@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { FaCalendarAlt, FaHotel, FaPlane, FaMapMarkerAlt, FaBed } from 'react-icons/fa';
 
 const PropertyCards = () => {
