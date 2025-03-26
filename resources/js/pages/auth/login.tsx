@@ -2,6 +2,8 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
+import { FcGoogle } from 'react-icons/fc';
+
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -33,6 +35,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         post(route('login'), {
             onFinish: () => reset('password'),
         });
+    };
+
+    const handleGoogleLogin = () => {
+        window.location.href = route('login.google');
     };
 
     return (
@@ -90,9 +96,15 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <Label htmlFor="remember">Remember me</Label>
                     </div>
 
-                    <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
+                    <Button type="submit" className="mt-4 w-full"  tabIndex={4} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Log in
+                    </Button>
+                    <Button type="button" className=" w-full cursor-pointer" onClick={handleGoogleLogin} tabIndex={4} disabled={processing}>
+                        <div className="flex items-center justify-center gap-2">
+                            <FcGoogle className="h-5 w-5" />
+                            Lanjutkan dengan Google
+                        </div>
                     </Button>
                 </div>
 
