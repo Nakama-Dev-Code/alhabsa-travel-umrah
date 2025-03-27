@@ -1,6 +1,7 @@
 <?php
 
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
@@ -9,14 +10,8 @@ use App\Http\Controllers\SocialController;
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/card', [FrontendController::class, 'card']);
 
-// Route::get('/', function () {
-//     return Inertia::render('welcome');
-// })->name('home');
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 });
 
 Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google');

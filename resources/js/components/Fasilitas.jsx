@@ -14,7 +14,7 @@ import { FaUtensils, FaPassport, FaSuitcaseRolling, FaUserAlt, FaHotel, FaBus, F
     ];
 
     return (
-      <div className="text-center p-10 ">
+      <div className="text-center p-10 bg-gradient-to-b from-gray-100 to-gray-200">
         <h2 className="text-3xl font-bold text-gray-800 mb-3">FASILITAS JAMAAH</h2>
         <p className="text-gray-600 mb-8 text-lg">Fasilitas yang kami sediakan untuk kenyamanan ibadah Anda</p>
 
