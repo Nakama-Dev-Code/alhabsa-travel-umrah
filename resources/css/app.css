@@ -7,6 +7,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme inline {
+    --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+
+    @keyframes scroll {
+      to {
+        transform: translate(calc(-50% - 0.5rem));
+      }
+    }
+  }
+
 @theme {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
