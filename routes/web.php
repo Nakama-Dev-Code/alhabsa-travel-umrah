@@ -1,14 +1,14 @@
 <?php
 
 use Inertia\Inertia;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\Admin\AdminController;
 
 // Untuk Front End
 Route::get('/', [FrontendController::class, 'home'])->name('home');
-Route::get('/card', [FrontendController::class, 'card']);
+Route::get('/umrah-package', [FrontendController::class, 'umrahpackage'])->name('umrah-package');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

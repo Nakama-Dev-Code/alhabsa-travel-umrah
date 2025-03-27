@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class FrontendController extends Controller
 {
@@ -12,7 +12,7 @@ class FrontendController extends Controller
         return Inertia::render('frontend/HomePages');
     }
 
-    public function card()
+    public function umrahpackage()
     {
         return Inertia::render('frontend/CardPages');
     }
