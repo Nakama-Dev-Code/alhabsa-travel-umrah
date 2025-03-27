@@ -1,4 +1,4 @@
-import { FaCalendarAlt, FaHotel, FaPlane, FaMapMarkerAlt, FaBed } from 'react-icons/fa';
+import { FaCalendarAlt, FaHotel, FaPlane, FaMapMarkerAlt } from 'react-icons/fa';
 
 const PropertyCards = () => {
   const properties = [
@@ -33,11 +33,11 @@ const PropertyCards = () => {
         {properties.map((property, index) => (
           <div key={index} className="max-w-full rounded-xl overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
 
-            <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 flex justify-between items-center">
+            <div className="bg-[#2E3650] p-4 flex justify-between items-center">
               <h3 className="text-xl font-bold text-white">{property.title}</h3>
               <div className="flex space-x-3">
 
-                <button className="w-10 h-10 flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-300">
+                <button className="w-10 h-10 flex items-center justify-center bg-[#222636] text-white rounded-lg transition-colors duration-300">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                   </svg>
@@ -135,7 +135,7 @@ const PropertyCards = () => {
                   </div>
                 </div>
 
-                <button className=" w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300">
+                <button className="w-full bg-[#2E3650] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300">
                  Order Now
                 </button>
               </div>
