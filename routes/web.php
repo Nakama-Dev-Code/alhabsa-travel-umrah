@@ -1,9 +1,14 @@
 <?php
 
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\frontend;
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
+
+// Untuk Front End
+Route::get('/card', [frontend::class, 'card']);
+Route::get('/home', [frontend::class, 'home']);
 
 Route::get('/', function () {
     return Inertia::render('welcome');

@@ -157,3 +157,15 @@
         @apply bg-background text-foreground;
     }
 }
+
+.bg-utama {
+    @apply bg-blue-600;
+  }
+
+  .text-utama{
+    @apply text-blue-500
+  }
+
+  .FaAngleRight{
+    @apply mr-1 text-slate-700
+  }
