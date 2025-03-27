@@ -60,8 +60,8 @@ const Header = () => {
             backgroundPosition: 'center'
           }}
         >
-          <div className="absolute inset-0  bg-gradient-to-b from-transparent to-black bg-opacity-40 flex items-center px-4  lg:px-32">
-            <div className="max-w-5xl text-white lg:mx-auto mx-6">
+          <div className="absolute inset-0 bg-black bg-gradient-to-b from-transparent to-black bg-opacity-40 flex items-center px-4 md:px-20 lg:px-32">
+            <div className="max-w-5xl text-white lg:mx-auto">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 {slide.title}
               </h1>
@@ -121,14 +121,14 @@ const Header = () => {
       </button> */}
 
       {/* Indikator Slide */}
-      <div className="absolute bottom-56 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+      <div className="absolute bottom-60 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`
               w-3 h-1 rounded-full transition-colors
-              ${index === currentSlide ? 'bg-green-500' : 'bg-white bg-opacity-50'}
+              ${index === currentSlide ? 'bg-blue-600' : 'bg-white bg-opacity-50'}
             `}
           />
         ))}
