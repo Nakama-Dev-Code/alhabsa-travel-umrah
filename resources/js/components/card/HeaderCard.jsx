@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaInstagram, FaTiktok } from 'react-icons/fa';
 
 const HeaderCard = () => {

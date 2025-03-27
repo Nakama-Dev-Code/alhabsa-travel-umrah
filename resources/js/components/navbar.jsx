@@ -161,16 +161,18 @@ const Navbar = () => {
             </button>
 
             {/* Login Button */}
-            <button 
-              className={`px-4 py-2 rounded-md transition-colors 
-                ${isScrolled 
-                  ? 'bg-[#222636] text-white hover:bg-[#2E3650]' 
-                  : 'bg-white text-black hover:bg-white/90'
-                }
-              `}
-            >
-              Login
-            </button>
+            <a href="/login">
+              <button 
+                className={`px-4 py-2 rounded-md transition-colors 
+                  ${isScrolled 
+                    ? 'bg-[#222636] text-white hover:bg-[#2E3650]' 
+                    : 'bg-white text-black hover:bg-white/90'
+                  }
+                `}
+              >
+                Login
+              </button>
+            </a>
           </div>
         </div>
       </div>
@@ -335,9 +337,11 @@ const Navbar = () => {
 
             {/* Send Feedback Button */}
             <div className="fixed bottom-4 center-4 m-2 sm:m-4">
+            <a href="/login">
               <button className="bg-[#2E3650] text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg">
                 Login
               </button>
+            </a>
             </div>
           </div>
         </div>

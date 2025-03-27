@@ -11,7 +11,6 @@ import Fasilitas from '@/components/Fasilitas'
 
 function HomePages() {
 
-
   return (
     <>
       <Header/>
@@ -20,10 +19,9 @@ function HomePages() {
       <Fasilitas/>
       <Galeri/>
       <Mitra/>
-     <Contact/>
-     <Footer/>
-
-     <SocialIcons/>
+      <Contact/>
+      <Footer/>
+      <SocialIcons/>
     </>
   )
 }
