@@ -11,6 +11,7 @@ class FrontendController extends Controller
     {
         return Inertia::render('frontend/HomePages');
     }
+
     public function card()
     {
         return Inertia::render('frontend/CardPages');
