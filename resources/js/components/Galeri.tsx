@@ -98,7 +98,7 @@ const Galeri = () => {
       </div>
 
       <div className="text-center mt-8">
-        <Link href={'/umrah-package'} className="bg-[#222636] text-white py-3 px-4 rounded-md hover:bg-[#2E3650] transition-colors">
+        <Link href={'/umrah-packages'} className="bg-[#222636] text-white py-3 px-4 rounded-md hover:bg-[#2E3650] transition-colors">
           Lihat Paket Umrah
         </Link>
       </div>

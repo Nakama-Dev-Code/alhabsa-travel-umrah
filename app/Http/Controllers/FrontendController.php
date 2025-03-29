@@ -12,7 +12,7 @@ class FrontendController extends Controller
         return Inertia::render('frontend/HomePages');
     }
 
-    public function umrahpackage()
+    public function umrahpackages()
     {
         return Inertia::render('frontend/CardPages');
     }

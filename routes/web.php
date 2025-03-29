@@ -10,12 +10,11 @@ use App\Http\Controllers\SocialController;
 
 // Untuk Front End
 Route::get('/', [FrontendController::class, 'home'])->name('home');
-Route::get('/card', [FrontendController::class, 'card']);
+Route::get('/umrah-packages', [FrontendController::class, 'umrahpackages'])->name('umrahpackages');
 
 // Untuk Admin
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('paket-umrah', [PaketUmrahController::class, 'paket_umrah'])->name('paket-umrah');
 });
 
 Route::middleware(['auth'])->group(function () {
