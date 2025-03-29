@@ -11,7 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('web_options', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->text('value');
+            $table->string('path_file')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -19,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('web_options');
     }
 };

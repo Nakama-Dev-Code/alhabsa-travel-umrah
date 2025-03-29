@@ -6,10 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 
-class AdminController extends Controller
+class PaketUmrahController extends Controller
 {
-    public function dashboard()
-    {
-        return Inertia::render('admin/dashboard');
-    }
+    //
 }
