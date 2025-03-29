@@ -1,16 +1,16 @@
 <?php
 
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebOptionController;
 use App\Http\Controllers\Admin\PaketUmrahController;
-use App\Http\Controllers\FrontendController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SocialController;
 
 // Untuk Front End
 Route::get('/', [FrontendController::class, 'home'])->name('home');
-Route::get('/card', [FrontendController::class, 'card']);
+Route::get('/umrah-package', [FrontendController::class, 'umrahpackage']);
 
 // Untuk Admin
 Route::middleware(['auth', 'verified'])->group(function () {

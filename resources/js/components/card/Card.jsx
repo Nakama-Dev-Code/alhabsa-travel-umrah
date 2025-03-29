@@ -37,7 +37,7 @@ const PropertyCards = () => {
               <h3 className="text-xl font-bold text-white">{property.title}</h3>
               <div className="flex space-x-3">
 
-                <button className="w-10 h-10 flex items-center justify-center bg-[#222636] text-white rounded-lg transition-colors duration-300">
+                <button className="w-10 h-4 flex items-center justify-center bg-[#222636] text-white rounded-lg transition-colors duration-300">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                   </svg>
@@ -46,7 +46,7 @@ const PropertyCards = () => {
             </div>
 
             <div className="md:flex">
-              <div className="md:w-1/2 relative max-h-full xl:h-[440px]">
+              <div className="md:w-1/2 relative max-h-full xl:h-[370px]">
                 <img
                   src={property.image}
                   alt={property.title}
@@ -62,7 +62,7 @@ const PropertyCards = () => {
                 </div>
               </div>
 
-              <div className="md:w-1/2 p-6">
+              <div className="md:w-1/2 p-4">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <p className="text-gray-600">{property.builder}</p>
@@ -79,7 +79,7 @@ const PropertyCards = () => {
                         </div>
                         <div>
                         <p className="text-xs text-gray-500">Date</p>
-                        <p className="font-semibold">03 April 2025</p>
+                        <p className="font-semibold text-sm">03 April 2025</p>
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@ const PropertyCards = () => {
                         </div>
                         <div>
                         <p className="text-xs text-gray-500">Hotels</p>
-                        <p className="font-semibold">Nama Hotel, Makkah</p>
+                        <p className="font-semibold text-sm">Nama Hotel, Makkah</p>
                         </div>
                     </div>
 
@@ -99,7 +99,7 @@ const PropertyCards = () => {
                         </div>
                         <div>
                         <p className="text-xs text-gray-500">Hotels</p>
-                        <p className="font-semibold">Nama Hotel, Madinah</p>
+                        <p className="font-semibold text-sm">Nama Hotel, Madinah</p>
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@ const PropertyCards = () => {
                         </div>
                         <div>
                         <p className="text-xs text-gray-500">Airline</p>
-                        <p className="font-semibold">Garuda Indonesia</p>
+                        <p className="font-semibold text-sm">Garuda Indonesia</p>
                         </div>
                     </div>
 
@@ -119,7 +119,7 @@ const PropertyCards = () => {
                         </div>
                         <div>
                         <p className="text-xs text-gray-500">Airport</p>
-                        <p className="font-semibold">Soekarno-Hatta (CGK)</p>
+                        <p className="font-semibold text-sm">Soekarno-Hatta (CGK)</p>
                         </div>
                     </div>
 
@@ -129,13 +129,13 @@ const PropertyCards = () => {
                   <div className="flex justify-between">
                       <div  className="text-start">
                         <p className="text-[19px] text-gray-500">Price : </p>
-                        <p className="font-bold text-[35px] text-rose-500">{property.harga}</p>
+                        <p className="font-bold text-[25px] text-rose-500">{property.harga}</p>
                       </div>
 
                   </div>
                 </div>
 
-                <button className="w-full bg-[#2E3650] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300">
+                <button className="w-full bg-[#2E3650] text-white font-medium py-1 px-4 rounded-lg transition-colors duration-300">
                  Order Now
                 </button>
               </div>
