@@ -26,7 +26,7 @@ const Navbar = () => {
   }, [showMobileMenu, showSearchModal]);
 
   useEffect(() => {
-    const hash = window.location.hash.substring(1); // Ambil ID dari hash di URL
+    const hash = window.location.hash.substring(1);
     if (hash) {
       setTimeout(() => {
         document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
@@ -100,7 +100,7 @@ const Navbar = () => {
           hidden md:block fixed top-0 left-0 w-full transition-all duration-300
           ${isScrolled
             ? 'bg-[#D3D3D3] shadow-md text-white'
-            : 'bg-transparent text-white bg-gradient-to-t from-transparent to-black/50'
+            : 'bg-transparent text-white bg-gradient-to-t from-transparent to-black/90'
           }
         `}
       >
@@ -130,7 +130,7 @@ const Navbar = () => {
           {/* Desktop navbar Links */}
           <nav className="flex space-x-6">
             {navItems.map((item, index) => (
-               <button key={index} onClick={() => handleNavigation('/', item.href)} className={`transition-colors cursor-pointer ${isScrolled ? 'text-[#222636] hover:text-black' : 'text-white hover:text-gray-200'}`}>
+               <button key={index} onClick={() => handleNavigation('/', item.href)} className={`transition-colors cursor-pointer ${isScrolled ? 'text-[#222636] hover:text-slate-950 hover:font-semibold transition-all duration-500' : 'text-white hover:text-gray-300'}`}>
                {item.label}
              </button>
             ))}
@@ -143,8 +143,8 @@ const Navbar = () => {
                 onClick={() => setShowSearchModal(true)}
                 className={`p-2 rounded-full group ${
                     isScrolled
-                    ? 'hover:bg-gray-500 cursor-pointer text-white' // Warna teks default saat di-scroll
-                    : 'hover:bg-white/20 cursor-pointer text-white' // Warna teks default normal
+                    ? 'hover:bg-gray-500 cursor-pointer text-white'
+                    : 'hover:bg-white/20  cursor-pointer text-white'
                 }`}
                 >
                 <svg
