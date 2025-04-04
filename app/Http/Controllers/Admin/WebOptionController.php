@@ -15,9 +15,7 @@ class WebOptionController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $perPage = 5; // Atau sesuai kebutuhan Anda
-        $sortField = $request->input('sort_field', 'id');
-        $sortDirection = $request->input('sort_direction', 'desc');
+        $perPage = 5; // Jumlah item per halaman
 
         $query = WebOption::query();
 
@@ -25,9 +23,6 @@ class WebOptionController extends Controller
             $query->where('name', 'like', "%{$search}%")
                 ->orWhere('value', 'like', "%{$search}%");
         }
-
-        // Tambahkan pengurutan
-        $query->orderBy($sortField, $sortDirection);
 
         $webOptions = $query->paginate($perPage)
             ->withQueryString();
@@ -40,11 +35,6 @@ class WebOptionController extends Controller
                 'current_page' => $webOptions->currentPage(),
                 'last_page' => $webOptions->lastPage(),
             ],
-            'filters' => [
-                'search' => $search,
-                'sort_field' => $sortField,
-                'sort_direction' => $sortDirection
-            ]
         ]);
     }
 

@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\PaketUmrahController;
 
 // Untuk Front End
 Route::get('/', [FrontendController::class, 'home'])->name('home');
-Route::get('/umrah-package', [FrontendController::class, 'umrahpackage']);
+Route::get('/umrah-packages', [FrontendController::class, 'umrahpackages']);
 
 // Untuk Admin
 Route::middleware(['auth', 'verified'])->group(function () {
