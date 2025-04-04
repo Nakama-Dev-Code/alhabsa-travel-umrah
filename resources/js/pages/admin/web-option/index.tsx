@@ -5,7 +5,10 @@ import { Head, router, usePage } from "@inertiajs/react";
 import PostFormModal from "@/components/postFormModal";
 import AppLayout from "@/layouts/app-layout";
 import { Plus, Search, Download, ChevronLeft, ChevronRight, Loader2, Trash2, Edit } from "lucide-react";
-import Swal from "sweetalert2";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 // Mendefinisikan tipe untuk WebOption
 interface WebOption {
@@ -38,6 +41,12 @@ export default function WebOption() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   
+  // State untuk dialog konfirmasi hapus
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+  const [isBulkDelete, setIsBulkDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   useEffect(() => {
     // Simulate initial loading
     const timer = setTimeout(() => {
@@ -69,30 +78,56 @@ export default function WebOption() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    Swal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Data ini akan dihapus secara permanen!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Ya, hapus!",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.delete(`/web-option/${id}`, {
-          onSuccess: () => {
-            toast.success("Berhasil menghapus data !");
-            setIsInitialLoading(true);
-            router.reload();
-          },
-          onError: () => {
-            toast.error("Gagal menghapus data !");
-          },
-        });
-      }
-    });
+  const openDeleteConfirm = (id: number) => {
+    setItemToDelete(id);
+    setIsBulkDelete(false);
+    setIsDeleteConfirmOpen(true);
+  };
+  
+  const openBulkDeleteConfirm = () => {
+    if (selectedItems.length === 0) {
+      toast.error("Tidak ada item yang dipilih!");
+      return;
+    }
+    setIsBulkDelete(true);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleDelete = () => {
+    if (isBulkDelete) {
+      // Handle bulk delete
+      setIsDeleting(true);
+      router.post('/web-option/bulk-delete', { ids: selectedItems }, {
+        onSuccess: () => {
+          toast.success("Berhasil menghapus data terpilih!");
+          setSelectedItems([]);
+          setIsDeleteConfirmOpen(false);
+          setIsDeleting(false);
+          router.reload();
+        },
+        onError: () => {
+          setIsDeleting(false);
+          toast.error("Gagal menghapus data!");
+          setIsDeleteConfirmOpen(false);
+        },
+      });
+    } else if (itemToDelete) {
+      // Handle single item delete
+      setIsDeleting(true);
+      router.delete(`/web-option/${itemToDelete}`, {
+        onSuccess: () => {
+          toast.success("Berhasil menghapus data!");
+          setIsDeleteConfirmOpen(false);
+          setIsDeleting(false);
+          router.reload();
+        },
+        onError: () => {
+          setIsDeleting(false);
+          toast.error("Gagal menghapus data!");
+          setIsDeleteConfirmOpen(false);
+        },
+      });
+    }
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -158,41 +193,6 @@ export default function WebOption() {
     }
   };
 
-  // Handle hapus semua checkbox
-  const handleBulkDelete = () => {
-    if (selectedItems.length === 0) {
-      toast.error("Tidak ada item yang dipilih!");
-      return;
-    }
-
-    Swal.fire({
-      title: "Apakah Anda yakin?",
-      text: `${selectedItems.length} data akan dihapus secara permanen!`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Ya, hapus semua!",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        router.post('/web-option/bulk-delete', { ids: selectedItems }, {
-          onSuccess: () => {
-            toast.success("Berhasil menghapus data terpilih !");
-            setSelectedItems([]);
-            setIsInitialLoading(true);
-            router.reload();
-          },
-          onError: () => {
-            setIsLoading(false);
-            toast.error("Gagal menghapus data !");
-          },
-        });
-      }
-    });
-  };
-
   return (
     <AppLayout>
       <Head title="Web Option" />
@@ -224,7 +224,7 @@ export default function WebOption() {
             </button>
             {selectedItems.length > 0 && (
               <button 
-                onClick={handleBulkDelete} 
+                onClick={openBulkDeleteConfirm} 
                 className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-700 text-white px-4 py-2 rounded-lg shadow hover:bg-red-800 transition"
                 disabled={isLoading || isInitialLoading}
               >
@@ -239,24 +239,24 @@ export default function WebOption() {
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-grow">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Search size={18} className="text-gray-500 dark:text-gray-400" />
+                <Search size={18} className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               </div>
-              <input
+              <Input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                className="block w-full p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Cari berdasarkan nama atau nilai..."
                 disabled={isInitialLoading}
               />
             </div>
-            <button
+            <Button
               type="submit"
-              className="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="w-full sm:w-auto text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               disabled={isLoading || isInitialLoading}
             >
               {isLoading ? 'Mencari...' : 'Cari'}
-            </button>
+            </Button>
           </div>
         </form>
 
@@ -265,76 +265,81 @@ export default function WebOption() {
             <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
             <span className="ml-2 text-gray-500">Loading data...</span>
           </div>
-        ) : (
+        ) : filteredData.length > 0 ? (
           <>
             <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 max-w-full">
-              <table className="w-full text-left border-collapse">
-                <thead className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                  <tr>
-                    <th className="p-3 font-medium border-b border-gray-300 dark:border-gray-700 w-10">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-10">
                       <input
                         type="checkbox"
                         checked={selectedItems.length === filteredData.length && filteredData.length > 0}
                         onChange={handleSelectAll}
                         className="w-4 h-4 rounded"
                       />
-                    </th>
-                    {["#", "Picture", "Name", "Value", "Actions"].map((header) => (
-                      <th key={header} className="p-3 font-medium border-b border-gray-300 dark:border-gray-700">{header}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.length ? (
-                    filteredData.map((post, index) => (
-                      <tr key={post.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
-                        <td className="p-3">
-                          <input
-                            type="checkbox"
-                            checked={selectedItems.includes(post.id)}
-                            onChange={() => handleCheckboxChange(post.id)}
-                            className="w-4 h-4 rounded"
+                    </TableHead>
+                    <TableHead>#</TableHead>
+                    <TableHead>Picture</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead className="w-[150px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredData.map((post, index) => (
+                    <TableRow key={post.id}>
+                      <TableCell>
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(post.id)}
+                          onChange={() => handleCheckboxChange(post.id)}
+                          className="w-4 h-4 rounded"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {((meta?.current_page || currentPage) - 1) * (meta?.per_page || 10) + index + 1}
+                      </TableCell>
+                      <TableCell>
+                        {post.path_file ? (
+                          <img
+                            src={post.path_file}
+                            alt="File"
+                            className="w-16 h-16 object-cover rounded-lg shadow"
                           />
-                        </td>
-                        <td className="p-3">{((meta?.current_page || currentPage) - 1) * (meta?.per_page || 10) + index + 1}</td>
-                        <td className="p-3">
-                          {post.path_file ? (
-                            <img src={post.path_file} alt="File" className="w-16 h-16 sm:w-16 sm:h-16 object-cover rounded-lg shadow" />
-                          ) : (
-                            <span className="text-gray-500">No Picture</span>
-                          )}
-                        </td>
-                        <td className="p-3">
-                          <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
-                            {post.name}
-                          </Badge>
-                        </td>
-                        <td className="p-3">{post.value}</td>
-                        <td className="p-3 flex flex-col sm:flex-row gap-3">
-                          <button 
-                            onClick={() => openModal(post)} 
-                            className="w-full sm:w-auto flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-lg shadow hover:bg-blue-600 transition"
+                        ) : (
+                          <span className="text-gray-500">No Picture</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                          {post.name}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{post.value}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => openModal(post)}
                           >
-                            <Edit size={16} /> Edit
-                          </button>
-                          <button 
-                            onClick={() => handleDelete(post.id)} 
-                            className="w-full sm:w-auto flex items-center justify-center gap-1 bg-red-500 text-white px-3 py-1 rounded-lg shadow hover:bg-red-600 transition"
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => openDeleteConfirm(post.id)}
                           >
-                            <Trash2 size={16} /> Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={6} className="text-center p-4 text-gray-600 dark:text-gray-400">
-                        Tidak ada data
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
 
             {/* Pagination */}
@@ -342,10 +347,8 @@ export default function WebOption() {
               <div className="flex justify-between items-center mt-4">
                 <div className="text-sm text-gray-700 dark:text-gray-300">
                   Menampilkan <span className="font-medium">{((meta.current_page - 1) * meta.per_page) + 1}</span> hingga{" "}
-                  <span className="font-medium">
-                    {Math.min(meta.current_page * meta.per_page, meta.total)}
-                  </span>{" "}
-                  dari <span className="font-medium">{meta.total}</span> data
+                  <span className="font-medium">{Math.min(meta.current_page * meta.per_page, meta.total)}</span> dari{" "}
+                  <span className="font-medium">{meta.total}</span> data
                 </div>
                 <div className="flex space-x-2">
                   <button
@@ -357,7 +360,6 @@ export default function WebOption() {
                   </button>
                   {[...Array(meta.last_page)].map((_, page) => {
                     page = page + 1;
-                    // Tampilkan 5 halaman (2 sebelum, halaman saat ini, 2 sesudah)
                     if (
                       page === 1 ||
                       page === meta.last_page ||
@@ -396,10 +398,47 @@ export default function WebOption() {
               </div>
             )}
           </>
+        ) : (
+          <div className="text-center py-20 text-gray-500">
+            Tidak ada data ditemukan.
+          </div>
         )}
       </div>
 
       <PostFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
+      
+      {/* Dialog Konfirmasi Hapus */}
+      <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Hapus</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            {isBulkDelete ? (
+              <p>Apakah Anda yakin ingin menghapus {selectedItems.length} data yang dipilih? Tindakan ini dapat dibatalkan.</p>
+            ) : (
+              <p>Apakah Anda yakin ingin menghapus data ini? Tindakan ini dapat dibatalkan.</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteConfirmOpen(false)}
+              disabled={isDeleting}
+            >
+              Batal
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Hapus
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 }

@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Post {
   id?: number;
@@ -16,13 +24,21 @@ interface Props {
 }
 
 export default function PostFormModal({ isOpen, closeModal, post }: Props) {
-  const [formData, setFormData] = useState<Post>({ name: "", value: "", path_file: "" });
+  const [formData, setFormData] = useState<Post>({
+    name: "",
+    value: "",
+    path_file: "",
+  });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
     if (post) {
-      setFormData({ name: post.name, value: post.value, path_file: post.path_file || "" });
+      setFormData({
+        name: post.name,
+        value: post.value,
+        path_file: post.path_file || "",
+      });
       setPreview(post.path_file || "");
       setSelectedFile(null);
     } else {
@@ -32,7 +48,9 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
     }
   }, [post]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -46,82 +64,67 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const data = new FormData();
     data.append("name", formData.name);
     data.append("value", formData.value);
     if (selectedFile) {
       data.append("path_file", selectedFile);
     }
-  
+
+    const url = post?.id ? `/web-option/${post.id}` : "/web-option";
+
     if (post?.id) {
       data.append("_method", "PUT");
-      router.post(`/web-option/${post.id}`, data, {
-        onSuccess: () => {
-          // Reset form data sebelum menutup modal
-          setFormData({ name: "", value: "", path_file: "" });
-          setPreview("");
-          setSelectedFile(null);
-          
-          closeModal();
-          toast.success("Berhasil mengubah data !");
-          router.reload();
-        },
-        onError: (errors) => {
-          toast.error("Gagal mengubah data !");
-          console.error(errors.message || "Failed to submit web option.");
-        },
-      });
-    } else {
-      router.post("/web-option", data, {
-        onSuccess: () => {
-          // Reset form data sebelum menutup modal
-          setFormData({ name: "", value: "", path_file: "" });
-          setPreview("");
-          setSelectedFile(null);
-          
-          closeModal();
-          toast.success("Berhasil menambah data !");
-          router.reload();
-        },
-        onError: (errors) => {
-          toast.error("Gagal menambah data !");
-          console.error(errors.message || "Failed to submit web option.");
-        },
-      });
     }
+
+    router.post(url, data, {
+      onSuccess: () => {
+        setFormData({ name: "", value: "", path_file: "" });
+        setPreview("");
+        setSelectedFile(null);
+        closeModal();
+        toast.success(post?.id ? "Berhasil mengubah data !" : "Berhasil menambah data !");
+        router.reload();
+      },
+      onError: (errors) => {
+        toast.error(post?.id ? "Gagal mengubah data!" : "Gagal menambah data!");
+        console.error(errors.message || "Failed to submit web option.");
+      },
+    });
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
-        <h2 className="text-lg font-semibold mb-4">{post ? "Edit Web Option" : "Add Web Option"}</h2>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div className="mb-3">
-            <label className="block text-sm font-medium">Name</label>
+    <Dialog open={isOpen} onOpenChange={closeModal}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{post ? "Edit Web Option" : "Add Web Option"}</DialogTitle>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off">
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="w-full border rounded px-3 py-2"
               required
             />
           </div>
-          <div className="mb-3">
-            <label className="block text-sm font-medium">Value</label>
+          <div>
+            <label className="block text-sm font-medium mb-1">Value</label>
             <textarea
               name="value"
               value={formData.value}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="w-full border rounded px-3 py-2"
               required
             ></textarea>
           </div>
-          <div className="mb-3">
-            <label className="block text-sm font-medium">File (optional)</label>
+          <div>
+            <label className="block text-sm font-medium mb-1">File (optional)</label>
             <input
               type="file"
               name="path_file"
@@ -131,17 +134,26 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
             />
           </div>
           {preview && (
-            <div className="mb-3">
+            <div>
               <p className="text-sm mb-1">Image Preview:</p>
-              <img src={preview} alt="Preview" className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-cover rounded-lg shadow" />
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded-lg shadow"
+              />
             </div>
           )}
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={closeModal} className="px-4 py-2 bg-gray-500 text-white rounded">Batal</button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">{post ? "Simpan Perubahan" : "Simpan Data"}</button>
-          </div>
+
+          <DialogFooter className="mt-4">
+            <Button type="button" variant="secondary" onClick={closeModal}>
+              Batal
+            </Button>
+            <Button type="submit">
+              {post ? "Simpan Perubahan" : "Simpan Data"}
+            </Button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
