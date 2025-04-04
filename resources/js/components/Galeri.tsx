@@ -61,7 +61,7 @@ const Galeri = () => {
                   hovered !== null && hovered !== index ? 'scale-[0.98]' : ''
                 }`}
               />
-              <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0  transition-opacity flex items-end">
+              <div className="absolute inset-0 bg-opacity-20 opacity-0  transition-opacity flex items-end group-hover:opacity-100">
                 <p className="text-white p-2 text-sm font-medium">{image.alt}</p>
               </div>
             </div>
@@ -89,7 +89,7 @@ const Galeri = () => {
                   hovered !== null && hovered !== index + 3 ? 'scale-[0.98]' : ''
                 }`}
               />
-              <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0  transition-opacity flex items-end">
+              <div className="absolute inset-0  bg-opacity-20 opacity-0  transition-opacity flex items-end group-hover:opacity-100">
                 <p className="text-white p-2 text-sm font-medium">{image.alt}</p>
               </div>
             </div>
