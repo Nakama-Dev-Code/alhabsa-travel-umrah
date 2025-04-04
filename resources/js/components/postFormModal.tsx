@@ -46,18 +46,23 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const data = new FormData();
     data.append("name", formData.name);
     data.append("value", formData.value);
     if (selectedFile) {
       data.append("path_file", selectedFile);
     }
-
+  
     if (post?.id) {
       data.append("_method", "PUT");
       router.post(`/web-option/${post.id}`, data, {
         onSuccess: () => {
+          // Reset form data sebelum menutup modal
+          setFormData({ name: "", value: "", path_file: "" });
+          setPreview("");
+          setSelectedFile(null);
+          
           closeModal();
           toast.success("Berhasil mengubah data !");
           router.reload();
@@ -70,6 +75,11 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
     } else {
       router.post("/web-option", data, {
         onSuccess: () => {
+          // Reset form data sebelum menutup modal
+          setFormData({ name: "", value: "", path_file: "" });
+          setPreview("");
+          setSelectedFile(null);
+          
           closeModal();
           toast.success("Berhasil menambah data !");
           router.reload();

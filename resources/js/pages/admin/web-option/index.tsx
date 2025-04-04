@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Toaster, toast } from "react-hot-toast";
 import { Head, router, usePage } from "@inertiajs/react";
 import PostFormModal from "@/components/postFormModal";
@@ -303,10 +304,10 @@ export default function WebOption() {
                             <span className="text-gray-500">No Picture</span>
                           )}
                         </td>
-                        <td className="p-3 flex items-center gap-2">
-                          <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                        <td className="p-3">
+                          <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
                             {post.name}
-                          </span>
+                          </Badge>
                         </td>
                         <td className="p-3">{post.value}</td>
                         <td className="p-3 flex flex-col sm:flex-row gap-3">
