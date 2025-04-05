@@ -122,7 +122,13 @@ class WebOptionController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'value' => 'required|string',
-            'path_file' => 'nullable|image|max:2048',
+            'path_file' => 'nullable|mimes:jpg,jpeg,png,gif,pdf|max:2048',
+        ], [
+            'name.required' => 'Nama harus diisi !',
+            'name.max' => 'Nama maksimal 255 karakter !',
+            'value.required' => 'Nilai harus diisi !',
+            'path_file.mimes' => 'File harus berformat jpg, jpeg, png, gif, atau pdf !',
+            'path_file.max' => 'Ukuran file maksimal 2MB !',
         ]);
 
         $data = $request->only(['name', 'value']);
@@ -136,15 +142,21 @@ class WebOptionController extends Controller
 
         WebOption::create($data);
 
-        return redirect()->route('web-option.index')->with('success', 'Web option created successfully.');
+        return redirect()->route('web-option.index')->with('success', 'Web option berhasil ditambahkan !');
     }
 
     public function update(Request $request, WebOption $WebOption)
     {
         $request->validate([
-            'name'   => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'value' => 'required|string',
-            'path_file' => 'nullable|image|max:2048',
+            'path_file' => 'nullable|mimes:jpg,jpeg,png,gif,pdf|max:2048',
+        ], [
+            'name.required' => 'Nama harus diisi !',
+            'name.max' => 'Nama maksimal 255 karakter !',
+            'value.required' => 'Nilai harus diisi !',
+            'path_file.mimes' => 'File harus berformat jpg, jpeg, png, gif, atau pdf !',
+            'path_file.max' => 'Ukuran file maksimal 2MB !',
         ]);
 
         $data = $request->only(['name', 'value']);

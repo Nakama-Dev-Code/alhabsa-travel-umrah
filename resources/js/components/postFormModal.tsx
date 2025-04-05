@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
 interface Post {
@@ -88,11 +82,29 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
         router.reload();
       },
       onError: (errors) => {
-        toast.error(post?.id ? "Gagal mengubah data!" : "Gagal menambah data!");
+        // console.log('Validation errors:', errors);
+        const formattedErrors: Record<string, string[]> = {};
+
+        for (const key in errors) {
+          if (Array.isArray(errors[key])) {
+            formattedErrors[key] = errors[key];
+          } else if (typeof errors[key] === "string") {
+            formattedErrors[key] = [errors[key]];
+          }
+        }
+        
+        setErrors(formattedErrors);
+        toast.error(post?.id ? "Gagal mengubah data !" : "Gagal menambah data !");
         console.error(errors.message || "Failed to submit web option.");
       },
     });
   };
+
+  // untuk memunculkan validasi error
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
+  
+  // untuk menghapus preview dan inputan file
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
@@ -101,7 +113,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
           <DialogTitle>{post ? "Edit Web Option" : "Add Web Option"}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off">
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off" noValidate>
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -112,6 +124,11 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
               className="w-full border rounded px-3 py-2"
               required
             />
+            {errors?.name && (
+              <p className="text-sm text-red-600 mt-1">
+                {Array.isArray(errors.name) ? errors.name[0] : errors.name}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Value</label>
@@ -122,6 +139,11 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
               className="w-full border rounded px-3 py-2"
               required
             ></textarea>
+            {errors?.value && (
+              <p className="text-sm text-red-600 mt-1">
+                {Array.isArray(errors.value) ? errors.value[0] : errors.value}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">File (optional)</label>
@@ -130,17 +152,56 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
               name="path_file"
               onChange={handleFileChange}
               className="w-full"
-              accept="image/*"
+              accept="image/*,application/pdf"
+              ref={fileInputRef}
             />
+            {errors?.path_file && (
+              <p className="text-sm text-red-600 mt-1">
+                {Array.isArray(errors.path_file) ? errors.path_file[0] : errors.path_file}
+              </p>
+            )}
           </div>
+
           {preview && (
-            <div>
-              <p className="text-sm mb-1">Image Preview:</p>
-              <img
-                src={preview}
-                alt="Preview"
-                className="w-32 h-32 object-cover rounded-lg shadow"
-              />
+            <div className="mt-2">
+              <p className="text-sm mb-1">File Preview:</p>
+              {selectedFile?.type?.startsWith("image/") ? (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded-lg shadow"
+                />
+              ) : selectedFile?.type === "application/pdf" || preview.endsWith(".pdf") ? (
+                <iframe
+                  src={preview}
+                  title="PDF Preview"
+                  className="w-full h-64 border rounded"
+                ></iframe>
+              ) : (
+                <a
+                  href={preview}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  Lihat file
+                </a>
+              )}
+
+              <Button
+                type="button"
+                variant="destructive"
+                className="mt-2"
+                onClick={() => {
+                  setSelectedFile(null);
+                  setPreview("");
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
+                }}
+              >
+                Hapus File
+              </Button>
             </div>
           )}
 

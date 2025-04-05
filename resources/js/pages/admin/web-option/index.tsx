@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Toaster, toast } from "react-hot-toast";
-import { Head, router, usePage } from "@inertiajs/react";
-import PostFormModal from "@/components/postFormModal";
 import AppLayout from "@/layouts/app-layout";
-import { Plus, Search, Download, ChevronLeft, ChevronRight, Loader2, Trash2, Edit } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Toaster, toast } from "react-hot-toast";
+import PostFormModal from "@/components/postFormModal";
+import { Head, router, usePage } from "@inertiajs/react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Plus, Search, Download, ChevronLeft, ChevronRight, Loader2, Trash2, Edit } from "lucide-react";
 
 // Mendefinisikan tipe untuk WebOption
 interface WebOption {
@@ -40,6 +40,7 @@ export default function WebOption() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
   
   // State untuk dialog konfirmasi hapus
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -302,15 +303,46 @@ export default function WebOption() {
                       </TableCell>
                       <TableCell>
                         {post.path_file ? (
-                          <img
-                            src={post.path_file}
-                            alt="File"
-                            className="w-16 h-16 object-cover rounded-lg shadow"
-                          />
+                          post.path_file.toLowerCase().endsWith(".pdf") ? (
+                            <a
+                              href={post.path_file}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 underline"
+                            >
+                              Lihat PDF
+                            </a>
+                          ) : (
+                            <>
+                              <img
+                                src={post.path_file}
+                                alt="File"
+                                className="w-16 h-16 object-cover rounded-lg shadow cursor-pointer"
+                                onClick={() => setZoomImage(post.path_file!)}
+                              />
+                            </>
+                          )
                         ) : (
-                          <span className="text-gray-500">No Picture</span>
+                          <span className="text-gray-500">404 Not Found</span>
                         )}
                       </TableCell>
+                      {zoomImage && (
+                        <div className="fixed inset-0 z-50 bg-black/25 flex items-center justify-center">
+                          <div className="relative">
+                            <img
+                              src={zoomImage}
+                              alt="Preview"
+                              className="max-w-[90vw] max-h-[90vh] rounded-lg shadow-xl"
+                            />
+                            <button
+                              onClick={() => setZoomImage(null)}
+                              className="absolute top-2 right-2 bg-white rounded-full p-1 shadow"
+                            >
+                              ❌
+                            </button>
+                          </div>
+                        </div>
+                      )}
                       <TableCell>
                         <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
                           {post.name}
