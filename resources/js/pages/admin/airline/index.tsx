@@ -4,17 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "react-hot-toast";
-import PackageTypeFormModal from "@/components/modal/packageTypeFormModal";
+import AirlineFormModal from "@/components/modal/airlineFormModal";
 import { Head, router, usePage } from "@inertiajs/react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Plus, Search, Download, ChevronLeft, ChevronRight, Loader2, Trash2, Edit } from "lucide-react";
 
-// Mendefinisikan tipe untuk tipe paket
-interface PackageType {
+// Mendefinisikan tipe untuk airline
+interface Airline {
   id: number;
   name: string;
-  description: string;
+  link_website: string;
 }
 
 // Mendefinisikan tipe untuk meta pagination
@@ -25,17 +25,17 @@ interface MetaPagination {
   last_page: number;
 }
 
-export default function PackageType() {
-  const { packageTypes, meta } = usePage<{ 
-    packageTypes: PackageType[],
+export default function Airline() {
+  const { airlines, meta } = usePage<{ 
+    airlines: Airline[],
     meta: MetaPagination
   }>().props;
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<PackageType | null>(null);
+  const [selectedPost, setSelectedPost] = useState<Airline | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState<PackageType[]>([]);
+  const [filteredData, setFilteredData] = useState<Airline[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -49,7 +49,7 @@ export default function PackageType() {
   useEffect(() => {
     // Simulate initial loading
     const timer = setTimeout(() => {
-      setFilteredData(packageTypes);
+      setFilteredData(airlines);
       setIsInitialLoading(false);
     }, 1000); // Show loading for 1 second on initial page load
     
@@ -60,19 +60,19 @@ export default function PackageType() {
     // Untuk menangani pencarian lokal di halaman ini
     if (!isInitialLoading) {
       if (searchTerm) {
-        const filtered = packageTypes.filter(item => 
+        const filtered = airlines.filter(item => 
           item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          (item.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+          (item.link_website?.toLowerCase() || '').includes(searchTerm.toLowerCase())
         );
         setFilteredData(filtered);
       } else {
-        setFilteredData(packageTypes);
+        setFilteredData(airlines);
       }
       setSelectedItems([]);
     }
-  }, [searchTerm, packageTypes, isInitialLoading]);
+  }, [searchTerm, airlines, isInitialLoading]);
 
-  const openModal = (post: PackageType | null = null) => {
+  const openModal = (post: Airline | null = null) => {
     setSelectedPost(post);
     setIsModalOpen(true);
   };
@@ -96,7 +96,7 @@ export default function PackageType() {
     if (isBulkDelete) {
       // Handle bulk delete
       setIsDeleting(true);
-      router.post('/package-type/bulk-delete', { ids: selectedItems }, {
+      router.post('/airline/bulk-delete', { ids: selectedItems }, {
         onSuccess: () => {
           toast.success("Berhasil menghapus data terpilih!");
           setSelectedItems([]);
@@ -113,7 +113,7 @@ export default function PackageType() {
     } else if (itemToDelete) {
       // Handle single item delete
       setIsDeleting(true);
-      router.delete(`/package-type/${itemToDelete}`, {
+      router.delete(`/airline/${itemToDelete}`, {
         onSuccess: () => {
           toast.success("Berhasil menghapus data!");
           setIsDeleteConfirmOpen(false);
@@ -132,7 +132,7 @@ export default function PackageType() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    router.get('/package-type', { search: searchTerm, page: 1 }, {
+    router.get('/airline', { search: searchTerm, page: 1 }, {
       preserveState: true,
       onSuccess: () => {
         setCurrentPage(1);
@@ -143,7 +143,7 @@ export default function PackageType() {
 
   const handlePageChange = (page: number) => {
     setIsLoading(true);
-    router.get('/package-type', { search: searchTerm, page }, {
+    router.get('/airline', { search: searchTerm, page }, {
       preserveState: true,
       onSuccess: () => {
         setCurrentPage(page);
@@ -154,7 +154,7 @@ export default function PackageType() {
 
   const exportToExcel = () => {
     setIsLoading(true);
-    window.location.href = `/package-type-export${searchTerm ? `?search=${searchTerm}` : ''}`;
+    window.location.href = `/airline-export${searchTerm ? `?search=${searchTerm}` : ''}`;
     setTimeout(() => {
       setIsLoading(false);
       toast.success("Data berhasil diekspor!");
@@ -163,7 +163,7 @@ export default function PackageType() {
 
   const exportToPdf = () => {
     setIsLoading(true);
-    window.location.href = `/package-type-export-pdf${searchTerm ? `?search=${searchTerm}` : ''}`;
+    window.location.href = `/airline-export-pdf${searchTerm ? `?search=${searchTerm}` : ''}`;
     setTimeout(() => {
       setIsLoading(false);
       toast.success("PDF berhasil diekspor!");
@@ -194,11 +194,11 @@ export default function PackageType() {
 
   return (
     <AppLayout>
-      <Head title="Tipe Paket" />
+      <Head title="Airline" />
       <Toaster position="top-right" reverseOrder={false} />
       <div className="p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-lg rounded-xl">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-          <h2 className="text-xl font-semibold">Tipe Paket</h2>
+          <h2 className="text-xl font-semibold">Airline</h2>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button 
               onClick={() => openModal()} 
@@ -245,7 +245,7 @@ export default function PackageType() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="block w-full p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Cari berdasarkan nama atau deskripsi..."
+                placeholder="Cari berdasarkan nama atau link website..."
                 disabled={isInitialLoading}
               />
             </div>
@@ -279,8 +279,8 @@ export default function PackageType() {
                       />
                     </TableHead>
                     <TableHead>#</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Description</TableHead>
+                    <TableHead>Nama Maskapai</TableHead>
+                    <TableHead>Link Website Maskapai</TableHead>
                     <TableHead className="w-[150px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -304,7 +304,18 @@ export default function PackageType() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {post.description ? post.description : '404 Not Found'}
+                        {post.link_website ? (
+                          <a
+                            href={post.link_website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: 'black', textDecoration: 'underline' }}
+                          >
+                            {post.link_website}
+                          </a>
+                        ) : (
+                          '404 Not Found'
+                        )}
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
@@ -394,7 +405,7 @@ export default function PackageType() {
         )}
       </div>
 
-      <PackageTypeFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
+      <AirlineFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
       
       {/* Dialog Konfirmasi Hapus */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>

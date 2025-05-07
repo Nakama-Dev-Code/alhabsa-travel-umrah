@@ -46,7 +46,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('package-schedule', PackageScheduleController::class);
 
     // Airlines
-    Route::resource('airlines', AirlineController::class);
+    Route::resource('airline', AirlineController::class);
+    Route::get('airline-export', [AirlineController::class, 'export'])->name('airline.export');
+    Route::get('airline-export-pdf', [AirlineController::class, 'export_pdf'])->name('airline.export-pdf');
+    Route::post('airline/bulk-delete', [AirlineController::class, 'bulkDelete'])->name('airline.bulk-delete');
 
     // Airport
     Route::resource('airports', AirportController::class);

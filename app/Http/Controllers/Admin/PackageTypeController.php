@@ -24,16 +24,16 @@ class PackageTypeController extends Controller
                 ->orWhere('description', 'like', "%{$search}%");
         }
 
-        $pakcageTypes = $query->paginate($perPage)
+        $packageTypes = $query->paginate($perPage)
             ->withQueryString();
 
         return Inertia::render('admin/package-type/index', [
-            'packageTypes' => $pakcageTypes->items(),
+            'packageTypes' => $packageTypes->items(),
             'meta' => [
-                'total' => $pakcageTypes->total(),
-                'per_page' => $pakcageTypes->perPage(),
-                'current_page' => $pakcageTypes->currentPage(),
-                'last_page' => $pakcageTypes->lastPage(),
+                'total' => $packageTypes->total(),
+                'per_page' => $packageTypes->perPage(),
+                'current_page' => $packageTypes->currentPage(),
+                'last_page' => $packageTypes->lastPage(),
             ],
         ]);
     }
@@ -55,7 +55,7 @@ class PackageTypeController extends Controller
             'search' => $search
         ]);
 
-        return $pdf->download('package-types.pdf');
+        return $pdf->download('airline.pdf');
     }
 
     public function export(Request $request)
@@ -137,8 +137,8 @@ class PackageTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
         ], [
-            'name.required' => 'Nama harus diisi !',
-            'name.max' => 'Nama maksimal 255 karakter !',
+            'name.required' => 'Nama paket harus diisi !',
+            'name.max' => 'Nama paket maksimal 255 karakter !',
         ]);
 
         $data = $request->only(['name', 'description']);
@@ -167,11 +167,11 @@ class PackageTypeController extends Controller
         $count = 0;
 
         foreach ($ids as $id) {
-            $pakcageTypes = PackageType::find($id);
+            $packageTypes = PackageType::find($id);
 
-            if ($pakcageTypes) {
+            if ($packageTypes) {
                 // Hapus data dari database
-                $pakcageTypes->delete();
+                $packageTypes->delete();
                 $count++;
             }
         }

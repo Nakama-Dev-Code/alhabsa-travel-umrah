@@ -51,13 +51,13 @@ const mainNavItems: NavItem[] = [
     // Manajemen Penerbangan
     {
         title: 'Airport',
-        href: '/airports',
+        href: '/airport',
         icon: MapPin,
         label: 'Manajemen Penerbangan',
     },
     {
         title: 'Airline',
-        href: '/airlines',
+        href: '/airline',
         icon: Plane,
         label: 'Manajemen Penerbangan',
     },
@@ -65,7 +65,7 @@ const mainNavItems: NavItem[] = [
     // Manajemen Hotel
     {
         title: 'Hotel',
-        href: '/hotels',
+        href: '/hotel',
         icon: Hotel,
         label: 'Manajemen Hotel',
     },
