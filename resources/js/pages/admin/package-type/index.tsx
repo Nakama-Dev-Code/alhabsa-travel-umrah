@@ -4,18 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "react-hot-toast";
-import WebOptionFormModal from "@/components/modal/webOptionFormModal";
+import PackageTypeFormModal from "@/components/modal/packageTypeFormModal";
 import { Head, router, usePage } from "@inertiajs/react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Plus, Search, Download, ChevronLeft, ChevronRight, Loader2, Trash2, Edit } from "lucide-react";
 
-// Mendefinisikan tipe untuk WebOption
-interface WebOption {
+// Mendefinisikan tipe untuk tipe paket
+interface PackageType {
   id: number;
   name: string;
-  value: string;
-  path_file?: string;
+  description: string;
 }
 
 // Mendefinisikan tipe untuk meta pagination
@@ -26,21 +25,20 @@ interface MetaPagination {
   last_page: number;
 }
 
-export default function WebOption() {
-  const { webOptions, meta } = usePage<{ 
-    webOptions: WebOption[],
+export default function PackageType() {
+  const { packageTypes, meta } = usePage<{ 
+    packageTypes: PackageType[],
     meta: MetaPagination
   }>().props;
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<WebOption | null>(null);
+  const [selectedPost, setSelectedPost] = useState<PackageType | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState<WebOption[]>([]);
+  const [filteredData, setFilteredData] = useState<PackageType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [zoomImage, setZoomImage] = useState<string | null>(null);
   
   // State untuk dialog konfirmasi hapus
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -51,7 +49,7 @@ export default function WebOption() {
   useEffect(() => {
     // Simulate initial loading
     const timer = setTimeout(() => {
-      setFilteredData(webOptions);
+      setFilteredData(packageTypes);
       setIsInitialLoading(false);
     }, 1000); // Show loading for 1 second on initial page load
     
@@ -62,19 +60,19 @@ export default function WebOption() {
     // Untuk menangani pencarian lokal di halaman ini
     if (!isInitialLoading) {
       if (searchTerm) {
-        const filtered = webOptions.filter(item => 
+        const filtered = packageTypes.filter(item => 
           item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          item.value.toLowerCase().includes(searchTerm.toLowerCase())
+          (item.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
         );
         setFilteredData(filtered);
       } else {
-        setFilteredData(webOptions);
+        setFilteredData(packageTypes);
       }
       setSelectedItems([]);
     }
-  }, [searchTerm, webOptions, isInitialLoading]);
+  }, [searchTerm, packageTypes, isInitialLoading]);
 
-  const openModal = (post: WebOption | null = null) => {
+  const openModal = (post: PackageType | null = null) => {
     setSelectedPost(post);
     setIsModalOpen(true);
   };
@@ -87,7 +85,7 @@ export default function WebOption() {
   
   const openBulkDeleteConfirm = () => {
     if (selectedItems.length === 0) {
-      toast.error("Tidak ada item yang dipilih!");
+      toast.error("Tidak ada item yang dipilih !");
       return;
     }
     setIsBulkDelete(true);
@@ -98,7 +96,7 @@ export default function WebOption() {
     if (isBulkDelete) {
       // Handle bulk delete
       setIsDeleting(true);
-      router.post('/web-option/bulk-delete', { ids: selectedItems }, {
+      router.post('/package-type/bulk-delete', { ids: selectedItems }, {
         onSuccess: () => {
           toast.success("Berhasil menghapus data terpilih!");
           setSelectedItems([]);
@@ -115,7 +113,7 @@ export default function WebOption() {
     } else if (itemToDelete) {
       // Handle single item delete
       setIsDeleting(true);
-      router.delete(`/web-option/${itemToDelete}`, {
+      router.delete(`/package-type/${itemToDelete}`, {
         onSuccess: () => {
           toast.success("Berhasil menghapus data!");
           setIsDeleteConfirmOpen(false);
@@ -134,7 +132,7 @@ export default function WebOption() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    router.get('/web-option', { search: searchTerm, page: 1 }, {
+    router.get('/package-type', { search: searchTerm, page: 1 }, {
       preserveState: true,
       onSuccess: () => {
         setCurrentPage(1);
@@ -145,7 +143,7 @@ export default function WebOption() {
 
   const handlePageChange = (page: number) => {
     setIsLoading(true);
-    router.get('/web-option', { search: searchTerm, page }, {
+    router.get('/package-type', { search: searchTerm, page }, {
       preserveState: true,
       onSuccess: () => {
         setCurrentPage(page);
@@ -156,7 +154,7 @@ export default function WebOption() {
 
   const exportToExcel = () => {
     setIsLoading(true);
-    window.location.href = `/web-option-export${searchTerm ? `?search=${searchTerm}` : ''}`;
+    window.location.href = `/package-type-export${searchTerm ? `?search=${searchTerm}` : ''}`;
     setTimeout(() => {
       setIsLoading(false);
       toast.success("Data berhasil diekspor!");
@@ -165,7 +163,7 @@ export default function WebOption() {
 
   const exportToPdf = () => {
     setIsLoading(true);
-    window.location.href = `/web-option-export-pdf${searchTerm ? `?search=${searchTerm}` : ''}`;
+    window.location.href = `/package-type-export-pdf${searchTerm ? `?search=${searchTerm}` : ''}`;
     setTimeout(() => {
       setIsLoading(false);
       toast.success("PDF berhasil diekspor!");
@@ -196,11 +194,11 @@ export default function WebOption() {
 
   return (
     <AppLayout>
-      <Head title="Web Option" />
+      <Head title="Tipe Paket" />
       <Toaster position="top-right" reverseOrder={false} />
       <div className="p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-lg rounded-xl">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-          <h2 className="text-xl font-semibold">Web Option</h2>
+          <h2 className="text-xl font-semibold">Tipe Paket</h2>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button 
               onClick={() => openModal()} 
@@ -247,7 +245,7 @@ export default function WebOption() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="block w-full p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Cari berdasarkan nama atau nilai..."
+                placeholder="Cari berdasarkan nama atau deskripsi..."
                 disabled={isInitialLoading}
               />
             </div>
@@ -281,9 +279,8 @@ export default function WebOption() {
                       />
                     </TableHead>
                     <TableHead>#</TableHead>
-                    <TableHead>Picture/ File</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Value</TableHead>
+                    <TableHead>Description</TableHead>
                     <TableHead className="w-[150px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -302,53 +299,13 @@ export default function WebOption() {
                         {((meta?.current_page || currentPage) - 1) * (meta?.per_page || 10) + index + 1}
                       </TableCell>
                       <TableCell>
-                        {post.path_file ? (
-                          post.path_file.toLowerCase().endsWith(".pdf") ? (
-                            <a
-                              href={post.path_file}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 underline"
-                            >
-                              Lihat PDF
-                            </a>
-                          ) : (
-                            <>
-                              <img
-                                src={post.path_file}
-                                alt="File"
-                                className="w-16 h-16 object-cover rounded-lg shadow cursor-pointer"
-                                onClick={() => setZoomImage(post.path_file!)}
-                              />
-                            </>
-                          )
-                        ) : (
-                          <span className="text-gray-500">404 Not Found</span>
-                        )}
-                      </TableCell>
-                      {zoomImage && (
-                        <div className="fixed inset-0 z-50 bg-black/25 flex items-center justify-center">
-                          <div className="relative">
-                            <img
-                              src={zoomImage}
-                              alt="Preview"
-                              className="max-w-[90vw] max-h-[90vh] rounded-lg shadow-xl"
-                            />
-                            <button
-                              onClick={() => setZoomImage(null)}
-                              className="absolute top-2 right-2 bg-white rounded-full p-1 shadow"
-                            >
-                              ❌
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                      <TableCell>
                         <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
                           {post.name}
                         </Badge>
                       </TableCell>
-                      <TableCell>{post.value}</TableCell>
+                      <TableCell>
+                        {post.description ? post.description : '404 Not Found'}
+                      </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           <Button
@@ -437,7 +394,7 @@ export default function WebOption() {
         )}
       </div>
 
-      <WebOptionFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
+      <PackageTypeFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
       
       {/* Dialog Konfirmasi Hapus */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>

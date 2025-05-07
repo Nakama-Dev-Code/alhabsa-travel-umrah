@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import Header from '@/components/Header'
 import Book from '@/components/Book'
 import About from '@/components/About'
@@ -13,6 +14,7 @@ function HomePages() {
 
   return (
     <>
+      <Head title="Beranda" />
       <Header/>
       <Book/>
       <About/>

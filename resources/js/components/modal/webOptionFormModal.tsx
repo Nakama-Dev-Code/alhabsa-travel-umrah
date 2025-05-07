@@ -17,7 +17,7 @@ interface Props {
   post?: Post | null;
 }
 
-export default function PostFormModal({ isOpen, closeModal, post }: Props) {
+export default function WebOptionFormModal({ isOpen, closeModal, post }: Props) {
   const [formData, setFormData] = useState<Post>({
     name: "",
     value: "",
@@ -115,13 +115,14 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
 
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off" noValidate>
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-sm font-medium mb-1">Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2"
+              placeholder="Masukkan name variable"
               required
             />
             {errors?.name && (
@@ -131,12 +132,13 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Value</label>
+            <label className="block text-sm font-medium mb-1">Value <span className="text-red-500">*</span></label>
             <textarea
               name="value"
               value={formData.value}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2"
+              placeholder="Masukkan value variable"
               required
             ></textarea>
             {errors?.value && (

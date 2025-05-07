@@ -120,12 +120,13 @@ class WebOptionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:web_options,name',
             'value' => 'required|string',
             'path_file' => 'nullable|mimes:jpg,jpeg,png,gif,pdf|max:2048',
         ], [
             'name.required' => 'Nama harus diisi !',
             'name.max' => 'Nama maksimal 255 karakter !',
+            'name.unique' => 'Nama sudah digunakan, gunakan nama lain !',
             'value.required' => 'Nilai harus diisi !',
             'path_file.mimes' => 'File harus berformat jpg, jpeg, png, gif, atau pdf !',
             'path_file.max' => 'Ukuran file maksimal 2MB !',
@@ -176,7 +177,7 @@ class WebOptionController extends Controller
 
         $WebOption->update($data);
 
-        return redirect()->route('web-option.index')->with('success', 'Web option updated successfully.');
+        return redirect()->route('web-option.index')->with('success', 'Web option berhasil diubah !');
     }
 
     public function destroy(WebOption $WebOption)
@@ -189,7 +190,7 @@ class WebOptionController extends Controller
         // Hapus data dari database
         $WebOption->delete();
 
-        return redirect()->route('web-option.index')->with('success', 'Web option deleted successfully.');
+        return redirect()->route('web-option.index')->with('success', 'Web option berhasil dihapus !');
     }
 
     public function bulkDelete(Request $request)
@@ -219,42 +220,4 @@ class WebOptionController extends Controller
 
         return redirect()->route('web-option.index')->with('success', $count . ' data berhasil dihapus.');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
 }

@@ -10,7 +10,7 @@ class PackageType extends Model
     use HasFactory;
 
     protected $table = 'package_types';
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $fillable = ['name', 'description'];
 
     public function categories()
     {
