@@ -1,0 +1,231 @@
+import { useState, useEffect, useRef } from "react";
+import { router } from "@inertiajs/react";
+import { toast } from "react-hot-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import LexicalEditor from "@/components/LexicalEditor";
+
+interface Post {
+  id?: number;
+  name: string;
+  value: string;
+  path_file?: string;
+}
+
+interface Props {
+  isOpen: boolean;
+  closeModal: () => void;
+  post?: Post | null;
+}
+
+export default function PostFormModal({ isOpen, closeModal, post }: Props) {
+  const [formData, setFormData] = useState<Post>({
+    name: "",
+    value: "",
+    path_file: "",
+  });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>("");
+
+  useEffect(() => {
+    if (post) {
+      setFormData({
+        name: post.name,
+        value: post.value,
+        path_file: post.path_file || "",
+      });
+      setPreview(post.path_file || "");
+      setSelectedFile(null);
+    } else {
+      setFormData({ name: "", value: "", path_file: "" });
+      setPreview("");
+      setSelectedFile(null);
+    }
+  }, [post]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEditorChange = (html: string) => {
+    setFormData({ ...formData, value: html });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("value", formData.value);
+    if (selectedFile) {
+      data.append("path_file", selectedFile);
+    }
+
+    const url = post?.id ? `/web-option/${post.id}` : "/web-option";
+
+    if (post?.id) {
+      data.append("_method", "PUT");
+    }
+
+    router.post(url, data, {
+      onSuccess: () => {
+        setFormData({ name: "", value: "", path_file: "" });
+        setPreview("");
+        setSelectedFile(null);
+        closeModal();
+        toast.success(post?.id ? "Berhasil mengubah data !" : "Berhasil menambah data !");
+        router.reload();
+      },
+      onError: (errors) => {
+        // console.log('Validation errors:', errors);
+        const formattedErrors: Record<string, string[]> = {};
+
+        for (const key in errors) {
+          if (Array.isArray(errors[key])) {
+            formattedErrors[key] = errors[key];
+          } else if (typeof errors[key] === "string") {
+            formattedErrors[key] = [errors[key]];
+          }
+        }
+        
+        setErrors(formattedErrors);
+        toast.error(post?.id ? "Gagal mengubah data !" : "Gagal menambah data !");
+        console.error(errors.message || "Failed to submit web option.");
+      },
+    });
+  };
+
+  // untuk memunculkan validasi error
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
+  
+  // untuk menghapus preview dan inputan file
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={closeModal}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{post ? "Edit Web Option" : "Add Web Option"}</DialogTitle>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off" noValidate>
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2"
+              required
+            />
+            {errors?.name && (
+              <p className="text-sm text-red-600 mt-1">
+                {Array.isArray(errors.name) ? errors.name[0] : errors.name}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Value</label>
+            {/* <textarea
+              name="value"
+              value={formData.value}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2"
+              required
+            ></textarea> */}
+            <LexicalEditor
+              value={formData.value}
+              onChange={handleEditorChange}
+              // className="w-full border rounded px-3 py-2"
+              errors={errors?.value}
+            />
+            {errors?.value && (
+              <p className="text-sm text-red-600 mt-1">
+                {Array.isArray(errors.value) ? errors.value[0] : errors.value}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">File (optional)</label>
+            <input
+              type="file"
+              name="path_file"
+              onChange={handleFileChange}
+              className="w-full"
+              accept="image/*,application/pdf"
+              ref={fileInputRef}
+            />
+            {errors?.path_file && (
+              <p className="text-sm text-red-600 mt-1">
+                {Array.isArray(errors.path_file) ? errors.path_file[0] : errors.path_file}
+              </p>
+            )}
+          </div>
+
+          {preview && (
+            <div className="mt-2">
+              <p className="text-sm mb-1">File Preview:</p>
+              {selectedFile?.type?.startsWith("image/") ? (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded-lg shadow"
+                />
+              ) : selectedFile?.type === "application/pdf" || preview.endsWith(".pdf") ? (
+                <iframe
+                  src={preview}
+                  title="PDF Preview"
+                  className="w-full h-64 border rounded"
+                ></iframe>
+              ) : (
+                <a
+                  href={preview}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  Lihat file
+                </a>
+              )}
+
+              <Button
+                type="button"
+                variant="destructive"
+                className="mt-2"
+                onClick={() => {
+                  setSelectedFile(null);
+                  setPreview("");
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
+                }}
+              >
+                Hapus File
+              </Button>
+            </div>
+          )}
+
+          <DialogFooter className="mt-4">
+            <Button type="button" variant="secondary" onClick={closeModal}>
+              Batal
+            </Button>
+            <Button type="submit">
+              {post ? "Simpan Perubahan" : "Simpan Data"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

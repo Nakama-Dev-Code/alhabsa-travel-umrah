@@ -1,0 +1,241 @@
+.lexical-editor-container {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.editor-container {
+    background: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+}
+
+.editor-inner {
+    background: #fff;
+    position: relative;
+    overflow-y: auto;
+    max-height: 350px;
+    border-top: 1px solid #ddd;
+}
+
+.editor-input {
+    min-height: 150px;
+    padding: 15px;
+    resize: none;
+    font-size: 16px;
+    caret-color: #444;
+    position: relative;
+    tab-size: 1;
+    outline: 0;
+    line-height: 1.5;
+}
+
+.editor-placeholder {
+    color: #999;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    user-select: none;
+    display: inline-block;
+    pointer-events: none;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+.toolbar .toolbar-item {
+    border: 0;
+    background: none;
+    border-radius: 4px;
+    padding: 8px;
+    margin-right: 2px;
+    cursor: pointer;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.toolbar .toolbar-item:hover {
+    background-color: #e8e8e8;
+}
+
+.toolbar .toolbar-item.active {
+    background-color: #ddd;
+}
+
+.toolbar-divider {
+    width: 1px;
+    background-color: #ddd;
+    margin: 0 8px;
+}
+
+/* Link Modal */
+.link-modal {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    background: white;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.link-modal input {
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.link-modal button {
+    padding: 6px 12px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.link-modal button:last-child {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* Text Formatting */
+.editor-text-bold {
+    font-weight: bold;
+}
+
+.editor-text-italic {
+    font-style: italic;
+}
+
+.editor-text-underline {
+    text-decoration: underline;
+}
+
+.editor-text-strikethrough {
+    text-decoration: line-through;
+}
+
+.editor-text-underlineStrikethrough {
+    text-decoration: underline line-through;
+}
+
+.editor-text-code {
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* Headings */
+.editor-heading-h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.editor-heading-h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.editor-heading-h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.editor-heading-h4 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.editor-heading-h5 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Lists */
+.editor-list-ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.editor-list-ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.editor-listitem {
+    margin: 5px 0;
+}
+
+.editor-nested-listitem {
+    list-style-type: circle;
+}
+
+/* Quote */
+.editor-quote {
+    border-left: 4px solid #ddd;
+    padding-left: 16px;
+    margin: 10px 0;
+    color: #666;
+}
+
+/* Link */
+.editor-link {
+    color: #4a90e2;
+    text-decoration: underline;
+}
+
+/* Code Block */
+.editor-code {
+    background: #f5f5f5;
+    font-family: monospace;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    overflow-x: auto;
+}
+
+/* Table */
+.table-wrapper {
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}

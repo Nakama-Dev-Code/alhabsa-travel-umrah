@@ -1,24 +1,25 @@
-import { FaCalendarAlt, FaHotel, FaPlane, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaHotel, FaPlane, FaMapMarkerAlt, FaPlaneDeparture } from 'react-icons/fa';
+import { FaPlaneCircleCheck } from "react-icons/fa6";
 
 const PropertyCards = () => {
   const properties = [
     {
-      title: "Paket mewah VVIP limit",
-      builder: "Ashana Housing",
-      lokasi: "Mekkah",
+      title: "SIGNATURE UMRAH BST TAHUN 2025",
+      builder: "Umroh Plus",
+      jenisPaket: "Paket Plus Dubai",
       status: "Unfurnished",
-      availability: "Immediately Available",
+      availability: "Tersedia",
       image: "/img/banner2.jpg",
-      harga: '150.0000'
+      harga: 'IDR 15.000.000,00'
     },
     {
       title: "2 BHK Luxury Flats",
-      builder: "Premium Builders",
-      lokasi: "Madinah",
+      builder: "Umroh Reguler",
+      jenisPaket: "Paket Plus Turki",
       status: "Semi-Furnished",
-      availability: "Ready to Move",
+      availability: "Habis",
       image: "/img/foto3.jpg",
-      harga: '150.0000'
+      harga: 'IDR 15.000.000,00'
     },
   ];
 
@@ -58,7 +59,7 @@ const PropertyCards = () => {
                 />
 
                 <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full shadow-md">
-                  <span className="text-sm font-semibold text-blue-700">{property.lokasi}</span>
+                  <span className="text-sm font-semibold text-blue-700">{property.jenisPaket}</span>
                 </div>
               </div>
 
@@ -85,11 +86,11 @@ const PropertyCards = () => {
 
                     <div className="flex items-center">
                         <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaHotel className="w-4 h-4 text-blue-600" />
+                        <FaPlaneCircleCheck className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
-                        <p className="text-xs text-gray-500">Hotels</p>
-                        <p className="font-semibold text-sm">Nama Hotel, Makkah</p>
+                        <p className="text-xs text-gray-500">Sisa Seat</p>
+                        <p className="font-semibold text-sm">17 Seat Tersedia</p>
                         </div>
                     </div>
 
@@ -98,18 +99,18 @@ const PropertyCards = () => {
                         <FaHotel className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
-                        <p className="text-xs text-gray-500">Hotels</p>
-                        <p className="font-semibold text-sm">Nama Hotel, Madinah</p>
+                        <p className="text-xs text-gray-500">Hotel Makkah</p>
+                        <p className="font-semibold text-sm">Makkah Clock Royal Tower</p>
                         </div>
                     </div>
 
                     <div className="flex items-center">
                         <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaPlane className="w-4 h-4 text-blue-600" />
+                        <FaHotel className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
-                        <p className="text-xs text-gray-500">Airline</p>
-                        <p className="font-semibold text-sm">Garuda Indonesia</p>
+                        <p className="text-xs text-gray-500">Hotels Madinah</p>
+                        <p className="font-semibold text-sm">Shadh Al Madinah Hotel</p>
                         </div>
                     </div>
 
@@ -120,6 +121,16 @@ const PropertyCards = () => {
                         <div>
                         <p className="text-xs text-gray-500">Airport</p>
                         <p className="font-semibold text-sm">Soekarno-Hatta (CGK)</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center">
+                        <div className="bg-blue-100 p-2 rounded-full mr-3">
+                        <FaPlaneDeparture  className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                        <p className="text-xs text-gray-500">Airline</p>
+                        <p className="font-semibold text-sm">Garuda Indonesia</p>
                         </div>
                     </div>
 

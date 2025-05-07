@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class WebOption extends Model
+class Airport extends Model
 {
     use HasFactory;
 
-    protected $table = 'web_options';
-    protected $fillable = ['name', 'value', 'path_file'];
+    protected $table = 'airports';
+    protected $fillable = ['name', 'code', 'location', 'description', 'link_website'];
 }
