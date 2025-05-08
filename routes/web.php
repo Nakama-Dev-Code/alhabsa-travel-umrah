@@ -58,7 +58,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('airport/bulk-delete', [AirportController::class, 'bulkDelete'])->name('airport.bulk-delete');
 
     // Hotel
-    Route::resource('hotels', HotelController::class);
+    Route::resource('hotel', HotelController::class);
+    Route::get('hotel-export', [HotelController::class, 'export'])->name('hotel.export');
+    Route::get('hotel-export-pdf', [HotelController::class, 'export_pdf'])->name('hotel.export-pdf');
+    Route::post('hotel/bulk-delete', [HotelController::class, 'bulkDelete'])->name('hotel.bulk-delete');
 });
 
 Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google');

@@ -10,5 +10,5 @@ class Hotel extends Model
     use HasFactory;
 
     protected $table = 'hotels';
-    protected $fillable = ['name', 'address', 'city', 'rating', 'location', 'description'];
+    protected $fillable = ['name', 'city', 'rating', 'location', 'latitude', 'longitude', 'description'];
 }

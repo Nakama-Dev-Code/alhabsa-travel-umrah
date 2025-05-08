@@ -14,6 +14,9 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    optimizeDeps: {
+        include: ['@smastrom/react-rating']
+    },
     esbuild: {
         jsx: 'automatic',
     },

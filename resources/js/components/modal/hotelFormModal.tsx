@@ -1,3 +1,4 @@
+import { Rating, Star } from "@smastrom/react-rating";
 import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
@@ -10,12 +11,12 @@ import L from "leaflet";
 interface Post {
   id?: number;
   name: string;
-  code: string;
+  city: string;
+  rating: string;
   location: string;
   latitude?: string;
   longitude?: string;
   description?: string;
-  link_website?: string;
 }
 
 interface Props {
@@ -31,6 +32,21 @@ L.Icon.Default.mergeOptions({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
+
+// Definisi tipe untuk RatingInfo
+interface RatingInfo {
+  label: string;
+  color: string;
+}
+
+// Definisi warna dan keterangan untuk setiap tingkat rating dengan tipe yang tepat
+const ratingLabels: Record<string, RatingInfo> = {
+  "1": { label: "Buruk", color: "#FF5252" },
+  "2": { label: "Kurang", color: "#FF9800" },
+  "3": { label: "Cukup", color: "#FFC107" },
+  "4": { label: "Sangat Baik", color: "#8BC34A" },
+  "5": { label: "Luar Biasa", color: "#4CAF50" }
+};
 
 // Komponen untuk event handling peta
 function MapEventHandler({ onMapClick, searchPosition, setSearchPosition }: { 
@@ -51,30 +67,44 @@ function MapEventHandler({ onMapClick, searchPosition, setSearchPosition }: {
 export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props) {
   const [formData, setFormData] = useState<Post>({
     name: "",
-    code: "",
+    city: "",
+    rating: "",
     location: "",
     latitude: "",
     longitude: "",
     description: "",
-    link_website: "",
   });
   
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [searchPosition, setSearchPosition] = useState<[number, number] | null>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([-6.200000, 106.816666]); // Default center Indonesia
+  const [mapCenter, setMapCenter] = useState<[number, number]>([-6.200000, 106.816666]);
+  const [ratingValue, setRatingValue] = useState<number>(0);
+
+  // Mendapatkan label dan warna berdasarkan rating saat ini
+  const getCurrentRating = () => {
+    const roundedRating = Math.round(ratingValue);
+    return roundedRating > 0 ? ratingLabels[roundedRating.toString()] : null;
+  };
+  
+  const currentRating = getCurrentRating();
 
   useEffect(() => {
     if (post) {
       setFormData({
         name: post.name,
-        code: post.code,
+        city: post.city,
+        rating: post.rating,
         location: post.location,
         latitude: post.latitude || "",
         longitude: post.longitude || "",
         description: post.description || "",
-        link_website: post.link_website || "",
       });
+
+      // Set nilai rating jika ada
+      if (post.rating) {
+        setRatingValue(parseFloat(post.rating));
+      }
 
       // Jika post memiliki latitude dan longitude, set marker dan center map
       if (post.latitude && post.longitude) {
@@ -86,13 +116,14 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
     } else {
       setFormData({ 
         name: "", 
-        code: "", 
+        city: "",
+        rating: "", 
         location: "", 
         latitude: "", 
         longitude: "", 
         description: "", 
-        link_website: "" 
       });
+      setRatingValue(0);
       setSearchPosition(null);
       setMapCenter([-6.200000, 106.816666]); // Reset ke default center
     }
@@ -104,6 +135,36 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle perubahan pada rating (hanya nilai bulat 1-5)
+  const handleRatingChange = (newRating: number) => {
+    // Pastikan rating selalu berupa bilangan bulat
+    const roundedRating = Math.round(newRating);
+    setRatingValue(roundedRating);
+    setFormData({ ...formData, rating: roundedRating.toString() });
+  };
+
+  // Handle perubahan manual pada input rating
+  const handleRatingInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    
+    // Validasi input agar tetap dalam rentang 0-5, hanya bilangan bulat
+    if (!isNaN(value) && value >= 0 && value <= 5) {
+      const roundedValue = Math.round(value); // Pembulatan ke bilangan bulat
+      setRatingValue(roundedValue);
+      setFormData({ ...formData, rating: roundedValue.toString() });
+    } else if (e.target.value === "") {
+      setRatingValue(0);
+      setFormData({ ...formData, rating: "" });
+    }
+  };
+
+  // Kustomisasi style untuk rating bintang berdasarkan nilai rating saat ini
+  const customRatingStyles = {
+    itemShapes: Star,
+    activeFillColor: currentRating?.color || "#FFC107",
+    inactiveFillColor: "#f0f0f0"
   };
 
   // Handle click pada peta
@@ -119,11 +180,18 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
       .then(response => response.json())
       .then(data => {
         if (data && data.display_name) {
+          const locationName = data.display_name;
+          
+          // Ekstrak kota dari location (biasanya ada pada bagian ke-5 setelah split dengan koma)
+          const locationParts = locationName.split(',');
+          const cityName = locationParts.length >= 5 ? locationParts[4].trim() : '';
+          
           setFormData(prev => ({
             ...prev,
-            location: data.display_name,
+            location: locationName,
+            city: cityName, // Set city otomatis dari location
           }));
-          setSearchTerm(data.display_name);
+          setSearchTerm(locationName);
         }
       })
       .catch(error => {
@@ -144,11 +212,18 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
             setSearchPosition([lat, lng]);
             setMapCenter([lat, lng]);
             
+            const locationName = data[0].display_name;
+            
+            // Ekstrak kota dari location (biasanya ada pada bagian ke-5 setelah split dengan koma)
+            const locationParts = locationName.split(',');
+            const cityName = locationParts.length >= 5 ? locationParts[4].trim() : '';
+            
             setFormData({
               ...formData,
-              location: data[0].display_name,
+              location: locationName,
               latitude: lat.toString(),
               longitude: lng.toString(),
+              city: cityName, // Set city otomatis dari location
             });
           } else {
             toast.error("Lokasi tidak ditemukan, coba kata kunci lain!");
@@ -166,7 +241,8 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
 
     const data = new FormData();
     data.append("name", formData.name);
-    data.append("code", formData.code);
+    data.append("city", formData.city);
+    data.append("rating", formData.rating);
     data.append("location", formData.location);
 
     // Tambahkan latitude dan longitude ke form data
@@ -182,13 +258,8 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
     if (formData.description) {
       data.append("description", formData.description);
     }
-    
-    // link_website is optional, only append if it has value
-    if (formData.link_website) {
-      data.append("link_website", formData.link_website);
-    }
 
-    const url = post?.id ? `airport/${post.id}` : "airport";
+    const url = post?.id ? `hotel/${post.id}` : "hotel";
 
     if (post?.id) {
       data.append("_method", "PUT");
@@ -196,7 +267,8 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
 
     router.post(url, data, {
       onSuccess: () => {
-        setFormData({ name: "", code: "", location: "", latitude: "", longitude: "", description: "", link_website: "" });
+        setFormData({ name: "", city: "", rating: "", location: "", latitude: "", longitude: "", description: "" });
+        setRatingValue(0);
         closeModal();
         toast.success(post?.id ? "Berhasil mengubah data!" : "Berhasil menambah data!");
         router.reload();
@@ -223,21 +295,21 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
     <Dialog open={isOpen} onOpenChange={closeModal} modal={true}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] flex flex-col p-6 pt-9">
         <DialogHeader className="pb-2">
-          <DialogTitle>{post ? "Edit Airport" : "Add Airport"}</DialogTitle>
+          <DialogTitle>{post ? "Edit Hotel" : "Add Hotel"}</DialogTitle>
         </DialogHeader>
 
         <div className="overflow-y-auto flex-grow pr-1">
           <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off" noValidate>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Nama Airport <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium mb-1">Nama Hotel <span className="text-red-500">*</span></label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full border rounded px-3 py-2"
-                  placeholder="Contoh: Soekarno-Hatta International Airport"
+                  placeholder="Contoh: Makkah Clock Royal Tower - A Fairmont Hotel"
                   required
                 />
                 {errors?.name && (
@@ -248,22 +320,82 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Kode Airport <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium mb-1">Kota/City <span className="text-gray-400">(otomatis)</span></label>
                 <input
                   type="text"
-                  name="code"
-                  value={formData.code}
-                  onChange={handleChange}
-                  className="w-full border rounded px-3 py-2"
-                  placeholder="Contoh: CGK"
-                  required
+                  name="city"
+                  value={formData.city}
+                  className="w-full border rounded px-3 py-2 bg-gray-50"
+                  placeholder="Kota akan diisi otomatis dari lokasi"
+                  readOnly
                 />
-                {errors?.code && (
+                <p className="text-xs text-gray-500 mt-1">Kota akan diambil otomatis dari lokasi</p>
+                {errors?.city && (
                   <p className="text-sm text-red-600 mt-1">
-                    {Array.isArray(errors.code) ? errors.code[0] : errors.code}
+                    {Array.isArray(errors.city) ? errors.city[0] : errors.city}
                   </p>
                 )}
               </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Rating Hotel <span className="text-red-500">*</span></label>
+              <div className="flex items-center space-x-4">
+                <div className="flex-grow">
+                  <Rating
+                    style={{ maxWidth: 200 }}
+                    value={ratingValue}
+                    onChange={handleRatingChange}
+                    itemStyles={customRatingStyles}
+                    transition="position"
+                    readOnly={false}
+                  />
+                </div>
+                <div className="w-24">
+                  <input
+                    type="number"
+                    name="rating"
+                    value={formData.rating}
+                    onChange={handleRatingInputChange}
+                    min="0"
+                    max="5"
+                    step="1"
+                    className="w-full border rounded px-3 py-2"
+                    placeholder="0.0"
+                    required
+                  />
+                </div>
+              </div>
+              
+              {/* Keterangan rating */}
+              {currentRating && (
+                <div className="flex items-center mt-2">
+                  <div 
+                    className="w-3 h-3 rounded-full mr-2" 
+                    style={{ backgroundColor: currentRating.color }}
+                  ></div>
+                  <span className="text-sm font-medium">{currentRating.label}</span>
+                </div>
+              )}
+              
+              {/* Legenda rating */}
+              <div className="mt-2 bg-gray-50 p-2 rounded text-xs">
+                <div className="grid grid-cols-5 gap-1">
+                  {Object.entries(ratingLabels).map(([rating, { label, color }]) => (
+                    <div key={rating} className="flex flex-col items-center">
+                      <div className="w-2 h-2 rounded-full mb-1" style={{ backgroundColor: color }}></div>
+                      <div className="font-medium">{rating}</div>
+                      <div className="text-center text-xs">{label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {errors?.rating && (
+                <p className="text-sm text-red-600 mt-1">
+                  {Array.isArray(errors.rating) ? errors.rating[0] : errors.rating}
+                </p>
+              )}
             </div>
             
             <div>
@@ -331,29 +463,12 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   value={formData.description}
                   onChange={handleChange}
                   className="w-full border rounded px-3 py-2"
-                  placeholder="Masukkan deskripsi airport (opsional)"
+                  placeholder="Masukkan deskripsi hotel (opsional)"
                   rows={3}
                 ></textarea>
                 {errors?.description && (
                   <p className="text-sm text-red-600 mt-1">
                     {Array.isArray(errors.description) ? errors.description[0] : errors.description}
-                  </p>
-                )}
-              </div>
-              
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">Link Website Airport <span className="text-gray-400">(opsional)</span></label>
-                <input
-                  type="text"
-                  name="link_website"
-                  value={formData.link_website}
-                  onChange={handleChange}
-                  className="w-full border rounded px-3 py-2"
-                  placeholder="Masukkan link website airport (opsional)"
-                />
-                {errors?.link_website && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {Array.isArray(errors.link_website) ? errors.link_website[0] : errors.link_website}
                   </p>
                 )}
               </div>
