@@ -82,10 +82,10 @@ class PackageTypeController extends Controller
 
         // Isi data
         $row = 2;
-        foreach ($packageTypes as $index => $webOption) {
+        foreach ($packageTypes as $index => $packageType) {
             $sheet->setCellValue('A' . $row, $index + 1);
-            $sheet->setCellValue('B' . $row, $webOption->name);
-            $sheet->setCellValue('C' . $row, $webOption->description ?? 'Tidak ada deskripsi');
+            $sheet->setCellValue('B' . $row, $packageType->name);
+            $sheet->setCellValue('C' . $row, $packageType->description ?? 'Tidak ada deskripsi');
             $row++;
         }
 

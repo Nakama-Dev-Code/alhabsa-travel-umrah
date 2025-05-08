@@ -10,5 +10,5 @@ class Airport extends Model
     use HasFactory;
 
     protected $table = 'airports';
-    protected $fillable = ['name', 'code', 'location', 'description', 'link_website'];
+    protected $fillable = ['name', 'code', 'location', 'latitude', 'longitude', 'description', 'link_website'];
 }

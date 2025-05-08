@@ -82,10 +82,10 @@ class AirlineController extends Controller
 
         // Isi data
         $row = 2;
-        foreach ($airlines as $index => $webOption) {
+        foreach ($airlines as $index => $airline) {
             $sheet->setCellValue('A' . $row, $index + 1);
-            $sheet->setCellValue('B' . $row, $webOption->name);
-            $sheet->setCellValue('C' . $row, $webOption->link_website ?? 'Tidak ada alamat link website');
+            $sheet->setCellValue('B' . $row, $airline->name);
+            $sheet->setCellValue('C' . $row, $airline->link_website ?? 'Tidak ada alamat link website');
             $row++;
         }
 
