@@ -125,7 +125,10 @@ class PackageTypeController extends Controller
             'name.unique' => 'Nama paket sudah digunakan, gunakan nama lain !',
         ]);
 
-        $data = $request->only(['name', 'description']);
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description
+        ];
 
         PackageType::create($data);
 
@@ -142,7 +145,10 @@ class PackageTypeController extends Controller
             'name.unique' => 'Nama paket sudah digunakan, gunakan nama lain !',
         ]);
 
-        $data = $request->only(['name', 'description']);
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description
+        ];
 
         $packageType->update($data);
 

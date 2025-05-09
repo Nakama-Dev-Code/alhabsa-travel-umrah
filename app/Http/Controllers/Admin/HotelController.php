@@ -146,7 +146,15 @@ class HotelController extends Controller
             'location.max' => 'Lokasi hotel maksimal 255 karakter !',
         ]);
 
-        $data = $request->only(['name', 'city', 'rating', 'location', 'latitude', 'longitude', 'description']);
+        $data = [
+            'name' => $request->name,
+            'city' => $request->city,
+            'rating' => $request->rating,
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'description' => $request->description
+        ];
 
         Hotel::create($data);
 
@@ -169,7 +177,15 @@ class HotelController extends Controller
             'location.max' => 'Lokasi hotel maksimal 255 karakter !',
         ]);
 
-        $data = $request->only(['name', 'city', 'rating', 'location', 'latitude', 'longitude', 'description']);
+        $data = [
+            'name' => $request->name,
+            'city' => $request->city,
+            'rating' => $request->rating,
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'description' => $request->description
+        ];
 
         $hotel->update($data);
 

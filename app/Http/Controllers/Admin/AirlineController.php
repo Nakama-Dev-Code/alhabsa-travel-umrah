@@ -125,7 +125,10 @@ class AirlineController extends Controller
             'name.unique' => 'Nama maskapai sudah digunakan, gunakan nama lain !',
         ]);
 
-        $data = $request->only(['name', 'link_website']);
+        $data = [
+            'name' => $request->name,
+            'link_website' => $request->link_website
+        ];
 
         Airline::create($data);
 
@@ -142,7 +145,10 @@ class AirlineController extends Controller
             'name.unique' => 'Nama maskapai sudah digunakan, gunakan nama lain !',
         ]);
 
-        $data = $request->only(['name', 'link_website']);
+        $data = [
+            'name' => $request->name,
+            'link_website' => $request->link_website
+        ];
 
         $airline->update($data);
 

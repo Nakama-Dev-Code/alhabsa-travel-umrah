@@ -144,7 +144,14 @@ class PackageCategoryController extends Controller
             'name.unique' => 'Jenis Paket sudah digunakan, gunakan nama lain !',
         ]);
 
-        PackageCategory::create($request->only('package_type_id', 'name'));
+        $data = [
+            'package_type_id' => $request->package_type_id,
+            'name' => $request->name,
+            'description' => $request->description
+        ];
+
+        PackageCategory::create($data);
+
         return redirect()->route('package-category.index')->with('success', 'Kategori paket berhasil ditambahkan !');
     }
 
@@ -153,6 +160,7 @@ class PackageCategoryController extends Controller
         $request->validate([
             'package_type_id' => 'required|exists:package_types,id',
             'name' => 'required|string|max:255|unique:package_categories,name,' . $packageCategory->id,
+            'description' => 'nullable|string',
         ], [
             'package_type_id.required' => 'Tipe paket harus dipilih !',
             'package_type_id.exists' => 'Tipe paket tidak ditemukan !',
@@ -161,7 +169,13 @@ class PackageCategoryController extends Controller
             'name.unique' => 'Jenis Paket sudah digunakan, gunakan nama lain !',
         ]);
 
-        $packageCategory->update($request->only('package_type_id', 'name', 'description'));
+        $data = [
+            'package_type_id' => $request->package_type_id,
+            'name' => $request->name,
+            'description' => $request->description
+        ];
+
+        $packageCategory->update($data);
 
         return redirect()->route('package-category.index')->with('success', 'Kategori paket berhasil diperbarui !');
     }

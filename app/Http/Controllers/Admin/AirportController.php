@@ -146,7 +146,15 @@ class AirportController extends Controller
             'location.max' => 'Lokasi airport maksimal 255 karakter !',
         ]);
 
-        $data = $request->only(['name', 'code', 'location', 'latitude', 'longitude', 'description', 'link_website']);
+        $data = [
+            'name' => $request->name,
+            'code' => $request->code,
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'description' => $request->description,
+            'link_website' => $request->link_website
+        ];
 
         Airport::create($data);
 
@@ -171,7 +179,15 @@ class AirportController extends Controller
             'location.max' => 'Lokasi airport maksimal 255 karakter !',
         ]);
 
-        $data = $request->only(['name', 'code', 'location', 'latitude', 'longitude', 'description', 'link_website']);
+        $data = [
+            'name' => $request->name,
+            'code' => $request->code,
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'description' => $request->description,
+            'link_website' => $request->link_website
+        ];
 
         $airport->update($data);
 

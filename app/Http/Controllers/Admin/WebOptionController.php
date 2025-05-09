@@ -132,7 +132,10 @@ class WebOptionController extends Controller
             'path_file.max' => 'Ukuran file maksimal 2MB !',
         ]);
 
-        $data = $request->only(['name', 'value']);
+        $data = [
+            'name' => $request->name,
+            'value' => $request->value
+        ];
 
         if ($request->hasFile('path_file')) {
             $file = $request->file('path_file');
@@ -161,7 +164,10 @@ class WebOptionController extends Controller
             'path_file.max' => 'Ukuran file maksimal 2MB !',
         ]);
 
-        $data = $request->only(['name', 'value']);
+        $data = [
+            'name' => $request->name,
+            'value' => $request->value
+        ];
 
         if ($request->hasFile('path_file')) {
             // Hapus file lama jika ada
