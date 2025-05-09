@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-interface Post {
+interface Airport {
   id?: number;
   name: string;
   code: string;
@@ -21,11 +22,12 @@ interface Post {
 interface Props {
   isOpen: boolean;
   closeModal: () => void;
-  post?: Post | null;
+  post?: Airport | null;
 }
 
 // Memperbaiki masalah icon default Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+// delete (L.Icon.Default.prototype as any)._getIconUrl;
+delete ((L.Icon.Default.prototype as unknown) as Record<string, unknown>)["_getIconUrl"];
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -49,7 +51,7 @@ function MapEventHandler({ onMapClick, searchPosition, setSearchPosition }: {
 }
 
 export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props) {
-  const [formData, setFormData] = useState<Post>({
+  const [formData, setFormData] = useState<Airport>({
     name: "",
     code: "",
     location: "",
@@ -60,6 +62,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
   });
   
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchPosition, setSearchPosition] = useState<[number, number] | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>([-6.200000, 106.816666]); // Default center Indonesia
@@ -163,6 +166,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const data = new FormData();
     data.append("name", formData.name);
@@ -199,6 +203,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         setFormData({ name: "", code: "", location: "", latitude: "", longitude: "", description: "", link_website: "" });
         closeModal();
         toast.success(post?.id ? "Berhasil mengubah data!" : "Berhasil menambah data!");
+        setIsSubmitting(false);
         router.reload();
       },
       onError: (errors) => {
@@ -215,12 +220,13 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         setErrors(formattedErrors);
         toast.error(post?.id ? "Gagal mengubah data!" : "Gagal menambah data!");
         console.error(errors.message || "Failed to submit data.");
+        setIsSubmitting(false);
       },
     });
   };
   
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal} modal={true}>
+    <Dialog open={isOpen} onOpenChange={() => !isSubmitting && closeModal()} modal={true}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] flex flex-col p-6 pt-9">
         <DialogHeader className="pb-2">
           <DialogTitle>{post ? "Edit Airport" : "Add Airport"}</DialogTitle>
@@ -239,6 +245,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Contoh: Soekarno-Hatta International Airport"
                   required
+                  disabled={isSubmitting}
                 />
                 {errors?.name && (
                   <p className="text-sm text-red-600 mt-1">
@@ -257,6 +264,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Contoh: CGK"
                   required
+                  disabled={isSubmitting}
                 />
                 {errors?.code && (
                   <p className="text-sm text-red-600 mt-1">
@@ -277,6 +285,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Cari lokasi atau klik pada peta"
                   required
+                  disabled={isSubmitting}
                 />
                 <Button 
                   type="button"
@@ -333,6 +342,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Masukkan deskripsi airport (opsional)"
                   rows={3}
+                  disabled={isSubmitting}
                 ></textarea>
                 {errors?.description && (
                   <p className="text-sm text-red-600 mt-1">
@@ -350,6 +360,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   onChange={handleChange}
                   className="w-full border rounded px-3 py-2"
                   placeholder="Masukkan link website airport (opsional)"
+                  disabled={isSubmitting}
                 />
                 {errors?.link_website && (
                   <p className="text-sm text-red-600 mt-1">
@@ -362,11 +373,21 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         </div>
 
         <DialogFooter className="mt-4 pt-4 border-t flex justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={closeModal}>
+          <Button type="button" variant="secondary" onClick={closeModal} disabled={isSubmitting}>
             Batal
           </Button>
-          <Button onClick={handleSubmit}>
-            {post ? "Simpan Perubahan" : "Simpan Data"}
+          <Button 
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {post ? "Menyimpan..." : "Menambahkan..."}
+              </>
+            ) : (
+              post ? "Simpan Perubahan" : "Simpan Data"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

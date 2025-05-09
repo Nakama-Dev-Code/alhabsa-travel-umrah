@@ -148,10 +148,6 @@ class HotelController extends Controller
 
         $data = $request->only(['name', 'city', 'rating', 'location', 'latitude', 'longitude', 'description']);
 
-        // Ekstrak city dari location
-        $locationParts = explode(',', $request->location);
-        $data['city'] = isset($locationParts[4]) ? trim($locationParts[4]) : null;
-
         Hotel::create($data);
 
         return redirect()->route('hotel.index')->with('success', 'Hotel berhasil ditambahkan !');
@@ -174,10 +170,6 @@ class HotelController extends Controller
         ]);
 
         $data = $request->only(['name', 'city', 'rating', 'location', 'latitude', 'longitude', 'description']);
-
-        // Ekstrak city dari location
-        $locationParts = explode(',', $request->location);
-        $data['city'] = isset($locationParts[4]) ? trim($locationParts[4]) : null;
 
         $hotel->update($data);
 

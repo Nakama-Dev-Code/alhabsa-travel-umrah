@@ -57,7 +57,7 @@
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Nama Hotel</th>
                 <th>Kota</th>
                 <th>Rating</th>

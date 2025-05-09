@@ -57,7 +57,7 @@
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Name</th>
                 <th>Value</th>
             </tr>

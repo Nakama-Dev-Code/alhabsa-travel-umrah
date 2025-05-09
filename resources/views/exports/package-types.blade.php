@@ -57,7 +57,7 @@
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Nama Paket</th>
                 <th>Deskripsi</th>
             </tr>

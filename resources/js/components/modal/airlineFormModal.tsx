@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-interface Post {
+interface Airline {
   id?: number;
   name: string;
   link_website?: string;
@@ -13,15 +14,16 @@ interface Post {
 interface Props {
   isOpen: boolean;
   closeModal: () => void;
-  post?: Post | null;
+  post?: Airline | null;
 }
 
 export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props) {
-  const [formData, setFormData] = useState<Post>({
+  const [formData, setFormData] = useState<Airline>({
     name: "",
     link_website: "",
   });
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (post) {
@@ -33,7 +35,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
       setFormData({ name: "", link_website: "" });
     }
     setErrors({});
-  }, [post]);
+  }, [post, isOpen]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,6 +45,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const data = new FormData();
     data.append("name", formData.name);
@@ -63,6 +66,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         setFormData({ name: "", link_website: "" });
         closeModal();
         toast.success(post?.id ? "Berhasil mengubah data!" : "Berhasil menambah data!");
+        setIsSubmitting(false);
         router.reload();
       },
       onError: (errors) => {
@@ -79,12 +83,13 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         setErrors(formattedErrors);
         toast.error(post?.id ? "Gagal mengubah data!" : "Gagal menambah data!");
         console.error(errors.message || "Failed to submit data.");
+        setIsSubmitting(false);
       },
     });
   };
   
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal}>
+    <Dialog open={isOpen} onOpenChange={() => !isSubmitting && closeModal()} modal={true}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{post ? "Edit Airline" : "Add Airline"}</DialogTitle>
@@ -101,6 +106,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
               className="w-full border rounded px-3 py-2"
               placeholder="Contoh: Garuda Indonesia"
               required
+              disabled={isSubmitting}
             />
             {errors?.name && (
               <p className="text-sm text-red-600 mt-1">
@@ -117,6 +123,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
               className="w-full border rounded px-3 py-2"
               placeholder="Masukkan link website maskapai (opsional)"
               rows={3}
+              disabled={isSubmitting}
             ></textarea>
             {errors?.link_website && (
               <p className="text-sm text-red-600 mt-1">
@@ -126,12 +133,22 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
           </div>
 
           <DialogFooter className="mt-4">
-            <Button type="button" variant="secondary" onClick={closeModal}>
+            <Button type="button" variant="secondary" onClick={closeModal} disabled={isSubmitting}>
               Batal
             </Button>
-            <Button type="submit">
-              {post ? "Simpan Perubahan" : "Simpan Data"}
-            </Button>
+            <Button 
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {post ? "Menyimpan..." : "Menambahkan..."}
+              </>
+            ) : (
+              post ? "Simpan Perubahan" : "Simpan Data"
+            )}
+          </Button>
           </DialogFooter>
         </form>
       </DialogContent>

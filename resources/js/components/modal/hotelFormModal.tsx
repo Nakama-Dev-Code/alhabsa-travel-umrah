@@ -2,13 +2,14 @@ import { Rating, Star } from "@smastrom/react-rating";
 import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-interface Post {
+interface Hotel {
   id?: number;
   name: string;
   city: string;
@@ -22,11 +23,12 @@ interface Post {
 interface Props {
   isOpen: boolean;
   closeModal: () => void;
-  post?: Post | null;
+  post?: Hotel | null;
 }
 
 // Memperbaiki masalah icon default Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+// delete (L.Icon.Default.prototype as any)._getIconUrl;
+delete ((L.Icon.Default.prototype as unknown) as Record<string, unknown>)["_getIconUrl"];
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -65,7 +67,7 @@ function MapEventHandler({ onMapClick, searchPosition, setSearchPosition }: {
 }
 
 export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props) {
-  const [formData, setFormData] = useState<Post>({
+  const [formData, setFormData] = useState<Hotel>({
     name: "",
     city: "",
     rating: "",
@@ -76,6 +78,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
   });
   
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchPosition, setSearchPosition] = useState<[number, number] | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>([-6.200000, 106.816666]);
@@ -174,28 +177,55 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
       latitude: lat.toString(),
       longitude: lng.toString(),
     });
-    
-    // Reverse geocoding menggunakan Nominatim (OpenStreetMap)
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+      
+    // Reverse geocoding menggunakan Nominatim (OpenStreetMap) dengan addressdetails=1
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`)
       .then(response => response.json())
       .then(data => {
-        if (data && data.display_name) {
+        if (data) {
           const locationName = data.display_name;
-          
-          // Ekstrak kota dari location (biasanya ada pada bagian ke-5 setelah split dengan koma)
-          const locationParts = locationName.split(',');
-          const cityName = locationParts.length >= 5 ? locationParts[4].trim() : '';
-          
+          let cityName = '';
+              
+          // Gunakan struktur address yang lebih detail dari Nominatim
+          if (data.address) {
+            // Prioritas pencarian kota dengan urutan dari yang paling kota hingga yang kurang menggambarkan kota
+            const possibleCityFields = [
+              'city',           // Kota besar
+              'town',           // Kota kecil/sedang
+              'municipality',   // Kotamadya
+              'city_district',  // Distrik kota
+              'borough',        // Kota kecil (US)
+              'suburb',         // Pinggiran kota
+              'district',       // Distrik
+              'county',         // Kabupaten
+              'state_district', // Distrik negara bagian
+              'region',         // Region
+              'state'           // Negara bagian/provinsi
+            ];
+            
+            // Cari nilai kota dari properti yang ada
+            for (const field of possibleCityFields) {
+              if (data.address[field]) {
+                cityName = data.address[field];
+                break; // Ambil yang pertama ditemukan sesuai prioritas
+              }
+            }
+            
+            // Log untuk debugging struktur address
+            console.log("Struktur alamat dari Nominatim:", data.address);
+            console.log("Nama kota yang dipilih:", cityName);
+          }
+              
           setFormData(prev => ({
             ...prev,
             location: locationName,
-            city: cityName, // Set city otomatis dari location
+            city: cityName || 'Kota tidak diketahui', // Default value jika tidak ditemukan
           }));
           setSearchTerm(locationName);
         }
       })
       .catch(error => {
-        console.error("Error during reverse geocoding:", error);
+        console.error("Error saat reverse geocoding:", error);
       });
   };
 
@@ -214,23 +244,61 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
             
             const locationName = data[0].display_name;
             
-            // Ekstrak kota dari location (biasanya ada pada bagian ke-5 setelah split dengan koma)
-            const locationParts = locationName.split(',');
-            const cityName = locationParts.length >= 5 ? locationParts[4].trim() : '';
-            
-            setFormData({
-              ...formData,
-              location: locationName,
-              latitude: lat.toString(),
-              longitude: lng.toString(),
-              city: cityName, // Set city otomatis dari location
-            });
+            // Gunakan logika yang sama untuk mendapatkan nama kota dari lokasi
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`)
+              .then(response => response.json())
+              .then(data => {
+                if (data && data.address) {
+                  let cityName = '';
+                  
+                  // Prioritas pencarian kota
+                  const possibleCityFields = [
+                    'city', 'town', 'municipality', 'city_district', 
+                    'borough', 'suburb', 'district', 'county', 
+                    'state_district', 'region', 'state'
+                  ];
+                  
+                  // Cari nilai kota dari properti yang ada
+                  for (const field of possibleCityFields) {
+                    if (data.address[field]) {
+                      cityName = data.address[field];
+                      break;
+                    }
+                  }
+                  
+                  setFormData({
+                    ...formData,
+                    location: locationName,
+                    latitude: lat.toString(),
+                    longitude: lng.toString(),
+                    city: cityName || 'Kota tidak diketahui',
+                  });
+                } else {
+                  setFormData({
+                    ...formData,
+                    location: locationName,
+                    latitude: lat.toString(),
+                    longitude: lng.toString(),
+                  });
+                }
+              })
+              .catch(error => {
+                console.error("Error saat mendapatkan detail kota:", error);
+                
+                // Fallback jika reverse geocoding gagal
+                setFormData({
+                  ...formData,
+                  location: locationName,
+                  latitude: lat.toString(),
+                  longitude: lng.toString(),
+                });
+              });
           } else {
             toast.error("Lokasi tidak ditemukan, coba kata kunci lain!");
           }
         })
         .catch(error => {
-          console.error("Error during geocoding:", error);
+          console.error("Error saat pencarian lokasi:", error);
           toast.error("Terjadi kesalahan saat mencari lokasi!");
         });
     }
@@ -238,6 +306,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const data = new FormData();
     data.append("name", formData.name);
@@ -271,6 +340,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         setRatingValue(0);
         closeModal();
         toast.success(post?.id ? "Berhasil mengubah data!" : "Berhasil menambah data!");
+        setIsSubmitting(false);
         router.reload();
       },
       onError: (errors) => {
@@ -287,12 +357,13 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         setErrors(formattedErrors);
         toast.error(post?.id ? "Gagal mengubah data!" : "Gagal menambah data!");
         console.error(errors.message || "Failed to submit data.");
+        setIsSubmitting(false);
       },
     });
   };
   
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal} modal={true}>
+    <Dialog open={isOpen} onOpenChange={() => !isSubmitting && closeModal()} modal={true}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] flex flex-col p-6 pt-9">
         <DialogHeader className="pb-2">
           <DialogTitle>{post ? "Edit Hotel" : "Add Hotel"}</DialogTitle>
@@ -311,6 +382,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Contoh: Makkah Clock Royal Tower - A Fairmont Hotel"
                   required
+                  disabled={isSubmitting}
                 />
                 {errors?.name && (
                   <p className="text-sm text-red-600 mt-1">
@@ -328,6 +400,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2 bg-gray-50"
                   placeholder="Kota akan diisi otomatis dari lokasi"
                   readOnly
+                  disabled={isSubmitting}
                 />
                 <p className="text-xs text-gray-500 mt-1">Kota akan diambil otomatis dari lokasi</p>
                 {errors?.city && (
@@ -363,6 +436,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                     className="w-full border rounded px-3 py-2"
                     placeholder="0.0"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -409,6 +483,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Cari lokasi atau klik pada peta"
                   required
+                  disabled={isSubmitting}
                 />
                 <Button 
                   type="button"
@@ -465,6 +540,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
                   className="w-full border rounded px-3 py-2"
                   placeholder="Masukkan deskripsi hotel (opsional)"
                   rows={3}
+                  disabled={isSubmitting}
                 ></textarea>
                 {errors?.description && (
                   <p className="text-sm text-red-600 mt-1">
@@ -477,11 +553,21 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         </div>
 
         <DialogFooter className="mt-4 pt-4 border-t flex justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={closeModal}>
+          <Button type="button" variant="secondary" onClick={closeModal} disabled={isSubmitting}>
             Batal
           </Button>
-          <Button onClick={handleSubmit}>
-            {post ? "Simpan Perubahan" : "Simpan Data"}
+          <Button 
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {post ? "Menyimpan..." : "Menambahkan..."}
+              </>
+            ) : (
+              post ? "Simpan Perubahan" : "Simpan Data"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

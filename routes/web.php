@@ -38,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Kategori Paket
     Route::resource('package-category', PackageCategoryController::class);
+    Route::get('package-category-export', [PackageCategoryController::class, 'export'])->name('package-category.export');
+    Route::get('package-category-export-pdf', [PackageCategoryController::class, 'export_pdf'])->name('package-category.export-pdf');
+    Route::post('package-category/bulk-delete', [PackageCategoryController::class, 'bulkDelete'])->name('package-category.bulk-delete');
 
     // Paket Umrah
     Route::resource('package', PackageController::class);

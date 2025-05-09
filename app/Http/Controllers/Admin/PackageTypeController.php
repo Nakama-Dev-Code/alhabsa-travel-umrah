@@ -55,7 +55,7 @@ class PackageTypeController extends Controller
             'search' => $search
         ]);
 
-        return $pdf->download('airline.pdf');
+        return $pdf->download('package-types.pdf');
     }
 
     public function export(Request $request)
@@ -135,10 +135,11 @@ class PackageTypeController extends Controller
     public function update(Request $request, PackageType $packageType)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:package_types,name,' . $packageType->id,
         ], [
             'name.required' => 'Nama paket harus diisi !',
             'name.max' => 'Nama paket maksimal 255 karakter !',
+            'name.unique' => 'Nama paket sudah digunakan, gunakan nama lain !',
         ]);
 
         $data = $request->only(['name', 'description']);

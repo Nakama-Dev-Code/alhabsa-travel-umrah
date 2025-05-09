@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Maskapai Penerbangan</title>
+    <title>Kategori Paket</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,7 +47,7 @@
 
 <body>
     <div class="header">
-        <h2>Laporan Maskapai Penerbangan</h2>
+        <h2>Laporan Kategori Paket</h2>
         @if ($search)
             <p>Hasil pencarian: "{{ $search }}"</p>
         @endif
@@ -57,17 +57,19 @@
     <table>
         <thead>
             <tr>
-                <th>No</th>
-                <th>Nama Maskapai</th>
-                <th>Link Website Maskapai</th>
+                <th>#</th>
+                <th>Jenis Paket</th>
+                <th>Tipe Paket</th>
+                <th>Deskripsi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($airlines as $index => $option)
+            @foreach ($packageCategories as $index => $option)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $option->name }}</td>
-                    <td>{{ $option->link_website ?? 'Tidak ada link website' }}</td>
+                    <td>{{ $option->type->name ?? 'Tidak ada tipe' }}</td>
+                    <td>{{ $option->description ?? 'Tidak ada deskripsi' }}</td>
                 </tr>
             @endforeach
         </tbody>

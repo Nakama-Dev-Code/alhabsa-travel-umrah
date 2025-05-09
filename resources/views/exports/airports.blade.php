@@ -57,7 +57,7 @@
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Nama Bandara</th>
                 <th>Kode Bandara</th>
                 <th>Lokasi</th>

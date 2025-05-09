@@ -37,7 +37,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Kategori Paket',
-        href: '/category-package',
+        href: '/package-category',
         icon: ChartBarStacked,
         label: 'Manajemen Paket',
     },

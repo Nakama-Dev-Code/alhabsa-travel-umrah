@@ -149,12 +149,13 @@ class WebOptionController extends Controller
     public function update(Request $request, WebOption $WebOption)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:web_options,name,' . $WebOption->id,
             'value' => 'required|string',
             'path_file' => 'nullable|mimes:jpg,jpeg,png,gif,pdf|max:2048',
         ], [
             'name.required' => 'Nama harus diisi !',
             'name.max' => 'Nama maksimal 255 karakter !',
+            'name.unique' => 'Nama sudah digunakan, gunakan nama lain !',
             'value.required' => 'Nilai harus diisi !',
             'path_file.mimes' => 'File harus berformat jpg, jpeg, png, gif, atau pdf !',
             'path_file.max' => 'Ukuran file maksimal 2MB !',

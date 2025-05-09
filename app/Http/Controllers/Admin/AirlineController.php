@@ -118,7 +118,7 @@ class AirlineController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:package_types,name',
+            'name' => 'required|string|max:255|unique:airlines,name',
         ], [
             'name.required' => 'Nama maskapai harus diisi !',
             'name.max' => 'Nama maskapai maksimal 255 karakter !',
@@ -135,10 +135,11 @@ class AirlineController extends Controller
     public function update(Request $request, Airline $airline)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:airlines,name,' . $airline->id,
         ], [
             'name.required' => 'Nama maskapai harus diisi !',
             'name.max' => 'Nama maskapai maksimal 255 karakter !',
+            'name.unique' => 'Nama maskapai sudah digunakan, gunakan nama lain !',
         ]);
 
         $data = $request->only(['name', 'link_website']);
