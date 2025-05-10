@@ -187,14 +187,13 @@ export default function WebOptionFormModal({ isOpen, closeModal, post }: Props) 
                     className="w-full h-64 border rounded"
                   ></iframe>
                 ) : (
-                  <a
-                    href={preview}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
+                  <Button
+                    type="button"
+                    onClick={() => window.open(preview, "_blank", "noopener,noreferrer")}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 mr-2"
                   >
-                    Lihat file
-                  </a>
+                    Lihat File
+                  </Button>
                 )}
 
                 <Button

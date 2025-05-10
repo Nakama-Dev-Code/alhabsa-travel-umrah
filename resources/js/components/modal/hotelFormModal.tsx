@@ -370,7 +370,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
         </DialogHeader>
 
         <div className="overflow-y-auto flex-grow pr-1">
-          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off" noValidate>
+          <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off" noValidate>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Nama Hotel <span className="text-red-500">*</span></label>

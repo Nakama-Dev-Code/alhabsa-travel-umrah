@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Kategori Paket</title>
+    <title>Paket Umrah</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,7 +47,7 @@
 
 <body>
     <div class="header">
-        <h2>Laporan Kategori Paket</h2>
+        <h2>Laporan Paket Umrah</h2>
         @if ($search)
             <p>Hasil pencarian: "{{ $search }}"</p>
         @endif
@@ -58,17 +58,17 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Jenis Paket</th>
-                <th>Tipe Paket</th>
+                <th>Nama Paket</th>
+                <th>Kategori Paket</th>
                 <th>Deskripsi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($packageCategories as $index => $option)
+            @foreach ($packages as $index => $option)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $option->name }}</td>
-                    <td>{{ $option->type->name ?? 'Tidak ada tipe' }}</td>
+                    <td>{{ $option->title }}</td>
+                    <td>{{ $option->category->name ?? 'Tidak ada kategori' }}</td>
                     <td>{{ $option->description ?? 'Tidak ada deskripsi' }}</td>
                 </tr>
             @endforeach

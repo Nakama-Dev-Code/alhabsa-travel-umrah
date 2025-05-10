@@ -95,7 +95,7 @@ export default function PackageTypeFormModal({ isOpen, closeModal, post }: Props
           <DialogTitle>{post ? "Edit Airline" : "Add Airline"}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off" noValidate>
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4" autoComplete="off" noValidate>
           <div>
             <label className="block text-sm font-medium mb-1">Nama Maskapai <span className="text-red-500">*</span></label>
             <input

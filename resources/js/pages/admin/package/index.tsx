@@ -4,25 +4,26 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "react-hot-toast";
-import PackageCategoryFormModal from "@/components/modal/packageCategoryFormModal";
+import PackageFormModal from "@/components/modal/packageFormModal";
 import { Head, router, usePage } from "@inertiajs/react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Plus, Search, Download, ChevronLeft, ChevronRight, Loader2, Trash2, Edit } from "lucide-react";
 
-// Mendefinisikan tipe untuk tipe paket
-interface PackageType {
+// Mendefinisikan tipe untuk kategori paket
+interface PackageCategory {
   id: number;
   name: string;
 }
 
-// Mendefinisikan tipe untuk kategori paket
-interface PackageCategory {
+// Mendefinisikan tipe untuk paket
+interface Package {
   id: number;
-  package_type_id: number;
-  name: string;
+  package_category_id: number;
+  title: string;
   description: string;
-  type?: {
+  image: string;
+  category?: {
     id: number;
     name: string;
   };
@@ -36,21 +37,22 @@ interface MetaPagination {
   last_page: number;
 }
 
-export default function PackageCategory() {
-  const { packageCategories, packageTypes, meta } = usePage<{ 
+export default function Package() {
+  const { packages, packageCategories, meta } = usePage<{ 
+    packages: Package[],
     packageCategories: PackageCategory[],
-    packageTypes: PackageType[],
     meta: MetaPagination
   }>().props;
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<PackageCategory | null>(null);
+  const [selectedPost, setSelectedPost] = useState<Package | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState<PackageCategory[]>([]);
+  const [filteredData, setFilteredData] = useState<Package[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
   
   // State untuk dialog konfirmasi hapus
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -61,7 +63,7 @@ export default function PackageCategory() {
   useEffect(() => {
     // Simulate initial loading
     const timer = setTimeout(() => {
-      setFilteredData(packageCategories);
+      setFilteredData(packages);
       setIsInitialLoading(false);
     }, 1000); // Show loading for 1 second on initial page load
     
@@ -72,26 +74,26 @@ export default function PackageCategory() {
     // Untuk menangani pencarian lokal di halaman ini
     if (!isInitialLoading) {
       if (searchTerm) {
-        const filtered = packageCategories.filter(item => 
-          (item.type?.name.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        const filtered = packages.filter(item =>
+          (item.category?.name.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
+          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           (item.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
         );
         setFilteredData(filtered);
       } else {
-        setFilteredData(packageCategories);
+        setFilteredData(packages);
       }
       setSelectedItems([]);
     }
-  }, [searchTerm, packageCategories, isInitialLoading]);
+  }, [searchTerm, packages, isInitialLoading]);
 
   // Function untuk mendapatkan nama tipe paket berdasarkan ID
-  const getPackageTypeName = (typeId: number) => {
-    const packageType = packageTypes.find(type => type.id === typeId);
-    return packageType ? packageType.name : "Tidak ditemukan";
+  const getPackageCategoryName = (typeId: number) => {
+    const packageCategory = packageCategories.find(type => type.id === typeId);
+    return packageCategory ? packageCategory.name : "Tidak ditemukan";
   };
 
-  const openModal = (post: PackageCategory | null = null) => {
+  const openModal = (post: Package | null = null) => {
     setSelectedPost(post);
     setIsModalOpen(true);
   };
@@ -115,7 +117,7 @@ export default function PackageCategory() {
     if (isBulkDelete) {
       // Handle bulk delete
       setIsDeleting(true);
-      router.post('/package-category/bulk-delete', { ids: selectedItems }, {
+      router.post('/package/bulk-delete', { ids: selectedItems }, {
         onSuccess: () => {
           toast.success("Berhasil menghapus data terpilih!");
           setSelectedItems([]);
@@ -132,7 +134,7 @@ export default function PackageCategory() {
     } else if (itemToDelete) {
       // Handle single item delete
       setIsDeleting(true);
-      router.delete(`/package-category/${itemToDelete}`, {
+      router.delete(`/package/${itemToDelete}`, {
         onSuccess: () => {
           toast.success("Berhasil menghapus data!");
           setIsDeleteConfirmOpen(false);
@@ -151,7 +153,7 @@ export default function PackageCategory() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    router.get('/package-category', { search: searchTerm, page: 1 }, {
+    router.get('/package', { search: searchTerm, page: 1 }, {
       preserveState: true,
       onSuccess: () => {
         setCurrentPage(1);
@@ -162,7 +164,7 @@ export default function PackageCategory() {
 
   const handlePageChange = (page: number) => {
     setIsLoading(true);
-    router.get('/package-category', { search: searchTerm, page }, {
+    router.get('/package', { search: searchTerm, page }, {
       preserveState: true,
       onSuccess: () => {
         setCurrentPage(page);
@@ -173,7 +175,7 @@ export default function PackageCategory() {
 
   const exportToExcel = () => {
     setIsLoading(true);
-    window.location.href = `/package-category-export${searchTerm ? `?search=${searchTerm}` : ''}`;
+    window.location.href = `/package-export${searchTerm ? `?search=${searchTerm}` : ''}`;
     setTimeout(() => {
       setIsLoading(false);
       toast.success("Data berhasil diekspor!");
@@ -182,7 +184,7 @@ export default function PackageCategory() {
 
   const exportToPdf = () => {
     setIsLoading(true);
-    window.location.href = `/package-category-export-pdf${searchTerm ? `?search=${searchTerm}` : ''}`;
+    window.location.href = `/package-export-pdf${searchTerm ? `?search=${searchTerm}` : ''}`;
     setTimeout(() => {
       setIsLoading(false);
       toast.success("PDF berhasil diekspor!");
@@ -213,11 +215,11 @@ export default function PackageCategory() {
 
   return (
     <AppLayout>
-      <Head title="Kategori Paket" />
+      <Head title="Paket" />
       <Toaster position="top-right" reverseOrder={false} />
       <div className="p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-lg rounded-xl">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-          <h2 className="text-xl font-semibold">Kategori Paket</h2>
+          <h2 className="text-xl font-semibold">Paket</h2>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button 
               onClick={() => openModal()} 
@@ -298,9 +300,9 @@ export default function PackageCategory() {
                       />
                     </TableHead>
                     <TableHead>#</TableHead>
-                    <TableHead>Nama Jenis Paket</TableHead>
-                    <TableHead>Tipe Paket</TableHead>
-                    <TableHead>Deskripsi</TableHead>
+                    <TableHead>Gambar Banner</TableHead>
+                    <TableHead>Nama Paket</TableHead>
+                    <TableHead>Kategori Paket</TableHead>
                     <TableHead className="w-[150px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -319,19 +321,61 @@ export default function PackageCategory() {
                         {((meta?.current_page || currentPage) - 1) * (meta?.per_page || 10) + index + 1}
                       </TableCell>
                       <TableCell>
-                        <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
-                          {post.name}
-                        </Badge>
+                        {post.image ? (
+                          post.image.toLowerCase().endsWith(".pdf") ? (
+                            <a
+                              href={post.image}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 underline"
+                            >
+                              Lihat PDF
+                            </a>
+                          ) : (
+                            <>
+                              <img
+                                src={post.image}
+                                alt="File"
+                                className="w-16 h-16 object-cover rounded-lg shadow cursor-pointer"
+                                onClick={() => setZoomImage(post.image!)}
+                              />
+                            </>
+                          )
+                        ) : (
+                          <span className="text-gray-500">404 Not Found</span>
+                        )}
+                      </TableCell>
+                      {zoomImage && (
+                        <div className="fixed inset-0 z-50 bg-black/25 flex items-center justify-center">
+                          <div className="relative">
+                            <img
+                              src={zoomImage}
+                              alt="Preview"
+                              className="max-w-[90vw] max-h-[90vh] rounded-lg shadow-xl"
+                            />
+                            <button
+                              onClick={() => setZoomImage(null)}
+                              className="absolute top-2 right-2 bg-white rounded-full p-1 shadow"
+                            >
+                              ❌
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      <TableCell>
+                        <div>
+                          <Badge className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                            {post.title}
+                          </Badge>
+                          <div className="text-sm text-gray-500 truncate max-w-sm" title={post.description}>
+                            {post.description ? post.description : '404 Not Found'}
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <Badge className="text-sm font-medium bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                          {post.type ? post.type.name : getPackageTypeName(post.package_type_id)}
+                          {post.category ? post.category.name : getPackageCategoryName(post.package_category_id)}
                         </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm text-gray-500 truncate max-w-sm" title={post.description}>
-                          {post.description ? post.description : '404 Not Found'}
-                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
@@ -421,7 +465,7 @@ export default function PackageCategory() {
         )}
       </div>
 
-      <PackageCategoryFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} packageTypes={packageTypes} />
+      <PackageFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} packageCategories={packageCategories} />
       
       {/* Dialog Konfirmasi Hapus */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>

@@ -44,6 +44,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Paket Umrah
     Route::resource('package', PackageController::class);
+    Route::get('package-export', [PackageController::class, 'export'])->name('package.export');
+    Route::get('package-export-pdf', [PackageController::class, 'export_pdf'])->name('package.export-pdf');
+    Route::post('package/bulk-delete', [PackageController::class, 'bulkDelete'])->name('package.bulk-delete');
 
     // Jadwal Paket Umrah
     Route::resource('package-schedule', PackageScheduleController::class);

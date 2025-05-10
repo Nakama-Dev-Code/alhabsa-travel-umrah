@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Validator;
 
 class PackageCategoryController extends Controller
 {
@@ -133,16 +134,20 @@ class PackageCategoryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'package_type_id' => 'required|exists:package_types,id',
             'name' => 'required|string|max:255|unique:package_categories,name',
         ], [
             'package_type_id.required' => 'Tipe paket harus dipilih !',
             'package_type_id.exists' => 'Tipe paket tidak ditemukan !',
-            'name.required' => 'Jenis Paket harus diisi !',
-            'name.max' => 'Jenis Paket maksimal 255 karakter !',
-            'name.unique' => 'Jenis Paket sudah digunakan, gunakan nama lain !',
+            'name.required' => 'Jenis paket harus diisi !',
+            'name.max' => 'Jenis paket maksimal 255 karakter !',
+            'name.unique' => 'Jenis paket sudah digunakan, gunakan nama lain !',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $data = [
             'package_type_id' => $request->package_type_id,
@@ -164,9 +169,9 @@ class PackageCategoryController extends Controller
         ], [
             'package_type_id.required' => 'Tipe paket harus dipilih !',
             'package_type_id.exists' => 'Tipe paket tidak ditemukan !',
-            'name.required' => 'Jenis Paket harus diisi !',
-            'name.max' => 'Jenis Paket maksimal 255 karakter !',
-            'name.unique' => 'Jenis Paket sudah digunakan, gunakan nama lain !',
+            'name.required' => 'Jenis paket harus diisi !',
+            'name.max' => 'Jenis paket maksimal 255 karakter !',
+            'name.unique' => 'Jenis paket sudah digunakan, gunakan nama lain !',
         ]);
 
         $data = [

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -26,13 +26,14 @@ interface Props {
 }
 
 export default function PackageCategoryFormModal({ isOpen, closeModal, post, packageTypes }: Props) {
+  const { errors } = usePage().props as { errors: Record<string, string> };
+  
   const [formData, setFormData] = useState<PackageCategory>({
     package_type_id: post?.package_type_id || (packageTypes.length > 0 ? packageTypes[0].id : 0),
     name: "",
     description: "",
   });
   
-  const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -49,7 +50,6 @@ export default function PackageCategoryFormModal({ isOpen, closeModal, post, pac
         description: "", 
       });
     }
-    setErrors({});
   }, [post, isOpen, packageTypes]);
 
   const handleChange = (
@@ -89,20 +89,9 @@ export default function PackageCategoryFormModal({ isOpen, closeModal, post, pac
         setIsSubmitting(false);
         router.reload();
       },
-      onError: (errors) => {
-        const formattedErrors: Record<string, string[]> = {};
-
-        for (const key in errors) {
-          if (Array.isArray(errors[key])) {
-            formattedErrors[key] = errors[key];
-          } else if (typeof errors[key] === "string") {
-            formattedErrors[key] = [errors[key]];
-          }
-        }
-        
-        setErrors(formattedErrors);
+      onError: () => {
         toast.error(post?.id ? "Gagal mengubah data!" : "Gagal menambah data!");
-        console.error(errors.message || "Failed to submit data.");
+        console.error("Failed to submit data.");
         setIsSubmitting(false);
       },
     });
@@ -130,10 +119,8 @@ export default function PackageCategoryFormModal({ isOpen, closeModal, post, pac
                   required
                   disabled={isSubmitting}
                 />
-                {errors?.name && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {Array.isArray(errors.name) ? errors.name[0] : errors.name}
-                  </p>
+                {errors.name && (
+                  <p className="text-sm text-red-600 mt-1">{errors.name}</p>
                 )}
               </div>
 
@@ -155,10 +142,8 @@ export default function PackageCategoryFormModal({ isOpen, closeModal, post, pac
                     ))}
                   </SelectContent>
                 </Select>
-                {errors?.package_type_id && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {Array.isArray(errors.package_type_id) ? errors.package_type_id[0] : errors.package_type_id}
-                  </p>
+                {errors.package_type_id && (
+                  <p className="text-sm text-red-600 mt-1">{errors.package_type_id}</p>
                 )}
               </div>
             </div>
@@ -174,10 +159,8 @@ export default function PackageCategoryFormModal({ isOpen, closeModal, post, pac
                 rows={3}
                 disabled={isSubmitting}
               ></textarea>
-              {errors?.description && (
-                <p className="text-sm text-red-600 mt-1">
-                  {Array.isArray(errors.description) ? errors.description[0] : errors.description}
-                </p>
+              {errors.description && (
+                <p className="text-sm text-red-600 mt-1">{errors.description}</p>
               )}
             </div>
           </form>
