@@ -10,7 +10,7 @@ class PackageSchedule extends Model
     use HasFactory;
 
     protected $table = 'package_schedules';
-    protected $fillable = ['package_id', 'hotel_madinah_id', 'hotel_makkah_id', 'airport_id', 'airline_id', 'departure_date', 'price', 'seat_available'];
+    protected $fillable = ['package_id', 'hotel_makkah_id', 'hotel_madinah_id', 'airport_id', 'airline_id', 'departure_date', 'price', 'seat_available'];
 
     public function package()
     {

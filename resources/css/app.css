@@ -11,11 +11,11 @@
     --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
 
     @keyframes scroll {
-      to {
-        transform: translate(calc(-50% - 0.5rem));
-      }
+        to {
+            transform: translate(calc(-50% - 0.5rem));
+        }
     }
-  }
+}
 
 @theme {
     --font-sans:
@@ -170,12 +170,12 @@
 
 .bg-utama {
     @apply bg-blue-600;
-  }
+}
 
-  .text-utama{
-    @apply text-blue-500
-  }
+.text-utama {
+    @apply text-blue-500;
+}
 
-  .FaAngleRight{
-    @apply mr-1 text-slate-700
-  }
+.FaAngleRight {
+    @apply mr-1 text-slate-700;
+}

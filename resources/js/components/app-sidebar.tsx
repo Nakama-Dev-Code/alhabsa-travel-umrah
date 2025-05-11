@@ -17,7 +17,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Paket Umrah',
-        href: '/umrah-package',
+        href: '/package-schedule',
         icon: NotebookText,
         label: 'Platform',
     },

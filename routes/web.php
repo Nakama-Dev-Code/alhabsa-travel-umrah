@@ -50,6 +50,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Jadwal Paket Umrah
     Route::resource('package-schedule', PackageScheduleController::class);
+    Route::get('package-schedule-export', [PackageScheduleController::class, 'export'])->name('package-schedule.export');
+    Route::get('package-schedule-export-pdf', [PackageScheduleController::class, 'export_pdf'])->name('package-schedule.export-pdf');
+    Route::post('package-schedule/bulk-delete', [PackageScheduleController::class, 'bulkDelete'])->name('package-schedule.bulk-delete');
 
     // Airlines
     Route::resource('airline', AirlineController::class);
