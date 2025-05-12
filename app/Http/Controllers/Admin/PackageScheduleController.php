@@ -291,4 +291,27 @@ class PackageScheduleController extends Controller
 
         return redirect()->route('package-schedule.index')->with('success', 'Jadwal umrah berhasil dihapus !');
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:package_schedules,id',
+        ]);
+
+        $ids = $request->ids;
+        $count = 0;
+
+        foreach ($ids as $id) {
+            $packageSchedule = PackageSchedule::find($id);
+
+            if ($packageSchedule) {
+                // Hapus data dari database
+                $packageSchedule->delete();
+                $count++;
+            }
+        }
+
+        return redirect()->route('package-schedule.index')->with('success', $count . ' data berhasil dihapus.');
+    }
 }
