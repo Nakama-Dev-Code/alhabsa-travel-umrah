@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Paket Umrah</title>
+    <title>Tipe Paket Umrah</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,7 +47,7 @@
 
 <body>
     <div class="header">
-        <h2>Laporan Paket Umrah</h2>
+        <h2>Laporan Tipe Paket Umrah</h2>
         @if ($search)
             <p>Hasil pencarian: "{{ $search }}"</p>
         @endif
