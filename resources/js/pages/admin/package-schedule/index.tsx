@@ -114,19 +114,30 @@ export default function PackageSchedule() {
   }, []);
   
   useEffect(() => {
-    // Untuk menangani pencarian lokal di halaman ini
     if (!isInitialLoading) {
       if (searchTerm) {
-        const filtered = packageSchedules.filter(item =>
-          (item.package?.title.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-          (item.hotelMakkah?.name.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-          (item.hotelMadinah?.name.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-          (item.airport?.name.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-          (item.airline?.name.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-          item.departure_date.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.seat_available.toString().includes(searchTerm.toLowerCase()) ||
-          item.price.toString().includes(searchTerm.toLowerCase())
-        );
+        const filtered = packageSchedules.filter(item => {
+          const packageTitle = item.package?.title?.toLowerCase() || '';
+          // Gunakan ID dan fungsi helper jika relasi tidak ada
+          const makkahName = item.hotelMakkah?.name?.toLowerCase() || getHotelName(item.hotel_makkah_id)?.toLowerCase() || '';
+          const madinahName = item.hotelMadinah?.name?.toLowerCase() || getHotelName(item.hotel_madinah_id)?.toLowerCase() || '';
+          const airportName = item.airport?.name?.toLowerCase() || '';
+          const airlineName = item.airline?.name?.toLowerCase() || '';
+          const departureDate = item.departure_date?.toLowerCase() || '';
+          const seatAvailable = item.seat_available?.toString() || '';
+          const price = item.price?.toString() || '';
+          
+          const term = searchTerm.toLowerCase();
+          
+          return packageTitle.includes(term) ||
+                 makkahName.includes(term) ||
+                 madinahName.includes(term) ||
+                 airportName.includes(term) ||
+                 airlineName.includes(term) ||
+                 departureDate.includes(term) ||
+                 seatAvailable.includes(term) ||
+                 price.includes(term);
+        });
         setFilteredData(filtered);
       } else {
         setFilteredData(packageSchedules);
@@ -134,6 +145,24 @@ export default function PackageSchedule() {
       setSelectedItems([]);
     }
   }, [searchTerm, packageSchedules, isInitialLoading]);
+
+  useEffect(() => {
+    console.log("Data dari server:", packageSchedules);
+    // Cek apakah relasi hotelMakkah dan hotelMadinah ada di setiap item
+    packageSchedules.forEach((item, index) => {
+      console.log(`Item ${index}:`, {
+        id: item.id,
+        package: item.package,
+        hotelMakkah: item.hotelMakkah,
+        hotelMadinah: item.hotelMadinah,
+        airport: item.airport,
+        airline: item.airline,
+        departure_date: item.departure_date,
+        price: item.price,
+        seat_available: item.seat_available
+      });
+    });
+  }, [packageSchedules]);
 
   // Function untuk mendapatkan nama paket berdasarkan ID
   const getPackageName = (typeId: number) => {

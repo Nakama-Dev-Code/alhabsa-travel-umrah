@@ -23,7 +23,7 @@ class PackageScheduleController extends Controller
         $search = $request->input('search');
         $perPage = 5; // Jumlah item per halaman
 
-        $query = PackageSchedule::with(['package.category.type', 'hotelMakkah', 'hotelMadinah', 'airport', 'airline']);
+        $query = PackageSchedule::with(['package', 'hotelMakkah', 'hotelMadinah', 'airport', 'airline']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -51,6 +51,8 @@ class PackageScheduleController extends Controller
 
         $packageSchedules = $query->paginate($perPage)
             ->withQueryString();
+
+        // dd($packageSchedules);
 
         // Get all package types for the dropdown
         $packages = Package::all();
