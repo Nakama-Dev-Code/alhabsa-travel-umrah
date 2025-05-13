@@ -15,7 +15,7 @@ const HeaderCard = () => {
         {/* Overlay dan Konten Utama */}
         <div className="absolute inset-0  bg-gradient-to-b from-transparent to-black/80 bg-opacity-50 flex items-center px-4 md:px-20 lg:px-32">
           <div className='text-white'>
-            <h1 className='text-5xl font-bold'>Let's Book now bro</h1>
+            <h1 className='text-5xl font-bold'>Transaksi Paket Umrah</h1>
           </div>
         </div>
 

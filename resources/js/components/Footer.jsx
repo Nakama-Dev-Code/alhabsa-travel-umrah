@@ -26,10 +26,10 @@ const Footer = () => {
               </div>
             </div>
             <div className="flex gap-4 mt-4">
-              <a href="#" className="text-gray-400 hover:text-red-500 transition">
+              <a href="#" className="text-gray-400 hover:text-[#2a3d66] transition-colors">
                 <FaSquareInstagram className="w-6 h-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-black transition">
+              <a href="#" className="text-gray-400 hover:text-[#2a3d66] transition-colors">
                 <AiFillTikTok className="w-6 h-6" />
               </a>
             </div>
