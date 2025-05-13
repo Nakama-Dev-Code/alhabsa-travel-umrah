@@ -29,8 +29,9 @@ class SocialController extends Controller
 
         // Jika user tidak ditemukan, tolak login
         if (!$authUser) {
-            return redirect()->to('/login')->withErrors([
-                'email' => 'Akun Google Anda belum terdaftar.',
+            // sebelumnya to->(route('login'))->withErrors(['email' => 'Akun Google Anda belum terdaftar.']);
+            return redirect()->route('login')->with([
+                'status' => 'Akun Google Anda belum terdaftar!',
             ]);
         }
 
