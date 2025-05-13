@@ -22,40 +22,67 @@ class SocialController extends Controller
 
     public function handleGoogleCallback()
     {
-        $user = Socialite::driver('google')->user();
+        $googleUser = Socialite::driver('google')->user();
 
-        // cek user sudah tersedia
-        $authUser = User::firstOrNew(['email' => $user->getEmail()]);
+        // Hanya cari user yang sudah ada
+        $authUser = User::where('email', $googleUser->getEmail())->first();
 
-        // cek user bila belum tersedia
-        if (!$authUser->exist) {
-            $temporaryPassword = $this->generateTemporaryPassword();
-            $authUser->name = $user->getName();
-            $authUser->password = bcrypt($temporaryPassword);
-            $authUser->email_verified_at = Carbon::now();
-            $authUser->save();
+        // Jika user tidak ditemukan, tolak login
+        if (!$authUser) {
+            return redirect()->to('/login')->withErrors([
+                'email' => 'Akun Google Anda belum terdaftar.',
+            ]);
         }
 
-        // Pastikan verifikasi email telah diatur
+        // Pastikan email sudah terverifikasi
         if ($authUser->email_verified_at === null) {
             $authUser->email_verified_at = Carbon::now();
             $authUser->save();
         }
 
-        // Login User
+        // Login user
         Auth::login($authUser, true);
 
         return redirect()->to('/dashboard');
     }
 
-    private function generateTemporaryPassword()
-    {
-        $letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $numbers = '0123456789';
+    // Jika belum terdaftar
+    // public function handleGoogleCallback()
+    // {
+    //     $user = Socialite::driver('google')->user();
 
-        $password = Str::random(6, $letters);
-        $password .= Str::random(2, $numbers); // .= php call with this (append)
+    //     // cek user sudah tersedia
+    //     $authUser = User::firstOrNew(['email' => $user->getEmail()]);
 
-        return $password;
-    }
+    //     // cek user bila belum tersedia
+    //     if (!$authUser->exist) {
+    //         $temporaryPassword = $this->generateTemporaryPassword();
+    //         $authUser->name = $user->getName();
+    //         $authUser->password = bcrypt($temporaryPassword);
+    //         $authUser->email_verified_at = Carbon::now();
+    //         $authUser->save();
+    //     }
+
+    //     // Pastikan verifikasi email telah diatur
+    //     if ($authUser->email_verified_at === null) {
+    //         $authUser->email_verified_at = Carbon::now();
+    //         $authUser->save();
+    //     }
+
+    //     // Login User
+    //     Auth::login($authUser, true);
+
+    //     return redirect()->to('/dashboard');
+    // }
+
+    // private function generateTemporaryPassword()
+    // {
+    //     $letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //     $numbers = '0123456789';
+
+    //     $password = Str::random(6, $letters);
+    //     $password .= Str::random(2, $numbers); // .= php call with this (append)
+
+    //     return $password;
+    // }
 }

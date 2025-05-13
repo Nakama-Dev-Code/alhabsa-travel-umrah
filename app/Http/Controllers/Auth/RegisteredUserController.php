@@ -18,9 +18,17 @@ class RegisteredUserController extends Controller
     /**
      * Show the registration page.
      */
-    public function create(): Response
+
+    // Bisa registrasi
+    // public function create(): Response
+    // {
+    //     return Inertia::render('auth/register');
+    // }
+
+    // Tidak bisa registrasi
+    public function create(): RedirectResponse
     {
-        return Inertia::render('auth/register');
+        return redirect()->route('login')->with('status', 'Tidak dapat melakukan registrasi !');
     }
 
     /**
@@ -32,7 +40,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
