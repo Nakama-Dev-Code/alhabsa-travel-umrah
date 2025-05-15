@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('img/logo.jpg') }}" type="image/jpeg" />
+    <link rel="icon" href="{{ asset('img/icon-logo.png') }}" type="image/png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}

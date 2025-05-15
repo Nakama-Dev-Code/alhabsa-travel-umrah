@@ -8,7 +8,6 @@ export const InfiniteMovingCards = ({
   direction = "left",
   speed = "fast",
   pauseOnHover = true,
-  className,
   imageClassName,
 }: {
   items: { src: string; alt: string }[];

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { SelectValue, SelectTrigger, SelectContent, SelectItem, Select } from "@/components/ui/select";
 
 import {
     Modal,
@@ -52,11 +53,6 @@ const Book = () => {
       'Paket Plus Palestina',
       'Paket Plus Mesir'
     ],
-    // 'haji': [
-    //   'Paket Haji Khusus',
-    //   'Paket Haji Furoda',
-    //   'Paket Haji Plus'
-    // ]
   };
 
   // Update daftar paket ketika jenis perjalanan berubah
@@ -82,6 +78,16 @@ const Book = () => {
     setTravelType(newType);
   };
 
+  // Fungsi untuk menangani perubahan bulan
+  const handleMonthChange = (value) => {
+    setSelectedMonth(value);
+  };
+
+  // Fungsi untuk menangani perubahan paket
+  const handlePackageChange = (value) => {
+    setSelectedPackage(value);
+  };
+
   // Fungsi untuk mengirim pesan ke WhatsApp
   const sendToWhatsApp = () => {
     // Validasi form
@@ -99,7 +105,6 @@ const Book = () => {
     const travelTypeText = {
       'umroh-reguler': 'Umrah Reguler',
       'umroh-plus': 'Umrah Plus',
-      // 'haji': 'Haji'
     };
 
    // Format pesan Islami
@@ -121,7 +126,6 @@ Mohon kiranya dapat memberikan informasi lebih lanjut terkait ketersediaan dan h
 
 Wassalamu'alaikum warahmatullahi wabarakatuh.
 `;
-
 
     // Format pesan untuk URL (encode)
     const encodedMessage = encodeURIComponent(message);
@@ -164,48 +168,41 @@ Wassalamu'alaikum warahmatullahi wabarakatuh.
           />
           Umrah Plus
         </label>
-        {/* <label className="flex items-center">
-          <input
-            type="radio"
-            name="travel-type"
-            value="haji"
-            checked={travelType === 'haji'}
-            onChange={() => handleTravelTypeChange('haji')}
-            className="mr-2"
-          />
-          Haji
-        </label> */}
       </div>
 
       {/* Pilihan Keberangkatan */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div>
           <label className="block mb-2">Keberangkatan</label>
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Pilih Bulan</option>
-            {months.map((month, index) => (
-              <option key={index} value={month}>{month}</option>
-            ))}
-          </select>
+          <Select value={selectedMonth} onValueChange={handleMonthChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih Bulan" />
+            </SelectTrigger>
+            <SelectContent>
+              {months.map((month, index) => (
+                <SelectItem key={index} value={month}>
+                  {month}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Jenis Paket */}
         <div>
           <label className="block mb-2">Jenis Paket</label>
-          <select
-            value={selectedPackage}
-            onChange={(e) => setSelectedPackage(e.target.value)}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Pilih Paket</option>
-            {packageOptions.map((pkg, index) => (
-              <option key={index} value={pkg}>{pkg}</option>
-            ))}
-          </select>
+          <Select value={selectedPackage} onValueChange={handlePackageChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih Paket" />
+            </SelectTrigger>
+            <SelectContent>
+              {packageOptions.map((pkg, index) => (
+                <SelectItem key={index} value={pkg}>
+                  {pkg}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Jumlah Penumpang */}
@@ -322,15 +319,9 @@ Wassalamu'alaikum warahmatullahi wabarakatuh.
             placeholder="Masukkan kode promo"
             className="flex-grow p-2 border rounded w-full md:w-auto"
           />
-          {/* <button
-            onClick={sendToWhatsApp}
-            className="bg-[#222636] text-white px-6 py-2 rounded hover:bg-[#2E3650] transition-colors  w-full md:w-auto mt-4 md:mt-0"
-          >
-            Cari Keberangkatan
-          </button> */}
           <Modal>
-            <ModalTrigger className=" cursor-pointer bg-black dark:bg-white dark:text-black text-white flex justify-center group/modal-btn">
-                <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
+            <ModalTrigger className="cursor-pointer bg-black dark:bg-white dark:text-black text-white flex justify-center group/modal-btn">
+                <span className="group-hover/modal-btn:translate-x-50 text-center transition duration-500">
                 Cari Keberangkatan
                 </span>
                 <div className="-translate-x-40 group-hover/modal-btn:translate-x-0 flex items-center justify-center absolute inset-0 transition duration-500 text-white z-20">
@@ -339,7 +330,6 @@ Wassalamu'alaikum warahmatullahi wabarakatuh.
             </ModalTrigger>
 
             <ModalBody>
-
                 <ModalContent>
                 <p>Apakah Anda yakin ingin mengirim permintaan ini?</p>
                 </ModalContent>
@@ -352,8 +342,7 @@ Wassalamu'alaikum warahmatullahi wabarakatuh.
                 </button>
                 </ModalFooter>
             </ModalBody>
-            </Modal>
-
+          </Modal>
         </div>
       </div>
     </div>

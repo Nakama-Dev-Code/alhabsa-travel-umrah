@@ -88,7 +88,7 @@ const Header = () => {
             onClick={() => setCurrentSlide(index)}
             className={`
               w-3 h-1 rounded-full transition-colors
-              ${index === currentSlide ? 'bg-green-500' : 'bg-white bg-opacity-50'}
+              ${index === currentSlide ? 'bg-[#2a3d66]' : 'bg-white bg-opacity-50'}
             `}
           />
         ))}

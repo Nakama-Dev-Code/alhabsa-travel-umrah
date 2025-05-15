@@ -505,7 +505,7 @@ const UmrahCardFilter = () => {
             <p className="text-gray-500 text-lg">Tidak ada paket umrah yang sesuai dengan filter yang dipilih.</p>
             <button 
               onClick={resetFilters}
-              className="mt-4 bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 hover:bg-blue-700"
+              className="mt-4 bg-[#2a3d66] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 hover:bg-blue-700"
             >
               Reset Filter
             </button>
@@ -547,7 +547,7 @@ const UmrahCardFilter = () => {
                     onClick={() => goToPage(page)}
                     className={`px-3 py-1 rounded-lg ${
                         currentPage === page
-                        ? "bg-blue-600 text-white"
+                        ? "bg-[#2E3650] text-white"
                         : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                     }`}
                     >
@@ -576,7 +576,7 @@ const UmrahCardFilter = () => {
       )}
 
       <div className="text-center mt-12">
-        <button className="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">
+        <button className="bg-white border border-[#2a3d66] text-[#2a3d66] hover:bg-blue-50 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">
           Lihat selengkapnya
         </button>
       </div>
