@@ -6,41 +6,127 @@ import { RiFilterLine } from "react-icons/ri";
 import { SelectValue, SelectTrigger, SelectContent, SelectItem, Select } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+// Definisi interface untuk data yang diambil dari controller
+interface Package {
+  id: number;
+  title: string;
+  image: string;
+  package_category_id: number;
+  category?: Category;
+}
+
+interface Category {
+  id?: number;
+  name: string;
+  type?: CategoryType;
+}
+
+interface CategoryType {
+  id?: number;
+  name: string;
+}
+
+interface Hotel {
+  id: number;
+  name: string;
+}
+
+interface Airport {
+  id: number;
+  name: string;
+}
+
+interface Airline {
+  id: number;
+  name: string;
+}
+
+interface PackageSchedule {
+  id: number;
+  package_id: number;
+  departure_date: string;
+  price: number;
+  seat_available: number;
+  hotel_makkah_id: number;
+  hotel_madinah_id: number;
+  airport_id: number;
+  airline_id: number;
+  hotelMakkah?: Hotel;
+  hotelMadinah?: Hotel;
+  airport?: Airport;
+  airline?: Airline;
+  package?: Package;
+}
+
+interface Property {
+  id: number;
+  title: string;
+  builder: string;
+  category: string;
+  status: string;
+  availability: string;
+  image: string;
+  harga: string;
+  date: string;
+  sisaSeat: string;
+  priceValue: number;
+  hotelMakkah: string;
+  hotelMadinah: string;
+  airport: string;
+  airline: string;
+}
+
+interface FilterState {
+  category: string;
+  availability: string;
+  airline: string;
+  priceRange: {
+    min: number;
+    max: number;
+  };
+}
+
 const UmrahCardFilter = () => {
-  const { packageSchedules, packages, hotels, airports, airlines } = usePage().props;
+  const { packageSchedules, packages, hotels, airports, airlines } = usePage<{
+    packageSchedules: PackageSchedule[],
+    packages: Package[],
+    hotels: Hotel[],
+    airports: Airport[],
+    airlines: Airline[]
+  }>().props;
   
   // Filter states
-  const [filters, setFilters] = useState({
-    category: "",
-    availability: "",
-    airline: "",
+  const [filters, setFilters] = useState<FilterState>({
+    category: "all",
+    availability: "all",
+    airline: "all",
     priceRange: { min: 0, max: 30000000 }
   });
 
   // Sorting state
-  const [sortBy, setSortBy] = useState("default");
+  const [sortBy, setSortBy] = useState<string>("default");
 
   // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(2);
-  const [filteredProperties, setFilteredProperties] = useState([]);
-  const [displayedProperties, setDisplayedProperties] = useState([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(2);
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+  const [displayedProperties, setDisplayedProperties] = useState<Property[]>([]);
   
   // Mengubah data yang diterima dari controller menjadi format yang dibutuhkan komponen
-  const [allProperties, setAllProperties] = useState([]);
+  const [allProperties, setAllProperties] = useState<Property[]>([]);
 
   useEffect(() => {
     // Mengubah data dari controller ke format yang dibutuhkan komponen
     if (packageSchedules && packageSchedules.length > 0) {
-      const formattedData = packageSchedules.map(schedule => {
+      const formattedData: Property[] = packageSchedules.map(schedule => {
         // Mencari data paket, hotel, dll berdasarkan ID
-        const packageData = packages.find(p => p.id === schedule.package_id) || {};
-        const category = packageData.category || {};
-        const type = category.type || {};
-        const hotelMakkah = hotels.find(h => h.id === schedule.hotel_makkah_id) || {};
-        const hotelMadinah = hotels.find(h => h.id === schedule.hotel_madinah_id) || {};
-        const airport = airports.find(a => a.id === schedule.airport_id) || {};
-        const airline = airlines.find(a => a.id === schedule.airline_id) || {};
+        const packageData = packages.find(p => p.id === schedule.package_id);
+        const category = packageData?.category || { name: "" };
+        const type = category?.type || { name: "" };
+        const hotelMakkah = schedule.hotelMakkah || hotels.find(h => h.id === schedule.hotel_makkah_id);
+        const hotelMadinah = schedule.hotelMadinah || hotels.find(h => h.id === schedule.hotel_madinah_id);
+        const airport = schedule.airport || airports.find(a => a.id === schedule.airport_id);
+        const airline = schedule.airline || airlines.find(a => a.id === schedule.airline_id);
         
         // Format harga
         const harga = `IDR ${new Intl.NumberFormat('id-ID').format(schedule.price)},00`;
@@ -50,19 +136,19 @@ const UmrahCardFilter = () => {
         
         return {
           id: schedule.id,
-          title: packageData.title || "PAKET UMRAH",
-          builder: type.name || "Umroh Reguler",
-          category: category.name || "Paket Reguler",
+          title: packageData?.title || "PAKET UMRAH",
+          builder: type?.name || "Umroh Reguler",
+          category: category?.name || "Paket Reguler",
           status: "Unfurnished",
           availability: availability,
-          image: packageData.image || "/img/no-image.jpg",
+          image: packageData?.image || "/img/no-image.jpg",
           harga: harga,
           date: new Date(schedule.departure_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
           sisaSeat: `${schedule.seat_available ? `${schedule.seat_available} Seat Tersedia` : 'Seat Habis'}`,
-          hotelMakkah: hotelMakkah.name || "Hotel di Makkah",
-          hotelMadinah: hotelMadinah.name || "Hotel di Madinah",
-          airport: airport.name || "Airport",
-          airline: airline.name || "Airline",
+          hotelMakkah: hotelMakkah?.name || "Hotel di Makkah",
+          hotelMadinah: hotelMadinah?.name || "Hotel di Madinah",
+          airport: airport?.name || "Airport",
+          airline: airline?.name || "Airline",
           priceValue: schedule.price
         };
       });
@@ -81,15 +167,15 @@ const UmrahCardFilter = () => {
     let result = [...allProperties];
     
     // Apply filters
-    if (filters.category) {
+    if (filters.category && filters.category !== "all") {
       result = result.filter(item => item.category === filters.category);
     }
     
-    if (filters.availability) {
+    if (filters.availability && filters.availability !== "all") {
       result = result.filter(item => item.availability === filters.availability);
     }
     
-    if (filters.airline) {
+    if (filters.airline && filters.airline !== "all") {
       result = result.filter(item => item.airline === filters.airline);
     }
     
@@ -105,9 +191,9 @@ const UmrahCardFilter = () => {
     } else if (sortBy === "price-desc") {
       result.sort((a, b) => b.priceValue - a.priceValue);
     } else if (sortBy === "date-asc") {
-      result.sort((a, b) => new Date(a.date) - new Date(b.date));
+      result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     } else if (sortBy === "date-desc") {
-      result.sort((a, b) => new Date(b.date) - new Date(a.date));
+      result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
     
     setFilteredProperties(result);
@@ -122,7 +208,7 @@ const UmrahCardFilter = () => {
   }, [currentPage, itemsPerPage, filteredProperties]);
 
   // Handle filter changes
-  const handleFilterChange = (filterName, value) => {
+  const handleFilterChange = (filterName: keyof FilterState, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [filterName]: value
@@ -130,7 +216,7 @@ const UmrahCardFilter = () => {
   };
 
   // Handle price range changes
-  const handlePriceRangeChange = (type, value) => {
+  const handlePriceRangeChange = (type: 'min' | 'max', value: string): void => {
     setFilters(prev => ({
       ...prev,
       priceRange: {
@@ -141,11 +227,11 @@ const UmrahCardFilter = () => {
   };
 
   // Handle reset filters
-  const resetFilters = () => {
+  const resetFilters = (): void => {
     setFilters({
-      category: "",
-      availability: "",
-      airline: "",
+      category: "all",
+      availability: "all",
+      airline: "all",
       priceRange: { min: 0, max: 30000000 }
     });
     setSortBy("default");
@@ -154,14 +240,14 @@ const UmrahCardFilter = () => {
   // Pagination controls
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
   
-  const goToPage = (page) => {
+  const goToPage = (page: number): void => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
 
   // Price formatter
-  const formatPrice = (price) => {
+  const formatPrice = (price: number): string => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
@@ -169,10 +255,10 @@ const UmrahCardFilter = () => {
     }).format(price);
   };
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
   // image
-  const [zoomImage, setZoomImage] = useState(null);
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
 
   return (
     <div className="px-4 md:px-20 lg:px-32 py-8 bg-gray-50">
@@ -218,7 +304,7 @@ const UmrahCardFilter = () => {
                 <SelectValue placeholder="Semua Kategori" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem>Semua Kategori</SelectItem>
+                <SelectItem value="all">Semua Kategori</SelectItem>
                 {categoryOptions.map((option, index) => (
                   <SelectItem key={index} value={option}>{option}</SelectItem>
                 ))}
@@ -237,7 +323,7 @@ const UmrahCardFilter = () => {
                 <SelectValue placeholder="Semua Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem>Semua Status</SelectItem>
+                <SelectItem value="all">Semua Status</SelectItem>
                 {availabilityOptions.map((option, index) => (
                   <SelectItem key={index} value={option}>{option}</SelectItem>
                 ))}
@@ -256,7 +342,7 @@ const UmrahCardFilter = () => {
                 <SelectValue placeholder="Semua Maskapai" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem>Semua Maskapai</SelectItem>
+                <SelectItem value="all">Semua Maskapai</SelectItem>
                 {airlineOptions.map((option, index) => (
                   <SelectItem key={index} value={option}>{option}</SelectItem>
                 ))}
@@ -371,9 +457,10 @@ const UmrahCardFilter = () => {
                     src={property.image}
                     alt={property.title}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/img/no-image.jpg";
+                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = "/img/no-image.jpg";
                     }}
                     />
 

@@ -1,7 +1,8 @@
+import { FC } from 'react';
 import { Head } from '@inertiajs/react';
-import UmrahCardFiltersAndPagination from '@/components/card/UmrahCardFilter'; 
+import UmrahCardFiltersAndPagination from '@/components/card/UmrahCardFilter';
 
-const CardPages = () => {
+const CardPages: FC = () => {
   return (
     <>
       <Head title="Paket Umrah" />
