@@ -3,19 +3,45 @@ import { usePage } from '@inertiajs/react';
 import { FaRegCircleUser } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar = () => {
-  const [showSearchModal, setShowSearchModal] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [position, setPosition] = useState({
+// Definisi tipe untuk NavItem
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+// Definisi tipe untuk Tab props
+interface TabProps {
+  children: React.ReactNode;
+  href: string;
+  index: number;
+}
+
+// Definisi tipe untuk Position
+interface Position {
+  left: number;
+  width: number;
+  opacity: number;
+}
+
+// Perbaikan untuk PageProps - menambahkan index signature
+interface PageProps {
+  url: string;
+  [key: string]: unknown; // Menambahkan index signature
+}
+
+const Navbar: React.FC = () => {
+  const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
+  const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [position, setPosition] = useState<Position>({
     left: 0,
     width: 0,
     opacity: 0,
   });
-  const [activeTab, setActiveTab] = useState(null);
-  const { url } = usePage();
-  const tracingBeamRef = useRef(null);
-  const mobileTracingBeamRef = useRef(null);
+  const [activeTab, setActiveTab] = useState<number | null>(null);
+  const { url } = usePage<PageProps>();
+  const tracingBeamRef = useRef<HTMLDivElement | null>(null);
+  const mobileTracingBeamRef = useRef<HTMLDivElement | null>(null);
 
   // Lock scroll when modal/menu open
   useEffect(() => {
@@ -35,12 +61,12 @@ const Navbar = () => {
 
   // Scroll listener
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = (): void => {
       setIsScrolled(window.scrollY > 50);
       updateTracingBeam();
     };
 
-    const updateTracingBeam = () => {
+    const updateTracingBeam = (): void => {
       if (tracingBeamRef.current && mobileTracingBeamRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
         const progress = scrollTop / (scrollHeight - clientHeight);
@@ -60,7 +86,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavigation = (path, hash = '') => {
+  const handleNavigation = (path: string, hash: string = ''): void => {
     if (url === '/' && hash) {
       setTimeout(() => {
         document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
@@ -71,7 +97,7 @@ const Navbar = () => {
     setShowMobileMenu(false);
   };
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { label: 'Beranda', href: 'Home' },
     { label: 'Pemesanan', href: 'Book' },
     { label: 'Tentang Kami', href: 'About' },
@@ -80,8 +106,8 @@ const Navbar = () => {
   ];
 
   // Custom Tab component for SlideTab effect
-  const Tab = ({ children, href, index }) => {
-    const ref = useRef(null);
+  const Tab: React.FC<TabProps> = ({ children, href, index }) => {
+    const ref = useRef<HTMLLIElement | null>(null);
     return (
       <li
         ref={ref}
@@ -159,6 +185,23 @@ const Navbar = () => {
         duration: 0.5
       }
     }
+  };
+
+  // Komponen Motion Link yang menggabungkan fitur motion dengan <a>
+  const MotionLink: React.FC<{
+    href: string;
+    className: string;
+    children: React.ReactNode;
+  }> = ({ href, className, children }) => {
+    return (
+      <motion.a
+        href={href}
+        className={className}
+        whileTap={{ scale: 0.98 }}
+      >
+        {children}
+      </motion.a>
+    );
   };
 
   return (
@@ -369,14 +412,14 @@ const Navbar = () => {
                   variants={itemVariants}
                   className="mt-6"
                 >
-                  <a 
+                  {/* Menggunakan komponen MotionLink untuk menggabungkan motion dengan anchor */}
+                  <MotionLink 
                     href="/login" 
                     className="text-white text-lg flex items-center gap-3 py-3 px-4 rounded-full bg-[#222636] hover:opacity-90 transition-opacity mt-4 justify-center"
-                    whileTap={{ scale: 0.98 }}
                   >
                     <FaRegCircleUser className="text-xl" />
                     Masuk
-                  </a>
+                  </MotionLink>
                 </motion.div>
               </div>
             </motion.div>

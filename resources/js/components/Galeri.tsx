@@ -50,7 +50,7 @@ const Galeri = () => {
     <div className="container mx-auto px-4 py-8" id="Galeri">
       <div className="text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
-          GALERI PERJALAN UMRAH
+          GALERI PERJALANAN UMRAH
           <span className="block h-1 w-24 bg-[#222636] mx-auto mt-2"></span>
         </h2>
         <p className="text-[#222636] text-sm md:text-base max-w-xl mx-auto">

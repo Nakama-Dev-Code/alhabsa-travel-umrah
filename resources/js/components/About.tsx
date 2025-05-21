@@ -1,6 +1,7 @@
+import { FC } from "react";
 import { motion } from "framer-motion";
 
-const About = () => {
+const About: FC = () => {
   return (
     <div id="About" className="py-16 lg:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
@@ -23,7 +24,7 @@ const About = () => {
         </div>
 
         {/* Bagian Kanan - Text Content */}
-        <div className="w-full lg:w-1/2 mt-4 lg:mt-0"> {/* Mengurangi margin-top pada mobile */}
+        <div className="w-full lg:w-1/2 mt-4 lg:mt-0">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -75,7 +76,7 @@ const About = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         viewport={{ once: true }}
-        className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" // Mengurangi margin top
+        className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
       >
         <div className="p-4 md:p-6 bg-white rounded-xl shadow-md border border-gray-100 text-center">
           <div className="text-[#222636] font-bold text-3xl md:text-4xl">2019</div>

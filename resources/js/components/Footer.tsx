@@ -1,10 +1,11 @@
+import React from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { IoCallSharp } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { AiFillTikTok } from "react-icons/ai";
 import { FaSquareInstagram } from "react-icons/fa6";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <footer className="bg-[#1d2233] text-gray-300 py-14 text-sm">
       <div className="container mx-auto px-6 lg:px-32">
@@ -50,14 +51,19 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Informasi</h3>
             <ul className="space-y-3">
-              {["Metode Pembayaran", "Kebijakan Privasi", "Syarat & Ketentuan"].map((item, index) => (
-                <li key={index} className="flex items-center group transition-all">
-                  <FaAngleRight className="mr-2 text-yellow-500" />
-                  <a href="#" className="group-hover:text-white hover:underline">
-                    {item}
-                  </a>
-                </li>
-              ))}
+              {["Metode Pembayaran", "Kebijakan Privasi", "Syarat & Ketentuan"].map(
+                (item, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center group transition-all"
+                  >
+                    <FaAngleRight className="mr-2 text-yellow-500" />
+                    <a href="#" className="group-hover:text-white hover:underline">
+                      {item}
+                    </a>
+                  </li>
+                )
+              )}
             </ul>
           </div>
 
@@ -66,9 +72,15 @@ const Footer = () => {
             <h3 className="text-xl font-semibold text-white mb-4">Layanan</h3>
             <ul className="space-y-3">
               {["Layanan Paket Umrah"].map((item, index) => (
-                <li key={index} className="flex items-center group transition-all">
+                <li
+                  key={index}
+                  className="flex items-center group transition-all"
+                >
                   <FaAngleRight className="mr-2 text-yellow-500" />
-                  <a href="/umrah-packages" className="group-hover:text-white hover:underline">
+                  <a
+                    href="/umrah-packages"
+                    className="group-hover:text-white hover:underline"
+                  >
                     {item}
                   </a>
                 </li>
@@ -80,13 +92,16 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Jam Operasional</h3>
             <p className="leading-relaxed">
-              Senin – Jumat<br />
-              08:00 – 17:00<br />
+              Senin – Jumat
+              <br />
+              08:00 – 17:00
+              <br />
               (By Appointment via WhatsApp)
             </p>
             <h3 className="text-xl font-semibold text-white mt-6 mb-4">Alamat</h3>
             <p className="leading-relaxed">
-              Jl. Lettu Ismail No.20, Gawanan,<br />
+              Jl. Lettu Ismail No.20, Gawanan,
+              <br />
               Kabupaten Sukoharjo, Jawa Tengah 57512
             </p>
           </div>
@@ -94,7 +109,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="text-center mt-12 border-t border-gray-700 pt-6 text-gray-400 text-sm">
-          &copy; {new Date().getFullYear()} <span className="text-white">Al Habsa Travel</span>. All Rights Reserved.
+          &copy; {new Date().getFullYear()}{" "}
+          <span className="text-white">Al Habsa Travel</span>. All Rights Reserved.
         </div>
       </div>
     </footer>

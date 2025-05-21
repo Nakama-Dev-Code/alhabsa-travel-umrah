@@ -9,39 +9,53 @@ import {
     ModalTrigger,
   } from "./ui/animated-modal";
 
-const Book = () => {
+// Definisi tipe untuk jenis perjalanan
+type TravelType = 'umroh-reguler' | 'umroh-plus';
+
+// Definisi tipe untuk passengers
+interface PassengersType {
+  adults: number;
+  children: number;
+}
+
+// Definisi tipe untuk packageData
+interface PackageDataType {
+  [key: string]: string[];
+}
+
+const Book: React.FC = () => {
   // State untuk jenis perjalanan
-  const [travelType, setTravelType] = useState('umroh-reguler');
+  const [travelType, setTravelType] = useState<TravelType>('umroh-reguler');
 
   // State untuk keberangkatan
-  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState<string>('');
 
   // State untuk jenis paket
-  const [selectedPackage, setSelectedPackage] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState<string>('');
 
   // State untuk daftar paket berdasarkan jenis perjalanan
-  const [packageOptions, setPackageOptions] = useState([]);
+  const [packageOptions, setPackageOptions] = useState<string[]>([]);
 
   // State untuk jumlah penumpang
-  const [passengers, setPassengers] = useState({
+  const [passengers, setPassengers] = useState<PassengersType>({
     adults: 1,
     children: 0
   });
 
   // State untuk menampilkan dropdown penumpang
-  const [showPassengerDropdown, setShowPassengerDropdown] = useState(false);
+  const [showPassengerDropdown, setShowPassengerDropdown] = useState<boolean>(false);
 
   // State untuk kode promo
-  const [promoCode, setPromoCode] = useState('');
+  const [promoCode, setPromoCode] = useState<string>('');
 
   // Data dummy
-  const months = [
+  const months: string[] = [
     'Januari 2025', 'Februari 2025', 'Maret 2025', 'April 2025', 'Mei 2025', 'Juni 2025',
     'Juli 2025', 'Agustus 2025', 'September 2025', 'Oktober 2025', 'November 2025', 'Desember 2025'
   ];
 
   // Data paket untuk setiap jenis perjalanan
-  const packageData = {
+  const packageData: PackageDataType = {
     'umroh-reguler': [
       'Paket Umrah Ramadhan',
       'Paket Umrah Syawal',
@@ -62,7 +76,7 @@ const Book = () => {
   }, [travelType]);
 
   // Fungsi untuk mengubah jumlah penumpang
-  const updatePassengers = (type, action) => {
+  const updatePassengers = (type: keyof PassengersType, action: 'increase' | 'decrease'): void => {
     setPassengers(prev => {
       if (action === 'increase') {
         return { ...prev, [type]: prev[type] + 1 };
@@ -74,22 +88,22 @@ const Book = () => {
   };
 
   // Fungsi untuk mengubah jenis perjalanan
-  const handleTravelTypeChange = (newType) => {
+  const handleTravelTypeChange = (newType: TravelType): void => {
     setTravelType(newType);
   };
 
   // Fungsi untuk menangani perubahan bulan
-  const handleMonthChange = (value) => {
+  const handleMonthChange = (value: string): void => {
     setSelectedMonth(value);
   };
 
   // Fungsi untuk menangani perubahan paket
-  const handlePackageChange = (value) => {
+  const handlePackageChange = (value: string): void => {
     setSelectedPackage(value);
   };
 
   // Fungsi untuk mengirim pesan ke WhatsApp
-  const sendToWhatsApp = () => {
+  const sendToWhatsApp = (): void => {
     // Validasi form
     if (!selectedMonth) {
       alert('Silakan pilih bulan keberangkatan');
@@ -102,7 +116,7 @@ const Book = () => {
     }
 
     // Terjemahan jenis perjalanan
-    const travelTypeText = {
+    const travelTypeText: Record<TravelType, string> = {
       'umroh-reguler': 'Umrah Reguler',
       'umroh-plus': 'Umrah Plus',
     };
@@ -300,7 +314,7 @@ Wassalamu'alaikum warahmatullahi wabarakatuh.
           <div className="flex items-center w-full md:w-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2 text-green-600"
+              className="h-5 w-5 mr-2 text-[#2a3d66]"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -310,7 +324,7 @@ Wassalamu'alaikum warahmatullahi wabarakatuh.
                 clipRule="evenodd"
               />
             </svg>
-            <span className="text-green-600">Tambahkan kode promo</span>
+            <span className="text-[#2a3d66]">Tambahkan kode promo</span>
           </div>
           <input
             type="text"

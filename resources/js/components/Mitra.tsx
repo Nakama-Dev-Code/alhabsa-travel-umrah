@@ -1,7 +1,13 @@
+import { FC } from "react";
 import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
 
-const Mitra = () => {
-  const airlines = [
+interface Airline {
+  src: string;
+  alt: string;
+}
+
+const Mitra: FC = () => {
+  const airlines: Airline[] = [
     { src: "/img/mitra/etihad.svg", alt: "Etihad Air" },
     { src: "/img/mitra/emirates-airlanes.svg", alt: "Emirates" },
     { src: "/img/mitra/garuda-indonesia.svg", alt: "Garuda Indonesia" },
@@ -24,7 +30,6 @@ const Mitra = () => {
         </p>
       </div>
 
-      {/* Both desktop and mobile: Infinite scroll */}
       <div className="py-6 bg-white/20 border-gray-100 shadow-lg">
         <InfiniteMovingCards
           items={airlines}
