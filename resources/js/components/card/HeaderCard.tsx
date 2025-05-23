@@ -21,12 +21,12 @@ const HeaderCard: React.FC = () => {
 
         {/* Social Media - Kanan Bawah */}
         <div className="absolute bottom-4 right-4 flex flex-col items-start gap-2 pb-4 px-4 md:px-20 lg:px-32">
-          <p className="text-white font-semibold text-[20px]">Social Media</p>
+          <p className="text-white font-semibold text-[20px]">Sosial Media</p>
           <div className="flex gap-3">
-            <a href="#" className="text-white hover:text-pink-500 transition-colors">
+            <a href="https://www.instagram.com/alhabsa.travel/" target='_blank' className="text-white hover:text-pink-500 transition-colors">
               <FaInstagram size={24} />
             </a>
-            <a href="#" className="text-white hover:text-pink-500 transition-colors">
+            <a href="https://www.tiktok.com/@alhabsatravel?_t=ZS-8wXNpd9Onjk&_r=1" target='_blank' className="text-white hover:text-pink-500 transition-colors">
               <FaTiktok size={24} />
             </a>
           </div>

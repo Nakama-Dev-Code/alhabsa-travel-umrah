@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import Header from '@/components/Header'
 import Book from '@/components/Book'
 import About from '@/components/About'
+import Card from '@/components/Card'
 import Galeri from '@/components/Galeri'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
@@ -18,6 +19,7 @@ function HomePages() {
       <Header/>
       <Book/>
       <About/>
+      <Card/>
       <Fasilitas/>
       <Galeri/>
       <Mitra/>

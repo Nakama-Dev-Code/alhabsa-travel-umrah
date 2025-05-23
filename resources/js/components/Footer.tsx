@@ -31,14 +31,16 @@ const Footer: React.FC = () => {
             </div>
             <div className="flex gap-4 mt-4">
               <a
-                href="#"
+                href="https://www.instagram.com/alhabsa.travel/" 
+                target='_blank'
                 className="text-gray-400 hover:text-pink-500 transition"
                 aria-label="Instagram"
               >
                 <FaSquareInstagram className="w-6 h-6" />
               </a>
               <a
-                href="#"
+                href="https://www.tiktok.com/@alhabsatravel?_t=ZS-8wXNpd9Onjk&_r=1"
+                target='_blank'
                 className="text-gray-400 hover:text-white transition"
                 aria-label="TikTok"
               >

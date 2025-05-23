@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
-import { FaCalendarAlt, FaHotel, FaMapMarkerAlt, FaPlaneDeparture } from 'react-icons/fa';
+import { FaCalendarAlt, FaHotel, FaMapMarkerAlt, FaPlaneDeparture, FaWhatsapp, FaInstagram, FaTiktok, FaDownload } from 'react-icons/fa';
+import { toast, Toaster } from 'sonner';
 import { FaPlaneCircleCheck } from "react-icons/fa6";
 import { RiFilterLine } from "react-icons/ri";
 import { SelectValue, SelectTrigger, SelectContent, SelectItem, Select } from "@/components/ui/select";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
 
 // Definisi interface untuk data yang diambil dari controller
 interface Package {
@@ -114,6 +115,9 @@ const UmrahCardFilter = () => {
   
   // Mengubah data yang diterima dari controller menjadi format yang dibutuhkan komponen
   const [allProperties, setAllProperties] = useState<Property[]>([]);
+
+  // Share menu state
+  const [showShareMenu, setShowShareMenu] = useState<{[key: number]: boolean}>({});
 
   useEffect(() => {
     // Mengubah data dari controller ke format yang dibutuhkan komponen
@@ -255,6 +259,59 @@ const UmrahCardFilter = () => {
     }).format(price);
   };
 
+  // Toggle share menu
+  const toggleShareMenu = (propertyId: number): void => {
+    setShowShareMenu(prev => ({
+      ...prev,
+      [propertyId]: !prev[propertyId]
+    }));
+  };
+
+  // Share handlers
+  const websiteUrl = 'https://alhabsa.com/umrah-packages'; 
+
+  const generateShareText = (property: Property): string => {
+    return `🌟 Paket Umrah Terbaik!\n\n` +
+          `🕌 ${property.title}\n` +
+          `📅 Keberangkatan: ${property.date}\n` +
+          `💰 Harga: ${property.harga}\n` +
+          `🏨 Hotel Makkah: ${property.hotelMakkah}\n` +
+          `🏨 Hotel Madinah: ${property.hotelMadinah}\n\n` +
+          `🔗 Info lengkap & pendaftaran:\n${websiteUrl}`;
+  };
+
+  const shareToWhatsApp = (property: Property): void => {
+    const text = generateShareText(property);
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    toggleShareMenu(property.id);
+  };
+
+  const shareToInstagram = (property: Property): void => {
+    const caption = generateShareText(property);
+    navigator.clipboard.writeText(caption);
+    toast.success('Caption berhasil disalin! Buka Instagram dan tempelkan saat membuat postingan');
+    toggleShareMenu(property.id);
+  };
+
+  const shareToTikTok = (property: Property): void => {
+    const caption = generateShareText(property);
+    navigator.clipboard.writeText(caption);
+    toast.success('Caption berhasil disalin! Buka TikTok dan tempelkan saat membuat postingan');
+    toggleShareMenu(property.id);
+  };
+
+  const downloadImage = (property: Property): void => {
+    // Kode untuk mengunduh gambar
+    const link = document.createElement('a');
+    link.href = property.image;
+    link.download = `${property.title}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toggleShareMenu(property.id);
+  };
+
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
   // image
@@ -266,7 +323,7 @@ const UmrahCardFilter = () => {
         <h2 className="font-bold text-3xl md:text-4xl text-gray-800 mb-2">Paket Umrah Terbaik</h2>
         <p className="font-medium text-gray-600 text-lg">Fasilitas lengkap & harga bersahabat</p>
       </div>
-
+      <Toaster position="top-right" richColors />
       {/* Filter toggle button (visible on mobile) */}
       <div className="md:hidden mb-4">
         <button 
@@ -438,14 +495,55 @@ const UmrahCardFilter = () => {
         {displayedProperties.length > 0 ? (
           displayedProperties.map((property, index) => (
             <div key={index} className="max-w-full rounded-xl overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
-              <div className="bg-[#2E3650] p-4 flex justify-between items-center">
+              <div className="bg-[#222636] p-4 flex justify-between items-center">
                 <h3 className="text-xl font-bold text-white">{property.title}</h3>
-                <div className="flex space-x-3">
-                  <button className="w-10 h-4 flex items-center justify-center bg-[#222636] text-white rounded-lg transition-colors duration-300">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
+                <div className="flex space-x-1 relative">
+                  <button 
+                    onClick={() => toggleShareMenu(property.id)}
+                    className="w-8 h-8 flex items-center justify-center bg-[#222636] text-white rounded-lg transition-colors duration-300"
+                  >
+                    <Share2 className="w-4 h-4" />
                   </button>
+                  
+                  {/* Share Menu Dropdown */}
+                  {showShareMenu[property.id] && (
+                    <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg z-10 w-40">
+                      <ul className="py-1">
+                        <li>
+                          <button 
+                            onClick={() => shareToWhatsApp(property)}
+                            className="flex items-center px-3 py-2 w-full text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" /> WhatsApp
+                          </button>
+                        </li>
+                        <li>
+                          <button 
+                            onClick={() => shareToInstagram(property)}
+                            className="flex items-center px-3 py-2 w-full text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            <FaInstagram className="w-4 h-4 mr-2 text-pink-600" /> Instagram
+                          </button>
+                        </li>
+                        <li>
+                          <button 
+                            onClick={() => shareToTikTok(property)}
+                            className="flex items-center px-3 py-2 w-full text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            <FaTiktok className="w-4 h-4 mr-2 text-black" /> TikTok
+                          </button>
+                        </li>
+                        <li>
+                          <button 
+                            onClick={() => downloadImage(property)}
+                            className="flex items-center px-3 py-2 w-full text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            <FaDownload className="w-4 h-4 mr-2 text-blue-500" /> Download
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -580,9 +678,16 @@ const UmrahCardFilter = () => {
                     </div>
                   </div>
 
-                  <button className="w-full bg-[#2E3650] text-white font-medium py-1 px-4 rounded-lg transition-colors duration-300 mt-4 hover:bg-[#1e2438]">
-                    Pesan Sekarang
-                  </button>
+                  <button
+                  className={`w-full font-medium py-1 px-4 rounded-lg mt-4 transition-colors duration-300
+                    ${property.sisaSeat === 'Seat Habis' 
+                      ? 'bg-[#222636] text-white cursor-not-allowed opacity-70' 
+                      : 'bg-[#222636] text-white hover:bg-[#2E3650]'}`}
+                  disabled={property.sisaSeat === 'Seat Habis'}
+                >
+                  {property.sisaSeat === 'Seat Habis' ? 'Seat Habis' : 'Pesan Sekarang'}
+                </button>
+
                 </div>
               </div>
             </div>
@@ -634,7 +739,7 @@ const UmrahCardFilter = () => {
                     onClick={() => goToPage(page)}
                     className={`px-3 py-1 rounded-lg ${
                         currentPage === page
-                        ? "bg-[#2E3650] text-white"
+                        ? "bg-[#222636] text-white"
                         : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                     }`}
                     >

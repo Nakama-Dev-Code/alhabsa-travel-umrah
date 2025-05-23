@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpenCheck, ChartBarStacked, Hotel, LayoutGrid, MapPin, NotebookText, Plane, Settings2, SquareLibrary } from 'lucide-react';
+import { BookOpenCheck, ChartBarStacked, Hotel, LayoutGrid, MapPin, NotebookText, Plane, SquareLibrary } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -21,12 +21,12 @@ const mainNavItems: NavItem[] = [
         icon: NotebookText,
         label: 'Platform',
     },
-    {
-        title: 'Web Option',
-        href: '/web-option',
-        icon: Settings2,
-        label: 'Platform',
-    },
+    // {
+    //     title: 'Web Option',
+    //     href: '/web-option',
+    //     icon: Settings2,
+    //     label: 'Platform',
+    // },
 
     // Manajemen Paket
     {

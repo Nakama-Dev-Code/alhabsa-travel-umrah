@@ -13,7 +13,25 @@ class FrontendController extends Controller
 {
     public function home()
     {
-        return Inertia::render('frontend/HomePages');
+        // Mengambil semua data yang diperlukan untuk halaman paket umrah
+        $packageSchedules = PackageSchedule::with(['package', 'package.category', 'package.category.type', 'hotelMakkah', 'hotelMadinah', 'airport', 'airline'])->get();
+
+        $packages = Package::with(['category', 'category.type'])
+            ->select('id', 'title', 'image', 'package_category_id')
+            ->get();
+
+        $hotels = Hotel::select('id', 'name')->get();
+        $airports = Airport::select('id', 'name')->get();
+        $airlines = Airline::select('id', 'name')->get();
+
+        // Mengirim data ke view Inertia
+        return Inertia::render('frontend/HomePages', [
+            'packageSchedules' => $packageSchedules,
+            'packages' => $packages,
+            'hotels' => $hotels,
+            'airports' => $airports,
+            'airlines' => $airlines
+        ]);
     }
 
     public function umrahpackages()

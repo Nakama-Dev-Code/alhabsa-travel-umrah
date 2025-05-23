@@ -179,3 +179,7 @@
 .FaAngleRight {
     @apply mr-1 text-slate-700;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}

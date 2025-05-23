@@ -49,10 +49,10 @@ const Galeri = () => {
   return (
     <div className="container mx-auto px-4 py-8" id="Galeri">
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
+        <h3 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
           GALERI PERJALANAN UMRAH
           <span className="block h-1 w-24 bg-[#222636] mx-auto mt-2"></span>
-        </h2>
+        </h3>
         <p className="text-[#222636] text-sm md:text-base max-w-xl mx-auto">
           Dokumentasi momen selama perjalanan ibadah Umrah bersama para jamaah Al Habsa
         </p>
