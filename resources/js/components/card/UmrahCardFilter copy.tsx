@@ -6,7 +6,6 @@ import { FaPlaneCircleCheck } from "react-icons/fa6";
 import { RiFilterLine } from "react-icons/ri";
 import { SelectValue, SelectTrigger, SelectContent, SelectItem, Select } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
-import DetailModal from './DetailModal';
 
 // Definisi interface untuk data yang diambil dari controller
 interface Package {
@@ -333,32 +332,6 @@ const UmrahCardFilter = () => {
   // image
   const [zoomImage, setZoomImage] = useState<string | null>(null);
 
-  const [modalState, setModalState] = useState<{
-    isOpen: boolean;
-    type: 'hotel' | 'airport' | 'airline' | null;
-    data: Hotel | Airport | Airline | null;
-  }>({
-    isOpen: false,
-    type: null,
-    data: null
-  });
-
-  const openModal = (type: 'hotel' | 'airport' | 'airline', data: Hotel | Airport | Airline) => {
-    setModalState({
-      isOpen: true,
-      type,
-      data
-    });
-  };
-
-  const closeModal = () => {
-    setModalState({
-      isOpen: false,
-      type: null,
-      data: null
-    });
-  };
-
   return (
     <div className="px-4 md:px-20 lg:px-32 py-8 bg-gray-50">
       <div className="text-start mb-6">
@@ -670,59 +643,43 @@ const UmrahCardFilter = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
-                        onClick={() => {
-                          const hotel = hotels.find(h => h.name === property.hotelMakkah);
-                          if (hotel) openModal('hotel', hotel);
-                        }}>
+                    <div className="flex items-center">
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaHotel className="w-4 h-4 text-blue-600" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Hotel Makkah</p>
-                        <p className="font-semibold text-sm hover:underline">{property.hotelMakkah}</p>
+                        <p className="font-semibold text-sm">{property.hotelMakkah}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
-                        onClick={() => {
-                          const hotel = hotels.find(h => h.name === property.hotelMadinah);
-                          if (hotel) openModal('hotel', hotel);
-                        }}>
+                    <div className="flex items-center">
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaHotel className="w-4 h-4 text-blue-600" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Hotel Madinah</p>
-                        <p className="font-semibold text-sm hover:underline">{property.hotelMadinah}</p>
+                        <p className="font-semibold text-sm">{property.hotelMadinah}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
-                        onClick={() => {
-                          const airport = airports.find(a => a.name === property.airport);
-                          if (airport) openModal('airport', airport);
-                        }}>
+                    <div className="flex items-center">
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaMapMarkerAlt className="w-4 h-4 text-blue-600" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Bandara</p>
-                        <p className="font-semibold text-sm hover:underline">{property.airport}</p>
+                        <p className="font-semibold text-sm">{property.airport}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
-                        onClick={() => {
-                          const airline = airlines.find(a => a.name === property.airline);
-                          if (airline) openModal('airline', airline);
-                        }}>
+                    <div className="flex items-center">
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaPlaneDeparture className="w-4 h-4 text-blue-600" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Maskapai</p>
-                        <p className="font-semibold text-sm hover:underline">{property.airline}</p>
+                        <p className="font-semibold text-sm">{property.airline}</p>
                       </div>
                     </div>
                   </div>
@@ -824,13 +781,6 @@ const UmrahCardFilter = () => {
             </div>
         </div>
       )}
-
-      <DetailModal
-        isOpen={modalState.isOpen}
-        onClose={closeModal}
-        type={modalState.type!}
-        data={modalState.data}
-      />
 
       <div className="text-center mt-12">
         <button className="bg-white border border-[#2a3d66] text-[#2a3d66] hover:bg-blue-50 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">

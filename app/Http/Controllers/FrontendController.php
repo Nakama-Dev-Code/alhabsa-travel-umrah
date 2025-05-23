@@ -43,9 +43,9 @@ class FrontendController extends Controller
             ->select('id', 'title', 'image', 'package_category_id')
             ->get();
 
-        $hotels = Hotel::select('id', 'name')->get();
-        $airports = Airport::select('id', 'name')->get();
-        $airlines = Airline::select('id', 'name')->get();
+        $hotels = Hotel::all();
+        $airports = Airport::all();
+        $airlines = Airline::all();
 
         // Mengirim data ke view Inertia
         return Inertia::render('frontend/CardPages', [
