@@ -5,6 +5,12 @@ import { MdEmail } from "react-icons/md";
 import { AiFillTikTok } from "react-icons/ai";
 import { FaSquareInstagram } from "react-icons/fa6";
 
+const informasiLinks = [
+  { label: "Metode Pembayaran", href: "/payment-method" },
+  { label: "Syarat & Ketentuan", href: "/terms-conditions" },
+  { label: "Kebijakan Privasi", href: "/privacy-policy" },
+];
+
 const Footer: React.FC = () => {
   return (
     <footer className="bg-[#1d2233] text-gray-300 py-14 text-sm">
@@ -53,19 +59,17 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Informasi</h3>
             <ul className="space-y-3">
-              {["Metode Pembayaran", "Kebijakan Privasi", "Syarat & Ketentuan"].map(
-                (item, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center group transition-all"
+              {informasiLinks.map((item, index) => (
+                <li key={index} className="flex items-center group transition-all">
+                  <FaAngleRight className="mr-2 text-yellow-500" />
+                  <a
+                    href={item.href}
+                    className="group-hover:text-white hover:underline"
                   >
-                    <FaAngleRight className="mr-2 text-yellow-500" />
-                    <a href="#" className="group-hover:text-white hover:underline">
-                      {item}
-                    </a>
-                  </li>
-                )
-              )}
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 

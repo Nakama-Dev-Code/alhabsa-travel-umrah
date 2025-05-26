@@ -1,6 +1,5 @@
 <?php
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\FrontendController;
@@ -17,6 +16,13 @@ use App\Http\Controllers\Admin\HotelController;
 // Untuk Front End
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/umrah-packages', [FrontendController::class, 'umrahpackages']);
+
+// Cookie
+Route::post('/cookie-consent', [FrontendController::class, 'cookie']);
+
+// Policy
+Route::get('/cookie-policy', [FrontendController::class, 'cookiePolicy']);
+Route::get('/privacy-policy', [FrontendController::class, 'privacyPolicy']);
 
 // Untuk Admin
 Route::middleware(['auth', 'verified'])->group(function () {

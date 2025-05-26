@@ -117,7 +117,7 @@ const UmrahCardFilter = () => {
     category: "all",
     availability: "all",
     airline: "all",
-    priceRange: { min: 0, max: 30000000 }
+    priceRange: { min: 0, max: 100000000 }
   });
 
   // Sorting state
@@ -252,7 +252,7 @@ const UmrahCardFilter = () => {
       category: "all",
       availability: "all",
       airline: "all",
-      priceRange: { min: 0, max: 30000000 }
+      priceRange: { min: 0, max: 100000000 }
     });
     setSortBy("default");
   };
@@ -385,7 +385,7 @@ const UmrahCardFilter = () => {
           </h3>
           <button 
             onClick={resetFilters}
-            className="text-sm text-[#2a3d66] hover:text-blue-800"
+            className="text-sm text-[#2E3650] hover:text-blue-800"
           >
             Reset Filter
           </button>
@@ -478,7 +478,7 @@ const UmrahCardFilter = () => {
               <input 
                 type="range" 
                 min="0" 
-                max="30000000" 
+                max="100000000" 
                 step="500000"
                 value={filters.priceRange.min} 
                 onChange={(e) => handlePriceRangeChange('min', e.target.value)}
@@ -486,14 +486,14 @@ const UmrahCardFilter = () => {
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
                 <span>0</span>
-                <span>30jt</span>
+                <span>100jt</span>
               </div>
             </div>
             <div>
               <input 
                 type="range" 
                 min="0" 
-                max="30000000" 
+                max="100000000" 
                 step="500000"
                 value={filters.priceRange.max} 
                 onChange={(e) => handlePriceRangeChange('max', e.target.value)}
@@ -501,7 +501,7 @@ const UmrahCardFilter = () => {
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
                 <span>0</span>
-                <span>30jt</span>
+                <span>100jt</span>
               </div>
             </div>
           </div>
@@ -613,7 +613,7 @@ const UmrahCardFilter = () => {
 
                 {/* Label kategori di kiri atas */}
                 <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full shadow-md">
-                    <span className="text-sm font-semibold text-blue-700">
+                    <span className="text-sm font-semibold text-[#2E3650]">
                     {property.category}
                     </span>
                 </div>
@@ -643,7 +643,7 @@ const UmrahCardFilter = () => {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <p className="text-gray-600">{property.builder}</p>
-                      <span className={`inline-block ${property.availability === 'Tersedia' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'} text-xs font-semibold px-2.5 py-0.5 rounded mt-1`}>
+                      <span className={`inline-block ${property.availability === 'Tersedia' ? 'bg-blue-100 text-[#2E3650]' : 'bg-red-100 text-red-800'} text-xs font-semibold px-2.5 py-0.5 rounded mt-1`}>
                         {property.availability}
                       </span>
                     </div>
@@ -652,7 +652,7 @@ const UmrahCardFilter = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex items-center">
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaCalendarAlt className="w-4 h-4 text-blue-600" />
+                        <FaCalendarAlt className="w-4 h-4 text-[#2E3650]" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Tanggal</p>
@@ -662,7 +662,7 @@ const UmrahCardFilter = () => {
 
                     <div className="flex items-center">
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaPlaneCircleCheck className="w-4 h-4 text-blue-600" />
+                        <FaPlaneCircleCheck className="w-4 h-4 text-[#2E3650]" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Sisa Seat</p>
@@ -670,13 +670,13 @@ const UmrahCardFilter = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
+                    <div className="flex items-center cursor-pointer" 
                         onClick={() => {
                           const hotel = hotels.find(h => h.name === property.hotelMakkah);
                           if (hotel) openModal('hotel', hotel);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaHotel className="w-4 h-4 text-blue-600" />
+                        <FaHotel className="w-4 h-4 text-[#2E3650]" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Hotel Makkah</p>
@@ -684,13 +684,13 @@ const UmrahCardFilter = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
+                    <div className="flex items-center cursor-pointer" 
                         onClick={() => {
                           const hotel = hotels.find(h => h.name === property.hotelMadinah);
                           if (hotel) openModal('hotel', hotel);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaHotel className="w-4 h-4 text-blue-600" />
+                        <FaHotel className="w-4 h-4 text-[#2E3650]" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Hotel Madinah</p>
@@ -698,13 +698,13 @@ const UmrahCardFilter = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
+                    <div className="flex items-center cursor-pointer" 
                         onClick={() => {
                           const airport = airports.find(a => a.name === property.airport);
                           if (airport) openModal('airport', airport);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaMapMarkerAlt className="w-4 h-4 text-blue-600" />
+                        <FaMapMarkerAlt className="w-4 h-4 text-[#2E3650]" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Bandara</p>
@@ -712,13 +712,13 @@ const UmrahCardFilter = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center cursor-pointer p-1 rounded" 
+                    <div className="flex items-center cursor-pointer" 
                         onClick={() => {
                           const airline = airlines.find(a => a.name === property.airline);
                           if (airline) openModal('airline', airline);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
-                        <FaPlaneDeparture className="w-4 h-4 text-blue-600" />
+                        <FaPlaneDeparture className="w-4 h-4 text-[#2E3650]" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Maskapai</p>
@@ -755,7 +755,7 @@ const UmrahCardFilter = () => {
             <p className="text-gray-500 text-lg">Tidak ada paket umrah yang sesuai dengan filter yang dipilih.</p>
             <button 
               onClick={resetFilters}
-              className="mt-4 bg-[#2a3d66] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 hover:bg-blue-700"
+              className="mt-4 bg-[#2E3650] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 hover:bg-blue-700"
             >
               Reset Filter
             </button>
@@ -833,7 +833,7 @@ const UmrahCardFilter = () => {
       />
 
       <div className="text-center mt-12">
-        <button className="bg-white border border-[#2a3d66] text-[#2a3d66] hover:bg-blue-50 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">
+        <button className="bg-white border border-[#2E3650] text-[#2E3650] hover:bg-blue-50 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">
           Lihat selengkapnya
         </button>
       </div>

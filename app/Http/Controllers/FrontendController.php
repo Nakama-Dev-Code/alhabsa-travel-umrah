@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 use App\Models\Package;
 use App\Models\PackageSchedule;
 use App\Models\Hotel;
@@ -55,5 +56,23 @@ class FrontendController extends Controller
             'airports' => $airports,
             'airlines' => $airlines
         ]);
+    }
+
+    public function cookie(Request $request)
+    {
+        $consent = $request->input('consent') ? 'accepted' : 'rejected';
+
+        return response()->json(['message' => 'Consent saved.'])
+            ->cookie('cookie_consent', $consent, 60 * 24 * 30); // 30 hari
+    }
+
+    public function cookiePolicy()
+    {
+        return Inertia::render('policy/cookie-policy');
+    }
+
+    public function privacyPolicy()
+    {
+        return Inertia::render('policy/privacy-policy');
     }
 }

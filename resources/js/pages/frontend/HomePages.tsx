@@ -10,6 +10,7 @@ import '../../../css/app.css'
 import SocialIcons from '@/components/SocialIcons'
 import Mitra from '@/components/Mitra'
 import Fasilitas from '@/components/Fasilitas'
+import CookieConsent from "@/components/CookieConsent";
 
 function HomePages() {
 
@@ -24,6 +25,7 @@ function HomePages() {
       <Galeri/>
       <Mitra/>
       <Contact/>
+      <CookieConsent />
       <Footer/>
       <SocialIcons/>
     </>
