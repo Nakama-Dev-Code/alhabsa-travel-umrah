@@ -11,12 +11,14 @@ import SocialIcons from '@/components/SocialIcons'
 import Mitra from '@/components/Mitra'
 import Fasilitas from '@/components/Fasilitas'
 import CookieConsent from "@/components/CookieConsent";
+import AccessibilityPanel from '@/components/AccessibilityPanel';
 
 function HomePages() {
 
   return (
     <>
       <Head title="Beranda" />
+      <AccessibilityPanel />
       <Header/>
       <Book/>
       <About/>

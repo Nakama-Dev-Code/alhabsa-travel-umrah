@@ -183,3 +183,478 @@
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
+
+/* aksebilitas */
+.umrah-accessibility-panel-wrapper {
+    position: fixed;
+    top: 15%;
+    left: 0;
+    z-index: 9999;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.umrah-panel-open {
+    transform: translateX(0);
+}
+
+.umrah-accessibility-panel-main {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 123, 191, 0.2);
+    border-left: none;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 0 12px 40px rgba(0, 123, 191, 0.15);
+    width: 320px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.umrah-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(0, 123, 191, 0.1);
+    background: linear-gradient(135deg, #222636 0%, #005c8f 100%);
+    color: white;
+    position: relative;
+}
+
+.umrah-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.umrah-close-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.umrah-close-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.umrah-panel-content {
+    padding: 24px;
+}
+
+.umrah-setting-section {
+    margin-bottom: 24px;
+}
+
+.umrah-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #222636;
+    font-size: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(0, 123, 191, 0.1);
+}
+
+.umrah-setting-group {
+    margin-bottom: 12px;
+}
+
+.umrah-setting-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.umrah-language-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.umrah-lang-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #4a5568;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.umrah-lang-btn:hover {
+    border-color: #2a3d66;
+    color: #2a3d66;
+    transform: translateY(-1px);
+}
+
+.umrah-lang-active {
+    background: linear-gradient(135deg, #2a3d66 0%, #005c8f 100%);
+    border-color: #2a3d66;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 123, 191, 0.3);
+}
+
+.umrah-voice-toggle {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #4a5568;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.umrah-voice-toggle:hover {
+    border-color: #2a3d66;
+    color: #2a3d66;
+    transform: translateY(-1px);
+}
+
+.umrah-voice-active {
+    background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+    border-color: #2a3d66;
+    color: #2a3d66;
+}
+
+.umrah-toggle-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.umrah-reading-indicator {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.2);
+    }
+}
+
+.umrah-speed-controls {
+    display: flex;
+    gap: 6px;
+}
+
+.umrah-speed-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #4a5568;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.umrah-speed-btn:hover {
+    border-color: #2a3d66;
+    color: #2a3d66;
+}
+
+.umrah-speed-btn.active {
+    background: #222636;
+    border-color: #222636;
+    color: white;
+}
+
+.umrah-pause-btn {
+    width: 100%;
+    padding: 10px 16px;
+    border: 2px solid #f59e0b;
+    background: #fef3c7;
+    color: #d97706;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.umrah-pause-btn:hover {
+    background: #fbbf24;
+    color: white;
+}
+
+.umrah-font-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.umrah-font-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #4a5568;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.umrah-font-btn:hover {
+    border-color: #222636;
+    color: #222636;
+    transform: translateY(-1px);
+}
+
+.umrah-font-size-display {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222636;
+    background: #f0f9ff;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.umrah-reset-button {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #dc2626;
+    background: white;
+    color: #dc2626;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.umrah-reset-button:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.umrah-accessibility-toggle {
+    position: fixed;
+    top: 15%;
+    left: 0;
+    background: linear-gradient(135deg, #222636 0%, #2a3d66 100%);
+    color: white;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 123, 191, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.umrah-accessibility-toggle:hover {
+    transform: translateX(6px);
+    box-shadow: 0 12px 32px rgba(0, 123, 191, 0.4);
+    background: linear-gradient(135deg, #2a3d66 0%, #222636 100%);
+}
+
+.umrah-toggle-open {
+    transform: translateX(320px);
+}
+
+.umrah-toggle-open:hover {
+    transform: translateX(326px);
+}
+
+.umrah-toggle-main-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.umrah-accessibility-panel-main::-webkit-scrollbar {
+    width: 6px;
+}
+
+.umrah-accessibility-panel-main::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 3px;
+}
+
+.umrah-accessibility-panel-main::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.umrah-accessibility-panel-main::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+@media (max-width: 768px) {
+    .umrah-accessibility-panel-main {
+        width: 300px;
+    }
+
+    .umrah-toggle-open {
+        transform: translateX(300px);
+    }
+
+    .umrah-toggle-open:hover {
+        transform: translateX(306px);
+    }
+}
+
+@media (max-width: 480px) {
+    .umrah-accessibility-panel-main {
+        width: 280px;
+        max-height: 60vh;
+    }
+
+    .umrah-toggle-open {
+        transform: translateX(280px);
+    }
+
+    .umrah-toggle-open:hover {
+        transform: translateX(286px);
+    }
+}
+
+/* CSS Tambahan untuk Button Greeting */
+
+.umrah-greeting-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.umrah-greeting-button {
+    flex: 1;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #4a5568;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.umrah-greeting-button:hover {
+    border-color: #2a3d66;
+    color: #2a3d66;
+    transform: translateY(-1px);
+}
+
+.umrah-greeting-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.umrah-greeting-button:disabled:hover {
+    border-color: #e2e8f0;
+    color: #4a5568;
+    transform: none;
+}
+
+/* Styling khusus untuk button Play Greeting */
+.umrah-play-greeting {
+    border-color: #10b981;
+    color: #059669;
+    background: #ecfdf5;
+}
+
+.umrah-play-greeting:hover:not(:disabled) {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Styling khusus untuk button Set Greeting */
+.umrah-set-greeting {
+    border-color: #3b82f6;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.umrah-set-greeting:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.umrah-greeting-preview {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+}
+
+.umrah-greeting-text {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Responsive untuk mobile */
+@media (max-width: 480px) {
+    .umrah-greeting-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .umrah-greeting-button {
+        width: 100%;
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+}
