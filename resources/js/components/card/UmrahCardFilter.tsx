@@ -755,7 +755,7 @@ const UmrahCardFilter = () => {
             <p className="text-gray-500 text-lg">Tidak ada paket umrah yang sesuai dengan filter yang dipilih.</p>
             <button 
               onClick={resetFilters}
-              className="mt-4 bg-[#2E3650] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 hover:bg-blue-700"
+              className="mt-4 bg-[#2E3650] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 hover:bg-[#2a3d66]"
             >
               Reset Filter
             </button>
