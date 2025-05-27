@@ -39,7 +39,6 @@ const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({ onLanguageChang
       greetingSettings: 'Ucapan Salam',
       professionalGreeting: 'Salam Profesional',
       playGreeting: 'Putar Salam',
-      setGreeting: 'Atur Salam',
       greetingText: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Selamat datang di layanan Umrah Al Habsa. Kami siap membantu Anda dalam perjalanan ibadah yang mulia ini.',
     },
     en: {
@@ -66,7 +65,6 @@ const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({ onLanguageChang
       greetingSettings: 'Professional Greeting',
       professionalGreeting: 'Professional Greeting',
       playGreeting: 'Play Greeting',
-      setGreeting: 'Set Greeting',
       greetingText: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Welcome to Al Habsa Umrah services. We are ready to assist you in this noble pilgrimage journey with our best service and comfortable facilities. May Allah Subahahu wata\'ala, grant ease in every step of your spiritual journey with us.'
     }
   };
@@ -163,12 +161,6 @@ const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({ onLanguageChang
     };
     
     window.speechSynthesis.speak(utterance);
-  };
-
-  // Fungsi untuk mengatur greeting text sesuai bahasa
-  const setGreetingText = () => {
-    const greetingText = t.greetingText;
-    speakText(greetingText);
   };
 
   // Pause/Resume speech
@@ -468,14 +460,6 @@ const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({ onLanguageChang
                   >
                     <Play className="umrah-toggle-icon" />
                     {t.playGreeting}
-                  </button>
-                  
-                  <button
-                    onClick={setGreetingText}
-                    className="umrah-greeting-button umrah-set-greeting"
-                  >
-                    <Volume2 className="umrah-toggle-icon" />
-                    {t.setGreeting}
                   </button>
                 </div>
                 
