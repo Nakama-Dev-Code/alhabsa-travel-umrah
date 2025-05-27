@@ -266,7 +266,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh`;
             <article 
               key={umrahPackage.id} 
               className="cursor-pointer relative"
-              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseEnter={() => setHoveredIndex(null)} //index
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <div className="relative rounded-2xl overflow-hidden shadow-md">

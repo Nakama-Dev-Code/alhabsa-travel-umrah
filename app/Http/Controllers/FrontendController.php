@@ -66,24 +66,68 @@ class FrontendController extends Controller
 
     public function umrahpackages()
     {
-        // Mengambil semua data yang diperlukan untuk halaman paket umrah
-        $packageSchedules = PackageSchedule::with(['package', 'package.category', 'package.category.type', 'hotelMakkah', 'hotelMadinah', 'airport', 'airline'])->get();
-
-        $packages = Package::with(['category', 'category.type'])
-            ->select('id', 'title', 'image', 'package_category_id')
+        $packageSchedules = PackageSchedule::with([
+            'package',
+            'package.category',
+            'package.category.type',
+            'hotelMakkah',
+            'hotelMadinah',
+            'airport',
+            'airline'
+        ])
+            ->where('seat_available', '>', 0)
             ->get();
 
-        $hotels = Hotel::all();
-        $airports = Airport::all();
-        $airlines = Airline::all();
+        $umrahPackages = $packageSchedules->map(function ($schedule) {
+            $formattedPrice = 'IDR ' . number_format($schedule->price, 0, ',', '.');
+            $formattedDate = \Carbon\Carbon::parse($schedule->departure_date)
+                ->locale('id')
+                ->translatedFormat('d F Y');
 
-        // Mengirim data ke view Inertia
+            return [
+                $schedule->package->title ?? 'PAKET UMRAH',                     // 0
+                $schedule->package->category->name ?? 'Paket Umrah Reguler',    // 1
+                $schedule->airline->name ?? 'Airline',                          // 2
+                $schedule->airport->name ?? 'Airport',                          // 3
+                $schedule->airport->code ?? 'Airport Code',                     // 4
+                $formattedPrice,                                               // 5
+                $schedule->hotelMakkah->name ?? 'Hotel Makkah',                // 6
+                $schedule->hotelMadinah->name ?? 'Hotel Madinah',              // 7
+                $schedule->package->category->type->name ?? 'Umrah Reguler',    // 8
+                $formattedDate,                                               // 9
+                $schedule->seat_available . ' Seat Tersedia',                  // 10
+                $schedule->package->image ?? '/img/no-image.jpg',              // 11
+                $schedule->price,                                             // 12
+
+                // Hotel Makkah data (index 13-19)
+                $schedule->hotelMakkah->city ?? 'Makkah',                     // 13
+                $schedule->hotelMakkah->rating ?? '4',                        // 14
+                $schedule->hotelMakkah->location ?? 'Makkah, Saudi Arabia',   // 15
+                $schedule->hotelMakkah->latitude ?? '',                       // 16
+                $schedule->hotelMakkah->longitude ?? '',                      // 17
+                $schedule->hotelMakkah->description ?? 'Hotel di Makkah',     // 18
+
+                // Hotel Madinah data (index 19-24)
+                $schedule->hotelMadinah->city ?? 'Madinah',                   // 19
+                $schedule->hotelMadinah->rating ?? '4',                       // 20
+                $schedule->hotelMadinah->location ?? 'Madinah, Saudi Arabia', // 21
+                $schedule->hotelMadinah->latitude ?? '',                      // 22
+                $schedule->hotelMadinah->longitude ?? '',                     // 23
+                $schedule->hotelMadinah->description ?? 'Hotel di Madinah',   // 24
+
+                // Airport data (index 25-28)
+                $schedule->airport->location ?? '',                           // 25
+                $schedule->airport->latitude ?? '',                           // 26
+                $schedule->airport->longitude ?? '',                          // 27
+                $schedule->airport->description ?? '',                        // 28
+
+                // Airline data (index 29)
+                $schedule->airline->link_website ?? '',                       // 29
+            ];
+        })->values();
+
         return Inertia::render('frontend/CardPages', [
-            'packageSchedules' => $packageSchedules,
-            'packages' => $packages,
-            'hotels' => $hotels,
-            'airports' => $airports,
-            'airlines' => $airlines
+            'umrahPackages' => $umrahPackages
         ]);
     }
 

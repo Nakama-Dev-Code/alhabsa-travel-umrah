@@ -1,5 +1,4 @@
 import { FaInstagram, FaTiktok } from 'react-icons/fa';
-import React from 'react';
 
 const HeaderCard: React.FC = () => {
   return (

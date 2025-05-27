@@ -1,9 +1,7 @@
-import React from 'react';
 import { FaHotel, FaMapMarkerAlt, FaPlaneDeparture, FaTimes, FaStar, FaGlobe } from 'react-icons/fa';
 import { Rating, Star } from "@smastrom/react-rating";
 
 interface Hotel {
-  id: number;
   name: string;
   city: string;
   rating: string;
@@ -14,7 +12,6 @@ interface Hotel {
 }
 
 interface Airport {
-  id: number;
   name: string;
   code: string;
   location: string;
@@ -25,7 +22,6 @@ interface Airport {
 }
 
 interface Airline {
-  id: number;
   name: string;
   link_website?: string;
 }

@@ -8,73 +8,41 @@ import { SelectValue, SelectTrigger, SelectContent, SelectItem, Select } from "@
 import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
 import DetailModal from './DetailModal';
 
-// Definisi interface untuk data yang diambil dari controller
-interface Package {
-  id: number;
-  title: string;
-  description?: string;
-  image: string;
-  package_category_id: number;
-  category?: Category;
+// Interface untuk data yang diterima dari controller
+interface UmrahPackageData {
+  0: string;  // title
+  1: string;  // category name
+  2: string;  // airline name
+  3: string;  // airport name
+  4: string;  // airport code
+  5: string;  // formatted price
+  6: string;  // hotel makkah name
+  7: string;  // hotel madinah name
+  8: string;  // type name
+  9: string;  // formatted date
+  10: string; // seat available text
+  11: string; // image
+  12: number; // raw price
+  13: string; // hotel makkah city
+  14: string; // hotel makkah rating
+  15: string; // hotel makkah location
+  16: string; // hotel makkah latitude
+  17: string; // hotel makkah longitude
+  18: string; // hotel makkah description
+  19: string; // hotel madinah city
+  20: string; // hotel madinah rating
+  21: string; // hotel madinah location
+  22: string; // hotel madinah latitude
+  23: string; // hotel madinah longitude
+  24: string; // hotel madinah description
+  25: string; // airport location
+  26: string; // airport latitude
+  27: string; // airport longitude
+  28: string; // airport description
+  29: string; // airline link website
 }
 
-interface Category {
-  id?: number;
-  name: string;
-  description?: string;
-  type?: CategoryType;
-}
-
-interface CategoryType {
-  id?: number;
-  name: string;
-  description?: string;
-}
-
-interface Hotel {
-  id: number;
-  name: string;
-  city: string;
-  rating: string;
-  location: string;
-  latitude?: string;
-  longitude?: string;
-  description?: string;
-}
-
-interface Airport {
-  id: number;
-  name: string;
-  code: string;
-  location: string;
-  latitude?: string;
-  longitude?: string;
-  description?: string;
-}
-
-interface Airline {
-  id: number;
-  name: string;
-  link_website?: string;
-}
-
-interface PackageSchedule {
-  id: number;
-  package_id: number;
-  departure_date: string;
-  price: number;
-  seat_available: number;
-  hotel_makkah_id: number;
-  hotel_madinah_id: number;
-  airport_id: number;
-  airline_id: number;
-  hotelMakkah?: Hotel;
-  hotelMadinah?: Hotel;
-  airport?: Airport;
-  airline?: Airline;
-  package?: Package;
-}
-
+// Interface untuk data yang sudah diformat untuk tampilan
 interface Property {
   id: number;
   title: string;
@@ -87,10 +55,41 @@ interface Property {
   date: string;
   sisaSeat: string;
   priceValue: number;
+  // Data lengkap untuk modal
+  hotelMakkahData?: Hotel;
+  hotelMadinahData?: Hotel;
+  airportData?: Airport;
+  airlineData?: Airline;
+  // Nama untuk tampilan
   hotelMakkah: string;
   hotelMadinah: string;
   airport: string;
   airline: string;
+}
+
+// Interface untuk modal detail (dummy data karena tidak ada data lengkap dari controller)
+interface Hotel {
+  name: string;
+  city: string;
+  rating: string;
+  location: string;
+  latitude?: string;
+  longitude?: string;
+  description?: string;
+}
+
+interface Airport {
+  name: string;
+  code: string;
+  location: string;
+  latitude?: string;
+  longitude?: string;
+  description?: string;
+}
+
+interface Airline {
+  name: string;
+  link_website?: string;
 }
 
 interface FilterState {
@@ -104,13 +103,8 @@ interface FilterState {
 }
 
 const UmrahCardFilter = () => {
-  const { packageSchedules, packages, hotels, airports, airlines } = usePage<{
-    packageSchedules: PackageSchedule[],
-    packages: Package[],
-    hotels: Hotel[],
-    airports: Airport[],
-    airlines: Airline[]
-  }>().props;
+  // Mengambil data dari controller
+  const { umrahPackages } = usePage<{ umrahPackages: UmrahPackageData[] }>().props;
   
   // Filter states
   const [filters, setFilters] = useState<FilterState>({
@@ -129,53 +123,71 @@ const UmrahCardFilter = () => {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [displayedProperties, setDisplayedProperties] = useState<Property[]>([]);
   
-  // Mengubah data yang diterima dari controller menjadi format yang dibutuhkan komponen
+  // State untuk data yang sudah diformat
   const [allProperties, setAllProperties] = useState<Property[]>([]);
 
   // Share menu state
   const [showShareMenu, setShowShareMenu] = useState<{[key: number]: boolean}>({});
 
   useEffect(() => {
-    // Mengubah data dari controller ke format yang dibutuhkan komponen
-    if (packageSchedules && packageSchedules.length > 0) {
-      const formattedData: Property[] = packageSchedules.map(schedule => {
-        // Mencari data paket, hotel, dll berdasarkan ID
-        const packageData = packages.find(p => p.id === schedule.package_id);
-        const category = packageData?.category || { name: "" };
-        const type = category?.type || { name: "" };
-        const hotelMakkah = schedule.hotelMakkah || hotels.find(h => h.id === schedule.hotel_makkah_id);
-        const hotelMadinah = schedule.hotelMadinah || hotels.find(h => h.id === schedule.hotel_madinah_id);
-        const airport = schedule.airport || airports.find(a => a.id === schedule.airport_id);
-        const airline = schedule.airline || airlines.find(a => a.id === schedule.airline_id);
-        
-        // Format harga
-        const harga = `IDR ${new Intl.NumberFormat('id-ID').format(schedule.price)},00`;
-        
-        // Menentukan status ketersediaan
-        const availability = schedule.seat_available > 0 ? "Tersedia" : "Habis";
-        
-        return {
-          id: schedule.id,
-          title: packageData?.title || "PAKET UMRAH",
-          builder: type?.name || "Umroh Reguler",
-          category: category?.name || "Paket Reguler",
-          status: "Unfurnished",
-          availability: availability,
-          image: packageData?.image || "/img/no-image.jpg",
-          harga: harga,
-          date: new Date(schedule.departure_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
-          sisaSeat: `${schedule.seat_available ? `${schedule.seat_available} Seat Tersedia` : 'Seat Habis'}`,
-          hotelMakkah: hotelMakkah?.name || "Hotel di Makkah",
-          hotelMadinah: hotelMadinah?.name || "Hotel di Madinah",
-          airport: airport?.name || "Airport",
-          airline: airline?.name || "Airline",
-          priceValue: schedule.price
-        };
-      });
+  if (umrahPackages && umrahPackages.length > 0) {
+    const formattedData: Property[] = umrahPackages.map((packageData, index) => {
+      const availability = packageData[10].includes('Seat Tersedia') ? "Tersedia" : "Habis";
       
-      setAllProperties(formattedData);
-    }
-  }, [packageSchedules, packages, hotels, airports, airlines]);
+      return {
+        id: index + 1,
+        title: packageData[0],
+        builder: packageData[8],
+        category: packageData[1],
+        status: "Unfurnished",
+        availability: availability,
+        image: packageData[11],
+        harga: packageData[5],
+        date: packageData[9],
+        sisaSeat: packageData[10],
+        hotelMakkah: packageData[6],
+        hotelMadinah: packageData[7],
+        airport: packageData[3],
+        airline: packageData[2],
+        priceValue: packageData[12],
+        
+        // Data lengkap untuk modal
+        hotelMakkahData: {
+          name: packageData[6],
+          city: packageData[13],
+          rating: packageData[14],
+          location: packageData[15],
+          latitude: packageData[16],
+          longitude: packageData[17],
+          description: packageData[18]
+        },
+        hotelMadinahData: {
+          name: packageData[7],
+          city: packageData[19],
+          rating: packageData[20],
+          location: packageData[21],
+          latitude: packageData[22],
+          longitude: packageData[23],
+          description: packageData[24]
+        },
+        airportData: {
+          name: packageData[3],
+          code: packageData[4],
+          location: packageData[25],
+          latitude: packageData[26],
+          longitude: packageData[27],
+          description: packageData[28]
+        },
+        airlineData: {
+          name: packageData[2],
+          link_website: packageData[29],
+        }
+      };
+    });
+    
+    setAllProperties(formattedData);
+  }
+  }, [umrahPackages]);
   
   // Extract unique values for filter options
   const categoryOptions = [...new Set(allProperties.map(item => item.category))];
@@ -672,8 +684,7 @@ const UmrahCardFilter = () => {
 
                     <div className="flex items-center cursor-pointer" 
                         onClick={() => {
-                          const hotel = hotels.find(h => h.name === property.hotelMakkah);
-                          if (hotel) openModal('hotel', hotel);
+                          openModal('hotel', property.hotelMakkahData!);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaHotel className="w-4 h-4 text-[#2E3650]" />
@@ -686,8 +697,7 @@ const UmrahCardFilter = () => {
 
                     <div className="flex items-center cursor-pointer" 
                         onClick={() => {
-                          const hotel = hotels.find(h => h.name === property.hotelMadinah);
-                          if (hotel) openModal('hotel', hotel);
+                          openModal('hotel', property.hotelMadinahData!);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaHotel className="w-4 h-4 text-[#2E3650]" />
@@ -700,8 +710,7 @@ const UmrahCardFilter = () => {
 
                     <div className="flex items-center cursor-pointer" 
                         onClick={() => {
-                          const airport = airports.find(a => a.name === property.airport);
-                          if (airport) openModal('airport', airport);
+                          openModal('airport', property.airportData!);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaMapMarkerAlt className="w-4 h-4 text-[#2E3650]" />
@@ -714,8 +723,7 @@ const UmrahCardFilter = () => {
 
                     <div className="flex items-center cursor-pointer" 
                         onClick={() => {
-                          const airline = airlines.find(a => a.name === property.airline);
-                          if (airline) openModal('airline', airline);
+                          openModal('airline', property.airlineData!);
                         }}>
                       <div className="bg-blue-100 p-2 rounded-full mr-3">
                         <FaPlaneDeparture className="w-4 h-4 text-[#2E3650]" />
@@ -749,7 +757,8 @@ const UmrahCardFilter = () => {
                 </div>
               </div>
             </div>
-          ))
+
+            ))
         ) : (
           <div className="col-span-full text-center py-8">
             <p className="text-gray-500 text-lg">Tidak ada paket umrah yang sesuai dengan filter yang dipilih.</p>
