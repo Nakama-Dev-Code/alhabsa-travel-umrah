@@ -4,7 +4,7 @@ import Book from '@/components/Book'
 import About from '@/components/About'
 import Card from '@/components/Card'
 import Galeri from '@/components/Galeri'
-import Contact from '@/components/Contact'
+import UmrahSimulator from '@/components/UmrahSimulator';
 import Footer from '@/components/Footer'
 import '../../../css/app.css'
 import SocialIcons from '@/components/SocialIcons'
@@ -26,7 +26,7 @@ function HomePages() {
       <Fasilitas/>
       <Galeri/>
       <Mitra/>
-      <Contact/>
+      <UmrahSimulator />
       <CookieConsent />
       <Footer/>
       <SocialIcons/>

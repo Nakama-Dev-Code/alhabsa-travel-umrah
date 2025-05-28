@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 interface NavItem {
   label: string;
   href: string;
+  isRoute?: boolean; // Menandakan apakah ini adalah route atau anchor hash
 }
 
 // Definisi tipe untuk Tab props
@@ -14,6 +15,7 @@ interface TabProps {
   children: React.ReactNode;
   href: string;
   index: number;
+  isRoute?: boolean;
 }
 
 // Definisi tipe untuk Position
@@ -86,32 +88,41 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavigation = (path: string, hash: string = ''): void => {
-    if (url === '/' && hash) {
-      setTimeout(() => {
-        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+  // Fungsi navigasi yang diperbaiki
+  const handleNavigation = (href: string, isRoute: boolean = false): void => {
+    if (isRoute) {
+      // Jika ini adalah route (seperti /contact), navigasi langsung
+      window.location.href = `/${href}`;
     } else {
-      window.location.href = `/#${hash}`;
+      // Jika ini adalah anchor hash
+      if (url === '/') {
+        // Jika sudah di halaman utama, scroll ke section
+        setTimeout(() => {
+          document.getElementById(href)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        // Jika di halaman lain, navigasi ke halaman utama dengan hash
+        window.location.href = `/#${href}`;
+      }
     }
     setShowMobileMenu(false);
   };
 
   const navItems: NavItem[] = [
-    { label: 'Beranda', href: 'Home' },
-    { label: 'Pemesanan', href: 'Book' },
-    { label: 'Tentang Kami', href: 'About' },
-    { label: 'Galeri', href: 'Galeri' },
-    { label: 'Kontak', href: 'Contact' },
+    { label: 'Beranda', href: 'Home', isRoute: false },
+    { label: 'Pemesanan', href: 'Book', isRoute: false },
+    { label: 'Tentang Kami', href: 'About', isRoute: false },
+    { label: 'Galeri', href: 'Galeri', isRoute: false },
+    { label: 'Kontak', href: 'contact', isRoute: true }, // Ditandai sebagai route
   ];
 
-  // Custom Tab component for SlideTab effect
-  const Tab: React.FC<TabProps> = ({ children, href, index }) => {
+  // Custom Tab component untuk SlideTab effect
+  const Tab: React.FC<TabProps> = ({ children, href, index, isRoute = false }) => {
     const ref = useRef<HTMLLIElement | null>(null);
     return (
       <li
         ref={ref}
-        onClick={() => handleNavigation('/', href)}
+        onClick={() => handleNavigation(href, isRoute)}
         onMouseEnter={() => {
           if (!ref?.current) return;
           const { width } = ref.current.getBoundingClientRect();
@@ -243,7 +254,7 @@ const Navbar: React.FC = () => {
               }`}
             >
               {navItems.map((item, index) => (
-                <Tab key={item.href} href={item.href} index={index}>
+                <Tab key={item.href} href={item.href} index={index} isRoute={item.isRoute}>
                   {item.label}
                 </Tab>
               ))}
@@ -398,7 +409,7 @@ const Navbar: React.FC = () => {
                       <motion.li
                         key={index}
                         variants={itemVariants}
-                        onClick={() => handleNavigation('/', item.href)}
+                        onClick={() => handleNavigation(item.href, item.isRoute)}
                         className="relative z-10 block cursor-pointer px-4 py-3 text-black text-lg hover:bg-black/5 rounded-lg transition-colors"
                         whileTap={{ scale: 0.98 }}
                       >

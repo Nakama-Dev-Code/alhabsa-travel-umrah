@@ -1,6 +1,6 @@
 import Navbar from '@/components/navbar'
 import { Head } from '@inertiajs/react';
-import HeaderCard from '@/components/policy/HeaderCardCookie'
+import HeaderCard from '@/components/card/HeaderCard'
 import CookieConsent from '@/components/CookieConsent';
 import Footer from '@/components/Footer'
 import SocialIcons from '@/components/SocialIcons'

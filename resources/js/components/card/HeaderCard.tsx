@@ -1,6 +1,22 @@
 import { FaInstagram, FaTiktok } from 'react-icons/fa';
+import { usePage } from '@inertiajs/react';
 
 const HeaderCard: React.FC = () => {
+  const { url } = usePage();
+
+  let title = 'Transaksi Paket Umrah';
+  if (url === '/umrah-savings-simulator') {
+    title = 'Simulator Tabungan Umrah';
+  } else if (url === '/umrah-packages') {
+    title = 'Transaksi Paket Umrah';
+  } else if (url === '/cookie-policy') {
+    title = 'Cookie Policy';
+  } else if (url === '/privacy-policy') {
+    title = 'Privacy Policy';
+  } else if (url === '/contact') {
+    title = 'Kontak Al Habsa';
+  }
+
   return (
     <div className="relative w-full h-[430px] overflow-hidden">
       <div
@@ -14,7 +30,7 @@ const HeaderCard: React.FC = () => {
         {/* Overlay dan Konten Utama */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 bg-opacity-50 flex items-center px-4 md:px-20 lg:px-32">
           <div className="text-white">
-            <h1 className="text-5xl font-bold">Transaksi Paket Umrah</h1>
+            <h1 className="text-5xl font-bold">{title}</h1>
           </div>
         </div>
 
@@ -22,10 +38,20 @@ const HeaderCard: React.FC = () => {
         <div className="absolute bottom-4 right-4 flex flex-col items-start gap-2 pb-4 px-4 md:px-20 lg:px-32">
           <p className="text-white font-semibold text-[20px]">Sosial Media</p>
           <div className="flex gap-3">
-            <a href="https://www.instagram.com/alhabsa.travel/" target='_blank' className="text-white hover:text-pink-500 transition-colors">
+            <a
+              href="https://www.instagram.com/alhabsa.travel/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-pink-500 transition-colors"
+            >
               <FaInstagram size={24} />
             </a>
-            <a href="https://www.tiktok.com/@alhabsatravel?_t=ZS-8wXNpd9Onjk&_r=1" target='_blank' className="text-white hover:text-pink-500 transition-colors">
+            <a
+              href="https://www.tiktok.com/@alhabsatravel?_t=ZS-8wXNpd9Onjk&_r=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-pink-500 transition-colors"
+            >
               <FaTiktok size={24} />
             </a>
           </div>

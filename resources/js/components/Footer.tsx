@@ -9,6 +9,12 @@ const informasiLinks = [
   { label: "Metode Pembayaran", href: "/payment-method" },
   { label: "Syarat & Ketentuan", href: "/terms-conditions" },
   { label: "Kebijakan Privasi", href: "/privacy-policy" },
+  { label: "Kebijakan Cookie", href: "/cookie-policy" },
+];
+
+const layananLink = [
+  { label: "Paket Umrah", href: "/package-schedule" },
+  { label: "Simulator Tabungan Umrah", href: "/umrah-savings-simulator" },
 ];
 
 const Footer: React.FC = () => {
@@ -77,17 +83,17 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Layanan</h3>
             <ul className="space-y-3">
-              {["Layanan Paket Umrah"].map((item, index) => (
+              {layananLink.map((item, index) => (
                 <li
                   key={index}
                   className="flex items-center group transition-all"
                 >
                   <FaAngleRight className="mr-2 text-yellow-500" />
                   <a
-                    href="/umrah-packages"
+                    href={item.href}
                     className="group-hover:text-white hover:underline"
                   >
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}

@@ -15,7 +15,9 @@ use App\Http\Controllers\Admin\HotelController;
 
 // Untuk Front End
 Route::get('/', [FrontendController::class, 'home'])->name('home');
+Route::get('/contact', [FrontendController::class, 'contact']);
 Route::get('/umrah-packages', [FrontendController::class, 'umrahpackages']);
+Route::get('/umrah-savings-simulator', [FrontendController::class, 'simulator'])->name('umrah.simulator');
 
 // Cookie
 Route::post('/cookie-consent', [FrontendController::class, 'cookie']);
