@@ -82,6 +82,7 @@ class HandleInertiaRequests extends Middleware
             'oauth',
             'settings',
             'login',
+            'contact',
             'register',
             'forgot-password',
             'reset-password',
@@ -91,6 +92,7 @@ class HandleInertiaRequests extends Middleware
             'storage',
             'logout',
             'sanctum/csrf-cookie',
+            'umrah-savings-simulator',
         ];
 
         $ziggyArray['routes'] = collect($ziggyArray['routes'])

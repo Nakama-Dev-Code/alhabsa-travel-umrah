@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, Calendar, TrendingUp, Users, Clock, DollarSign, Target, CheckCircle, Star, MessageCircle, Plane, Hotel, Menu, X } from 'lucide-react';
+import { Calculator, Calendar, TrendingUp, Users, Clock, DollarSign, Target, CheckCircle, MessageCircle, Plane, Hotel, Menu, X, Moon } from 'lucide-react';
+import { Rating, Star } from "@smastrom/react-rating";
 
 interface TabunganData {
   targetBiaya: number;
@@ -188,6 +189,15 @@ const TabunganUmrahSimulator: React.FC<TabunganUmrahSimulatorProps> = ({ umrahPa
       <span className="inline">{label}</span>
     </button>
   );
+
+  // Definisi warna dan keterangan untuk setiap tingkat rating
+    const ratingLabels: { [key: number]: { label: string; color: string } } = {
+        1: { label: "Buruk", color: "#FF5252" },
+        2: { label: "Kurang", color: "#FF9800" },
+        3: { label: "Cukup", color: "#FFC107" },
+        4: { label: "Sangat Baik", color: "#8BC34A" },
+        5: { label: "Luar Biasa", color: "#4CAF50" }
+    };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -514,11 +524,38 @@ const TabunganUmrahSimulator: React.FC<TabunganUmrahSimulatorProps> = ({ umrahPa
                           </div>
                           <div className="flex items-start gap-2">
                             <Hotel className="h-4 w-4 text-[#222636] mt-0.5" />
-                            <div>
-                              <div>Makkah: {paket.hotelMakkah} ({paket.hotelMakkahRating}⭐)</div>
-                              <div>Madinah: {paket.hotelMadinah} ({paket.hotelMadinahRating}⭐)</div>
+                            <div className="space-y-1">
+                                {/* Hotel Makkah */}
+                                <div className="flex items-center gap-1">
+                                <span>Makkah: {paket.hotelMakkah}</span>
+                                <Rating
+                                    style={{ maxWidth: 100 }}
+                                    value={parseFloat(paket.hotelMakkahRating) || 0}
+                                    itemStyles={{
+                                    itemShapes: Star,
+                                    activeFillColor: ratingLabels[Math.round(parseFloat(paket.hotelMakkahRating) || 0)]?.color || "#FFC107",
+                                    inactiveFillColor: "#f0f0f0"
+                                    }}
+                                    readOnly={true}
+                                />
+                                </div>
+
+                                {/* Hotel Madinah */}
+                                <div className="flex items-center gap-1">
+                                <span>Madinah: {paket.hotelMadinah}</span>
+                                <Rating
+                                    style={{ maxWidth: 100 }}
+                                    value={parseFloat(paket.hotelMadinahRating) || 0}
+                                    itemStyles={{
+                                    itemShapes: Star,
+                                    activeFillColor: ratingLabels[Math.round(parseFloat(paket.hotelMadinahRating) || 0)]?.color || "#FFC107",
+                                    inactiveFillColor: "#f0f0f0"
+                                    }}
+                                    readOnly={true}
+                                />
+                                </div>
                             </div>
-                          </div>
+                        </div>
                         </div>
                         
                         <div className="space-y-2">
@@ -552,7 +589,7 @@ const TabunganUmrahSimulator: React.FC<TabunganUmrahSimulatorProps> = ({ umrahPa
                       <p className="text-gray-600 mb-4">Silakan sesuaikan budget atau waktu tabungan Anda</p>
                       <button
                         onClick={() => setActiveTab('simulator')}
-                        className="bg-[#222636] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                        className="bg-[#222636] hover:bg-[#2E3650] text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                       >
                         Kembali ke Simulator
                       </button>
@@ -595,11 +632,38 @@ const TabunganUmrahSimulator: React.FC<TabunganUmrahSimulatorProps> = ({ umrahPa
                           <span>{paket.airline}</span>
                         </div>
                         <div className="flex items-start gap-2">
-                          <Hotel className="h-4 w-4 text-[#222636] mt-0.5" />
-                          <div>
-                            <div>Makkah: {paket.hotelMakkah} ({paket.hotelMakkahRating}⭐)</div>
-                            <div>Madinah: {paket.hotelMadinah} ({paket.hotelMadinahRating}⭐)</div>
-                          </div>
+                            <Hotel className="h-4 w-4 text-[#222636] mt-0.5" />
+                            <div className="space-y-1">
+                                {/* Hotel Makkah */}
+                                <div className="flex items-center gap-1">
+                                <span>Makkah: {paket.hotelMakkah}</span>
+                                <Rating
+                                    style={{ maxWidth: 100 }}
+                                    value={parseFloat(paket.hotelMakkahRating) || 0}
+                                    itemStyles={{
+                                    itemShapes: Star,
+                                    activeFillColor: ratingLabels[Math.round(parseFloat(paket.hotelMakkahRating) || 0)]?.color || "#FFC107",
+                                    inactiveFillColor: "#f0f0f0"
+                                    }}
+                                    readOnly={true}
+                                />
+                                </div>
+
+                                {/* Hotel Madinah */}
+                                <div className="flex items-center gap-1">
+                                <span>Madinah: {paket.hotelMadinah}</span>
+                                <Rating
+                                    style={{ maxWidth: 100 }}
+                                    value={parseFloat(paket.hotelMadinahRating) || 0}
+                                    itemStyles={{
+                                    itemShapes: Star,
+                                    activeFillColor: ratingLabels[Math.round(parseFloat(paket.hotelMadinahRating) || 0)]?.color || "#FFC107",
+                                    inactiveFillColor: "#f0f0f0"
+                                    }}
+                                    readOnly={true}
+                                />
+                                </div>
+                            </div>
                         </div>
                       </div>
                       
@@ -743,7 +807,7 @@ const TabunganUmrahSimulator: React.FC<TabunganUmrahSimulatorProps> = ({ umrahPa
               {/* Quote Inspiratif */}
               <div className="mt-8 bg-gradient-to-r from-[#222636] to-[#2a3d66] text-white rounded-xl p-6 text-center">
                 <div className="mb-4">
-                  <Star className="h-8 w-8 mx-auto mb-2" />
+                  <Moon className="h-8 w-8 mx-auto mb-2" />
                   <h3 className="text-xl font-bold">Doa untuk Kemudahan Rezeki</h3>
                 </div>
                 <blockquote className="text-white/90 text-lg italic mb-4">

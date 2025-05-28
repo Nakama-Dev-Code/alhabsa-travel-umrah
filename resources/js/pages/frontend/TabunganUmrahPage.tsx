@@ -2,8 +2,8 @@ import { Head } from '@inertiajs/react';
 import Navbar from '@/components/navbar'
 import HeaderCard from '@/components/card/HeaderCard'
 import TabunganUmrahSimulator from '@/components/TabunganUmrahSimulator';
-import CookieConsent from '@/components/CookieConsent';
 import SocialIcons from '@/components/SocialIcons'
+import CookieConsent from "@/components/CookieConsent";
 import Footer from '@/components/Footer'
 
 interface Props {
@@ -19,6 +19,7 @@ const TabunganUmrahPage: React.FC<Props> = ({ umrahPackages }) => {
             <TabunganUmrahSimulator umrahPackages={umrahPackages} />
             <CookieConsent />
             <SocialIcons/>
+            <CookieConsent />
             <Footer/>
         </div>
     );
