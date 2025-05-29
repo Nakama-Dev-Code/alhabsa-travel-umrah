@@ -5,10 +5,6 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\PackageSchedule;
-use App\Models\Package;
-use App\Models\Hotel;
-use App\Models\Airport;
-use App\Models\Airline;
 
 class FrontendController extends Controller
 {
