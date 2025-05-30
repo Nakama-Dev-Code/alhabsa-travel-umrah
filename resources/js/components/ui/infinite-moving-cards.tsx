@@ -69,7 +69,8 @@ export const InfiniteMovingCards = ({
               src={item.src}
               alt={item.alt}
               className={cn(
-                "object-contain px-4 grayscale group-hover:grayscale-0 transition-all duration-300",
+                // "object-contain px-4 grayscale group-hover:grayscale-0 transition-all duration-300",
+                "object-contain px-4 transition-all duration-300",
                 imageClassName || "w-full h-full"
               )}
             />

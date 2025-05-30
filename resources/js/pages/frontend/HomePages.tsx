@@ -12,6 +12,7 @@ import Mitra from '@/components/Mitra'
 import Fasilitas from '@/components/Fasilitas'
 import CookieConsent from "@/components/CookieConsent";
 import AccessibilityPanel from '@/components/AccessibilityPanel';
+// import PhotoBooth from '@/components/PhotoBooth'
 
 function HomePages() {
 
@@ -27,6 +28,7 @@ function HomePages() {
       <Galeri/>
       <Mitra/>
       <UmrahSimulator />
+      {/* <PhotoBooth/> */}
       <CookieConsent />
       <Footer/>
       <SocialIcons/>

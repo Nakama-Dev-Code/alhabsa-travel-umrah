@@ -15,10 +15,13 @@ export default defineConfig({
         tailwindcss(),
     ],
     optimizeDeps: {
-        include: ['@smastrom/react-rating']
+        include: ['@smastrom/react-rating', '@imgly/background-removal']
     },
     esbuild: {
         jsx: 'automatic',
+    },
+    worker: {
+        format: 'es'
     },
     resolve: {
         alias: {
