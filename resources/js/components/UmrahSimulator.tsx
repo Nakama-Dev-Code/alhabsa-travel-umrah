@@ -29,15 +29,16 @@ const UmrahSimulator: FC = () => {
 
         {/* Teks & Tombol */}
         <div className="md:w-1/2 text-gray-800 text-center md:text-left">
-          <p className="text-lg font-semibold text-[#222636]">
+          <p className="text-xl md:text-2xl font-semibold text-[#222636]">
             Bingung menghitung biaya umrah?
           </p>
-          <h2 className="text-2xl md:text-4xl font-extrabold leading-snug my-3">
+          <h2 className="text-3xl md:text-5xl font-extrabold leading-snug my-3">
             Simulasikan perjalanan suci Anda sejak sekarang
           </h2>
+
           <Link href="/umrah-savings-simulator">
-            <button className="bg-[#222636] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-[#2E3650] transition mt-4">
-              Klik di sini
+            <button className="bg-[#222636] text-white font-semibold px-6 py-3 rounded-md shadow-lg hover:bg-[#2E3650] transition mt-4">
+              KLIK DISINI
             </button>
           </Link>
         </div>

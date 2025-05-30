@@ -2,10 +2,6 @@ import { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { LuAsterisk } from "react-icons/lu";
 
-// Interface untuk data array (tanpa ID)
-// Urutan BARU: [0]namaPaket, [1]paket, [2]airline, [3]airport, [4]codeAirport, 
-//             [5]price, [6]hotelMakkah, [7]hotelMadinah, [8]tipePaket, [9]tanggal, 
-//             [10]sisaSeat, [11]image, [12]originalPrice
 type UmrahPackageData = [
   string,  // namaPaket
   string,  // paket
@@ -294,10 +290,10 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh`;
       <div className="flex justify-center mt-8">
         <a 
           href="/umrah-packages"
-          className="bg-[#222636] text-white text-sm font-semibold rounded-full px-8 py-3 hover:bg-[#2E3650] focus:outline-none transition-colors" 
+          className="bg-[#222636] text-white text-sm font-semibold rounded-md px-8 py-3 hover:bg-[#2E3650] focus:outline-none transition-colors" 
           type="button"
         >
-          Lebih banyak
+          LEBIH BANYAK
         </a>
       </div>
     </main>

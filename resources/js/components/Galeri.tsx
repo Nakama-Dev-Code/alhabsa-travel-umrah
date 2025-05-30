@@ -248,23 +248,9 @@ const Galeri = () => {
       <div className="text-center mt-12">
         <Link
           href={'/umrah-packages'}
-          className="bg-[#222636] text-white py-3 px-6 rounded-md hover:bg-[#2E3650] transition-colors inline-flex items-center gap-2 justify-center"
+          className="bg-[#222636] text-white font-semibold py-3 px-6 rounded-md hover:bg-[#2E3650] transition-colors inline-flex items-center gap-2 justify-center"
         >
-          <span>Lihat Paket Umrah</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 text-yellow-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 7l5 5-5 5M6 12h12"
-            />
-          </svg>
+          <span>LIHAT PAKET UMRAH</span>
         </Link>
       </div>
 
