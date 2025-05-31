@@ -58,7 +58,7 @@ const Mitra: FC = () => {
             items={airlines}
             direction="right"
             speed="slow"
-            imageClassName="w-56 md:w-60 h-20 md:h-24 object-contain mx-3 md:mx-6 transition duration-300 ease-in-out"
+            imageClassName="w-56 md:w-60 h-20 md:h-24 object-contain mx-3 md:mx-6 grayscale hover:grayscale-0 transition duration-300 ease-in-out"
           />
         </div>
       </div>

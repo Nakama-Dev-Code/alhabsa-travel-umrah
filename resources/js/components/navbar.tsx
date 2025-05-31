@@ -387,7 +387,7 @@ const Navbar: React.FC = () => {
               animate="open"
               exit="closed"
               variants={menuVariants}
-              className="fixed top-0 right-0 bottom-0 w-5/5 bg-white shadow-lg z-50 overflow-y-auto md:hidden"
+              className="fixed top-0 right-0 bottom-0 w-4/5 bg-white shadow-lg z-50 overflow-y-auto md:hidden"
             >
               <div className="p-4">
                 <div className="flex justify-between items-center mb-6">

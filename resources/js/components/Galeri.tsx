@@ -23,25 +23,32 @@ const galleryImages: GalleryImage[] = [
 const Galeri: React.FC = () => {
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+
       <div className="text-center mb-10">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-[#222636] mb-2">
-          GALERI PERJALANAN <span className="text-[#222636] underline underline-offset-4">UMRAH</span>
-        </h2>
-        <p className="text-[#222636] text-lg md:text-xl max-w-xl mx-auto">
-          Dokumentasi momen selama perjalanan ibadah Umrah bersama para jamaah Al Habsa
+      <div className="flex items-center justify-center mb-4">
+        <div className="flex-grow h-px bg-[#222636] mx-4 md:mx-6"></div>
+          <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-[#222636] whitespace-nowrap">
+            GALERI PERJALANAN <span className="underline underline-offset-4">UMRAH</span>
+          </h2>
+        <div className="flex-grow h-px bg-[#222636] mx-4 md:mx-6"></div>
+      </div>
+  
+        <p className="text-[#222636] text-lg md:text-xl max-w-xl mx-auto mb-2">
+          Potret momen suci bersama Al Habsa Travel
         </p>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {galleryImages.map((image, index) => (
           <div key={index} className="flex flex-col items-start">
-            <div className="relative rounded-lg overflow-hidden group w-full">
+            <div className="relative rounded-lg rounded-bl-none overflow-hidden group w-full">
               <img
                 src={image.src}
                 alt={image.alt}
                 className="w-full h-105 object-cover transform transition duration-300 group-hover:scale-110"
               />
               <div className="absolute bottom-0 left-0 w-60 bg-white py-3 px-4 rounded-tr-sm shadow-sm flex flex-col items-start">
-                <h2 className="text-black font-extrabold text-2xl uppercase">
+                <h2 className="text-black font-extrabold text-xl uppercase">
                   {image.alt}
                 </h2>
               </div>

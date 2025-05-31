@@ -30,14 +30,14 @@ const Footer: React.FC = () => {
             </p>
             <div className="space-y-2">
               <div className="flex items-center">
-                <IoCallSharp className="mr-2 text-yellow-500" />
+                <IoCallSharp className="mr-2 text-[#B49164]" />
                 <span>+62 813-2919-6100</span>
               </div>
               <a
                 href="mailto:alhabsa.travel@gmail.com"
                 className="flex items-center hover:underline"
               >
-                <MdEmail className="mr-2 text-yellow-500" />
+                <MdEmail className="mr-2 text-[#B49164]" />
                 alhabsa.travel@gmail.com
               </a>
             </div>
@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               {informasiLinks.map((item, index) => (
                 <li key={index} className="flex items-center group transition-all">
-                  <FaAngleRight className="mr-2 text-yellow-500" />
+                  <FaAngleRight className="mr-2 text-[#B49164]" />
                   <a
                     href={item.href}
                     className="group-hover:text-white hover:underline"
@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
                   key={index}
                   className="flex items-center group transition-all"
                 >
-                  <FaAngleRight className="mr-2 text-yellow-500" />
+                  <FaAngleRight className="mr-2 text-[#B49164]" />
                   <a
                     href={item.href}
                     className="group-hover:text-white hover:underline"

@@ -115,9 +115,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh`;
   
   return (
     <main className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <h2 className="font-semibold text-gray-900 text-2xl mb-8">
-        Harga Spesial Untuk Paket Umrah
-      </h2>
+      <div className="flex items-center justify-start mb-8">
+        <h2 className="font-semibold text-gray-900 text-2xl whitespace-nowrap">
+          Harga Spesial Untuk Paket Umrah
+        </h2>
+          <div className="flex-grow h-px bg-[#222636] mx-4 md:mx-6"></div>
+      </div>
+
       <div className="relative">
         {!isMobile && currentPage > 0 && (
           <button 

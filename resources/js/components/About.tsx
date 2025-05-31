@@ -1,9 +1,8 @@
-import { FC } from "react";
 import { motion } from "framer-motion";
 
-const About: FC = () => {
+const About: React.FC = () => {
   return (
-    <div id="About" className="py-12 md:py-16 lg:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div id="About" className="py-12 md:py-16 lg:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6 md:gap-8 lg:gap-12">
         <div className="relative w-full lg:w-1/2">
           {/* Background dekoratif - Hide on mobile for cleaner look */}
@@ -40,17 +39,16 @@ const About: FC = () => {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
-            className="bg-white p-4 sm:p-6 md:p-8 rounded-lg md:rounded-xl shadow-md md:shadow-lg border border-gray-100"
           >
             <div className="inline-block px-3 py-1 mb-3 text-xs sm:text-sm font-medium text-white bg-[#222636] rounded-full">
               Tentang Kami
             </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-800 leading-tight">
-              Memberikan Pelayanan Umrah Yang <span className="text-[#7fc9ff]">Terbaik</span> Untuk Para Jamaah
+            <h2 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-800 leading-tight">
+              Memberikan Pelayanan Umrah Yang <span className="text-[#B49164] underline">Terbaik</span> Untuk Para Jamaah
             </h2>
 
             <div className="mt-4 sm:mt-6 text-gray-600 space-y-3 sm:space-y-4">
-              <p className="text-sm sm:text-base md:text-lg leading-relaxed">
+              <p className="text-md sm:text-base md:text-lg leading-relaxed">
                 Berdiri sejak tahun 2019, <span className="font-semibold">PT. ALHABSA MABRURO TOUR</span> memiliki pengalaman di bidang pelayanan jasa Tour & Travel, khususnya di pelayanan jasa UMRAH. Kualitas pelayanan dan kepercayaan jamaah menjadi prioritas utama kami dari awal berdiri sampai saat ini, dan akan terus meningkatkan kualitas pelayanan.
               </p>
             </div>
@@ -68,7 +66,7 @@ const About: FC = () => {
                 <span className="xs:hidden">Unduh Profile</span>
               </a>
               <a
-                href="#Contact"
+                href="/contact"
                 className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-white text-[#222636] border border-[#222636] font-medium hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 text-sm sm:text-base"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,16 +107,6 @@ const About: FC = () => {
           </div>
         </div>
 
-        {/* Dekorasi kanan bawah - Hidden on mobile, adjusted for tablets */}
-        <div className="hidden md:block absolute -bottom-20 -right-40 w-62 h-62
-                md:-bottom-30 md:-right-50 md:w-82 md:h-82
-                lg:-bottom-40 lg:-right-50 lg:w-82 lg:h-82">
-          <img
-            src="/img/brand-circles.png"
-            alt="Dekorasi Fakta"
-            className="w-full h-full object-contain filter brightness-0 saturate-100 sepia hue-rotate-[220deg]"
-          />
-        </div>
       </motion.div>
     </div>
   );

@@ -1,14 +1,4 @@
-import {
-  FaUtensils,
-  FaPassport,
-  FaSuitcaseRolling,
-  FaUserAlt,
-  FaHotel,
-  FaBus,
-  FaUsers,
-  FaPlaneDeparture,
-  FaCamera,
-} from "react-icons/fa";
+import { FaUtensils, FaPassport, FaSuitcaseRolling, FaUserAlt, FaHotel, FaBus, FaUsers, FaPlaneDeparture, FaCamera } from "react-icons/fa";
 import { ReactNode } from "react";
 
 // Tipe untuk setiap fasilitas
@@ -37,23 +27,24 @@ const Fasilitas = () => {
     { icon: <FaCamera />, title: "Dokumentasi", description: "Dokumentasi untuk jamaah selama ibadah di tanah suci" },
   ];
 
-  const facilitiesGroupOne = facilities.slice(0, 2);
-  const facilitiesGroupTwo = facilities.slice(2, 4);
-  const facilitiesGroupThree = facilities.slice(4, 6);
-  const facilitiesGroupFour = facilities.slice(6, 8);
-  const facilitiesGroupFive = facilities.slice(8);
+  // const facilitiesGroupOne = facilities.slice(0, 2);
+  // const facilitiesGroupTwo = facilities.slice(2, 4);
+  // const facilitiesGroupThree = facilities.slice(4, 6);
+  // const facilitiesGroupFour = facilities.slice(6, 8);
+  // const facilitiesGroupFive = facilities.slice(8);
 
   const FacilityCard: React.FC<FacilityCardProps> = ({ facility }) => (
     <div
-      className="group relative bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+      className="group relative bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 mt-2"
+      data-aos="fade-up"
     >
-      <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#222636] p-3 sm:p-4 rounded-full shadow-md">
-        <span className="text-white text-2xl sm:text-3xl">{facility.icon}</span>
+      <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#222636] p-4 rounded-full shadow-md">
+        <span className="text-white text-4xl sm:text-3xl">{facility.icon}</span>
       </div>
 
-      <div className="mt-8 sm:mt-10">
-        <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-1 sm:mb-2">{facility.title}</h3>
-        <p className="text-gray-600 text-xs sm:text-sm">{facility.description}</p>
+      <div className="mt-10">
+        <h3 className="text-2xl sm:text-xl font-bold text-gray-800 mb-2">{facility.title}</h3>
+        <p className="text-lg sm:text-base text-gray-600">{facility.description}</p>
       </div>
 
       <div className="absolute bottom-0 left-0 w-full h-1 bg-[#222636] from-blue-500 to-indigo-500 scale-x-0 group-hover:scale-x-50 transition-transform duration-300"></div>
@@ -62,11 +53,15 @@ const Fasilitas = () => {
 
   return (
     <div className="text-center p-4 sm:p-6 md:p-10 bg-[#f8f9fa]" id="Fasilitas">
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 sm:mb-3">
-        FASILITAS JAMAAH 
-        <span className="block h-1 w-24 bg-[#222636] mx-auto mt-2"></span>
-      </h2>
-      <p className="text-gray-600 mb-6 sm:mb-8 text-base sm:text-lg">
+      <div className="flex items-center justify-center mb-2">
+       <div className="flex-grow h-px bg-[#222636] mx-4 md:mx-6"></div>
+          <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-[#222636] whitespace-nowrap">
+            FASILITAS JAMAAH
+          </h2>
+       <div className="flex-grow h-px bg-[#222636] mx-4 md:mx-6"></div>
+      </div>
+
+      <p className="text-[#222636] mb-6 sm:mb-8 text-lg md:text-xl">
         Fasilitas yang kami sediakan untuk kenyamanan ibadah Anda
       </p>
 
@@ -77,8 +72,14 @@ const Fasilitas = () => {
         ))}
       </div>
 
-      {/* Tampilan Mobile */}
       <div className="md:hidden space-y-8">
+        {facilities.map((facility, index) => (
+          <FacilityCard facility={facility} index={index} key={index} />
+        ))}
+      </div>
+
+      {/* Tampilan Mobile */}
+      {/* <div className="md:hidden space-y-8">
         {[facilitiesGroupOne, facilitiesGroupTwo, facilitiesGroupThree, facilitiesGroupFour].map(
           (group, groupIndex) => (
             <div className="grid grid-cols-2 gap-4 sm:gap-6" key={groupIndex}>
@@ -94,7 +95,7 @@ const Fasilitas = () => {
             <FacilityCard facility={facility} index={index + 8} key={index + 8} />
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

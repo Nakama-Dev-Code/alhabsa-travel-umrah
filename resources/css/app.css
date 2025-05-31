@@ -204,7 +204,6 @@
     border: 1px solid rgba(0, 123, 191, 0.2);
     border-left: none;
     border-radius: 0 16px 16px 0;
-    box-shadow: 0 12px 40px rgba(0, 123, 191, 0.15);
     width: 320px;
     max-height: 70vh;
     overflow-y: auto;
@@ -304,7 +303,6 @@
     background: linear-gradient(135deg, #2a3d66 0%, #005c8f 100%);
     border-color: #2a3d66;
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 123, 191, 0.3);
 }
 
 .umrah-voice-toggle {
@@ -484,7 +482,6 @@
     border-radius: 0 12px 12px 0;
     padding: 16px 12px;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0, 123, 191, 0.3);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 9998;
     display: flex;
@@ -494,7 +491,6 @@
 
 .umrah-accessibility-toggle:hover {
     transform: translateX(6px);
-    box-shadow: 0 12px 32px rgba(0, 123, 191, 0.4);
     background: linear-gradient(135deg, #2a3d66 0%, #222636 100%);
 }
 
@@ -626,7 +622,6 @@
     background: #3b82f6;
     border-color: #3b82f6;
     color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .umrah-greeting-preview {
