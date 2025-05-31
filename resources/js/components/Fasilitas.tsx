@@ -20,7 +20,7 @@ const Fasilitas = () => {
     { icon: <FaPassport />, title: "Visa Umrah", description: "Pengurusan visa umrah untuk keperluan ibadah di tanah suci" },
     { icon: <FaSuitcaseRolling />, title: "Perlengkapan Umrah", description: "Paket umrah dengan perlengkapan kebutuhan ibadah yang lengkap" },
     { icon: <FaUserAlt />, title: "TL/ Mutawwif", description: "Umrah ditemani dengan leader dan Muthawif yang tersertifikasi" },
-    { icon: <FaHotel />, title: "Hotel Penginapan", description: "Akomodasi hotel / penginapan terbaik dan termyaman" },
+    { icon: <FaHotel />, title: "Hotel Penginapan", description: "Akomodasi hotel / penginapan terbaik dan ternyaman" },
     { icon: <FaBus />, title: "Transportasi", description: "Transportasi untuk memudahkan perjalanan jamaah" },
     { icon: <FaUsers />, title: "Tim Professional Saudi", description: "Tim professional dari Saudi untuk melancarkan kegiatan para jamaah" },
     { icon: <FaPlaneDeparture />, title: "Tiket Pesawat", description: "Tiket pesawat PP untuk keperluan berangkat ke tanah suci" },

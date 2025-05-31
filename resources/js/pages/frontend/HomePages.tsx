@@ -5,6 +5,7 @@ import About from '@/components/About'
 import Card from '@/components/Card'
 import Galeri from '@/components/Galeri'
 import UmrahSimulator from '@/components/UmrahSimulator';
+import Process from '@/components/process-step/ProcessSteps'
 import Footer from '@/components/Footer'
 import '../../../css/app.css'
 import SocialIcons from '@/components/SocialIcons'
@@ -23,6 +24,7 @@ function HomePages() {
       <Header/>
       <Book/>
       <About/>
+      <Process/>
       <Card/>
       <Fasilitas/>
       <Galeri/>
