@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
               <a
                 href="https://www.instagram.com/alhabsa.travel/" 
                 target='_blank'
-                className="text-gray-400 hover:text-pink-500 transition"
+                className="text-gray-400 hover:text-white transition"
                 aria-label="Instagram"
               >
                 <FaSquareInstagram className="w-6 h-6" />

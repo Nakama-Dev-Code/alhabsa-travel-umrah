@@ -28,7 +28,16 @@ const HeaderCard: React.FC = () => {
         }}
       >
         {/* Overlay dan Konten Utama */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 bg-opacity-50 flex items-center px-4 md:px-20 lg:px-32">
+        
+        {/* lama */}
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 bg-opacity-50 flex items-center px-4 md:px-20 lg:px-32">
+          <div className="text-white">
+            <h1 className="text-5xl font-bold">{title}</h1>
+          </div>
+        </div> */}
+
+        {/* baru */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 bg-opacity-50 flex items-end px-4 md:px-20 lg:px-32 pb-12">
           <div className="text-white">
             <h1 className="text-5xl font-bold">{title}</h1>
           </div>
@@ -42,7 +51,7 @@ const HeaderCard: React.FC = () => {
               href="https://www.instagram.com/alhabsa.travel/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-pink-500 transition-colors"
+              className="text-white hover:text-[#B49164] transition-colors"
             >
               <FaInstagram size={24} />
             </a>
@@ -50,7 +59,7 @@ const HeaderCard: React.FC = () => {
               href="https://www.tiktok.com/@alhabsatravel?_t=ZS-8wXNpd9Onjk&_r=1"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-pink-500 transition-colors"
+              className="text-white hover:text-[#B49164] transition-colors"
             >
               <FaTiktok size={24} />
             </a>

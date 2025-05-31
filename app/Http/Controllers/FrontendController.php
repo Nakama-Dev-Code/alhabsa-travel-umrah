@@ -33,10 +33,6 @@ class FrontendController extends Controller
                 ->locale('id')
                 ->translatedFormat('d F Y');
 
-            // Return array tanpa ID - mulai dari index 0
-            // Urutan: [0]namaPaket, [1]paket, [2]airline, [3]airport, [4]codeAirport,
-            //         [5]price, [6]hotelMakkah, [7]hotelMadinah, [8]tipePaket, [9]tanggal,
-            //         [10]sisaSeat, [11]image, [12]originalPrice
             return [
                 $schedule->package->title ?? 'PAKET UMRAH',                      // 0
                 $schedule->package->category->name ?? 'Paket Umrah Reguler',     // 1
@@ -102,19 +98,19 @@ class FrontendController extends Controller
 
                 // Hotel Makkah data (index 13-19)
                 $schedule->hotelMakkah->city ?? 'Makkah',                     // 13
-                $schedule->hotelMakkah->rating ?? '4',                        // 14
+                $schedule->hotelMakkah->rating ?? '5',                        // 14
                 $schedule->hotelMakkah->location ?? 'Makkah, Saudi Arabia',   // 15
                 $schedule->hotelMakkah->latitude ?? '',                       // 16
                 $schedule->hotelMakkah->longitude ?? '',                      // 17
-                $schedule->hotelMakkah->description ?? 'Hotel di Makkah',     // 18
+                $schedule->hotelMakkah->description ?? '',                    // 18
 
                 // Hotel Madinah data (index 19-24)
                 $schedule->hotelMadinah->city ?? 'Madinah',                   // 19
-                $schedule->hotelMadinah->rating ?? '4',                       // 20
+                $schedule->hotelMadinah->rating ?? '5',                       // 20
                 $schedule->hotelMadinah->location ?? 'Madinah, Saudi Arabia', // 21
                 $schedule->hotelMadinah->latitude ?? '',                      // 22
                 $schedule->hotelMadinah->longitude ?? '',                     // 23
-                $schedule->hotelMadinah->description ?? 'Hotel di Madinah',   // 24
+                $schedule->hotelMadinah->description ?? '',                   // 24
 
                 // Airport data (index 25-28)
                 $schedule->airport->location ?? '',                           // 25
